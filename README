@@ -1,0 +1,30 @@
+Abyss - Deep dive into system performance, profiling and benchmarking 
+
+To play with abyss features and tools, Please clone the repository:
+
+git clone ssh://git@stash.corp.netflix.com:7999/cldperf/abyss.git
+
+It will create multiple folders:
+
+apps: scripts to collect application specific stats via JMX. For example: Cassandra, kafka, elasticsearch, tomcat
+
+monitor: scripts to collect system stats: cpu, mem, disk, net, io
+
+sniffer: script to collect low level tcp stats such as: per connection RTT, throughput,retransmit 
+
+test-suites: Set of scripts to automate load testing and capturing metrics, For example: network latency and throughput testing, RPS testing using memcached ..
+
+
+Metrics are dumped into graphite server. Dashboard is available to graphs these metrics. 
+
+Production:
+http:/abyss.us-east-1.prod.netflix.net//grafana/#/dashboard/db/system-benchmark-dashboard
+
+Test:
+http:/abyss.us-east-1.prod.netflix.net//grafana/#/dashboard/db/system-benchmark-dashboard
+
+
+..
+
+
+

@@ -1,0 +1,41 @@
+Network Test Suites:
+
+NOTE: Some manual setups are required on the peer host in order to run these test property.  
+
+Test scripts are provided to automate network load testing and to capture relevent metrics. Matrics are periodically 
+dumped to graphite server. Dashboard to graph these metrics
+
+Dash board:
+
+Production:
+http://abyss.us-east-1.prod.netflix.net/grafana/#/dashboard/db/system-benchmark-dashboard
+Test:
+http://abyss.us-east-1.test.netflix.net/grafana/#/dashboard/db/system-benchmark-dashboard
+
+net-tests.sh: Master script that launches all network tests listed below. Only one test is active at any time. Requires peer host ec2 name or IP address as an argument. 
+
+netBW.pl: Measures network bandwidth or throughput of instance.	Message size equals to the default socket buffer size, set to 12MB on Ubuntu Trusty ami is used. AWS throttles network outbound traffic. This test validates if the instance is achieving 
+amazon advertise network bandwidth limit. Higher number is better.
+
+   Metric: bandwidth in MB
+   Requirment: peer should have netserver process running on port 7101: $ sudo netserver -p 7101
+
+
+netTPS.pl: Measures network latency by sending small payload of 1 byte at a time. It measures number of trasactions completed per second. There can be only one transaction pending at any time. Higher number of transactions (TPS) is better representing lower network latency	
+
+  Metric: TPS (Trasactions Per Second)
+  Requirments: peer should have netserver process running on port 7101: $ sudo netserver -p 7101
+
+pingRTT.pl: Measure network latency by using adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
+
+  Metric: Time in ms
+  Requirements: no additional setup required.
+
+memcached.pl: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs 70k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better.
+
+  Metric: buckets representing latencies in ranages from 1 ms to over 10 ms
+  Requirements:
+  - Peer host should have memcached installed and running on port 7002. Perform following steps on peer:
+    $sudo apt-get -y install memcached
+    $sudo memcached -p 7002 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
+

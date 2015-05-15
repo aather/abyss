@@ -1,0 +1,7 @@
+
+Application specific scripts. Captures java application performance stats via JMX port. java agent, jolokia, runs on the localhost
+and capture application data via JMX port every 5 seconds and dumps it graphite server.
+
+Dashboard url:
+
+http://ec2-54-147-50-69.compute-1.amazonaws.com/grafana/#/dashboard/db/cassandra-20-performance-on-trusty
