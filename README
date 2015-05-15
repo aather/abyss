@@ -1,30 +1,96 @@
-Abyss - Deep dive into system performance, profiling and benchmarking 
+What is AbyssEdit
 
-To play with abyss features and tools, Please clone the repository:
+Abyss is a toolset developed to solve performance issues requiring deeper analysis. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance.
+Abyss toolset provides access to low level profiling data captured at higher resolution. Atlas metrics are collected at lower precision and run time averaging is performed before storing data. Low sample granularity and averaging can mask resource usage spikes and thus may not be a true representation of workload during peak traffic. Abyss may have higher overhead, depending on the workload, than Vector and Atlas. Abyss is primarily focused on Ad hoc performance analysis. Abyss agents running on instance capture application and system level metrics and periodically push them to graphite servers. Dashboards are available to visualize metrics and to perform data correlation.
+Abyss relies on following components to function:
+Agents: Agents run on the instance and are written using perl, python and C.
+App: App agents capture java application and jvm metrics via JMX port on localhost. Cassandra agent is available. Kafka, ES and Tomcat agents are planned
+System: System agent captures system metrics: cpu, mem, net, io
+Sniffer: Sniffer agents captures low level per connection tcp metrics and IO latency metrics
+Benchmark: benchmarking agents automate the process of running benchmarks. Agents are available for testing instance network bandwidth, latency and memcached RPS rate. Benchmark agents for cpu, memory, and storage are planned.
+Graphite Server: All agents periodically (default: every 5 seconds) ship metrics to graphite server. There are graphite servers running in test and prod. Metrics are kept temporarily or until the instance is under performance review. 
+Visualization:Grafana is used for creating dashboards. There are separate dashboards for test and prod. These are ready-to-use dashboards. User selects the cluster name and instance id to see graph of associated metrics. Available Dashboards
+System Performance Dashboard: Generic system performance dashboard capture system level metrics
+Application Performance Dashboard: Application specific dashboards, that combine application and system metrics for better correlation
+Benchmark Dashboard: Relevant metrics from benchmark iterations are accumulated in graphite and graph it using grafana
+ElasticSearch: Dashboards are saved on ES for quick retrieval.
 
-git clone ssh://git@stash.corp.netflix.com:7999/cldperf/abyss.git
+There is a master startup scripts (startMonitoring) available to start application and system agents.
+$./startMonitoring
+Metrics starts accumulating in graphite server. Wait for 10-15 minutes to have sufficient metrics displayed on the dashboard. There are separate dashboards for production and test:
 
-It will create multiple folders:
+Similarly, If interested in benchmarking (network benchmark test-suite is available), one can start all network benchmarks using a master script, "startBenchmark".
 
-apps: scripts to collect application specific stats via JMX. For example: Cassandra, kafka, elasticsearch, tomcat
-
-monitor: scripts to collect system stats: cpu, mem, disk, net, io
-
-sniffer: script to collect low level tcp stats such as: per connection RTT, throughput,retransmit 
-
-test-suites: Set of scripts to automate load testing and capturing metrics, For example: network latency and throughput testing, RPS testing using memcached ..
-
-
-Metrics are dumped into graphite server. Dashboard is available to graphs these metrics. 
-
-Production:
-http:/abyss.us-east-1.prod.netflix.net//grafana/#/dashboard/db/system-benchmark-dashboard
-
-Test:
-http:/abyss.us-east-1.prod.netflix.net//grafana/#/dashboard/db/system-benchmark-dashboard
-
-
+Graphite Servers:
+ 
+Abyss Metrics
+List of metrics collected by abyss toolset:
+System MetricsEdit
+Metrics
+Detail
+cpu and percpu	
+cpu utilization: idle, sys, usr, intr
+cpu load: runnable and blocked threads
+context switches
+memory	
+free (unused), free (cached) and used memory
+Network	
+System-wide Network throughput, pps, tcp segments, tcp timeouts
+Per connection: Network throughput, Latency (RTT), retransmit
+Per connection: packet size, ssthresh, cwnd, rwnd, read/write queue size
+IO	System-wide IO throughput, IOPS, IO latency and IO size
+Application MetricsEdit
+Cassandra
+Metrics
+Detail
+Latency
+coordinator and C* column family read and write latency
+IOPS	coordinator and C* column family read and write Ops
+Pending Tasks	Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
+compaction	total bytes compacted, memtable size and memtable switch rate
+sstable stats	sstable cached in memory, sstable sizes and sstable counts
+JVM
+Metrics
+Detail
+Java memory	Heap and non heap usage
+GC	garbage collection duration
+Benchmark MetricsEdit
+Name
+Type
+Description
+ping -A	measure net latency	
+Adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
+netperf	measure net latency	TCP request response test with request/response payload of 1 byte. There can be only one transaction pending at any time. Higher number of transactions (TPS) is better representing lower network latency
+netperf	measure net throughput	
+TCP throughput test with message size equals to the default socket buffer size, set to 12MB on Ubuntu Trusty ami. AWS throttles network outbound traffic. This test validates if the instance is achieving amazon advertise network bandwidth limit. Higher number is better.
+To measure the impact of high network load on system latency, ping and netperf latency tests were kept running during the throughput test.
+memcache	measure net latency	
+Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs 10k, 20k, 30k,... 80k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better.
+To measure the impact of high rate get/second request, ping and netperf latency tests were kept running during the memcache testing.
+To interpret benchmark graphs correctly, it is important to understand how data points (metrics) in the graph are generated:
+For ping and netperf tests, I calculated 95th and 99th%ile on latency and throughput values printed during tests and then published them as metric. That means, every data point in the graph represents a single test result. Each test ran for 5-10 seconds
+For memcached tests, I use the name/value of the bucket as a metric printed after the test ends. Each test ran for 10 seconds. Every data point in the graph represent a single test result. For memcached tests, "gets" RPS of 70k were used to measure its impact on overall Network latency.
+Command
+Output
+Metric
+ping -A -w 5 $peer	64 bytes from (10.61.174.178): icmp_seq=1 ttl=64 time=0.019 ms	Time
+netperf -H $peer -t TCP_RR -j -v 2 -l 5 -D 1	Interim result: 29194.94 Trans/s over 1.000 seconds ending at ..	TPS
+netperf -H $peer -j -v 2 -l 10 -D 1	Interim result: 31334.07 10^6bits/s over 1.009 seconds ending at ..	bandwidth
+memcached client:
+$mcblaster -p 7002 -z 100 -d 10 -r 70000 -c 20 $peer
+memcached server:
+$memcached -p 7002 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
+ 
+ 
+Reports gets/s completed within 1-10 ms, placed in separate buckets.
+RTT distribution for 'get' requests. For example: Number of 'gets" completed within 0-1 ms:
+[  0-1000] : 40615
 ..
-
-
-
+Completed in over 10 ms:
+Over  10000 usec: 2683
+buckets
+Future EnhancementsEdit
+Support for new Applications: kafka, tomcat, ES
+Support additional benchmarks: IO, CPU, Memory and Application specific benchmarks
+More low level metrics to have better visibility into application and system stacks
+Better visualization by using new features and enhancement introduced in grafana
