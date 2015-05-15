@@ -1,7 +1,10 @@
-What is AbyssEdit
+<b>What is Abyss</b>
+<p>
+Abyss is a toolset developed to solve performance issues requiring deeper analysis. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
 
-Abyss is a toolset developed to solve performance issues requiring deeper analysis. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance.
-Abyss toolset provides access to low level profiling data captured at higher resolution. Atlas metrics are collected at lower precision and run time averaging is performed before storing data. Low sample granularity and averaging can mask resource usage spikes and thus may not be a true representation of workload during peak traffic. Abyss may have higher overhead, depending on the workload, than Vector and Atlas. Abyss is primarily focused on Ad hoc performance analysis. Abyss agents running on instance capture application and system level metrics and periodically push them to graphite servers. Dashboards are available to visualize metrics and to perform data correlation.
+Abyss agents running on instance capture application and system level metrics and periodically push them to graphite servers. Dashboards are created using Grafana are available in Dashboard folder to visualize metrics and to perform data correlation.
+</p>
+
 Abyss relies on following components to function:
 Agents: Agents run on the instance and are written using perl, python and C.
 App: App agents capture java application and jvm metrics via JMX port on localhost. Cassandra agent is available. Kafka, ES and Tomcat agents are planned
