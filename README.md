@@ -25,6 +25,13 @@ $./startMonitoring
 
 This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on the dashboard. Similarly, If interested in benchmarking (network benchmark test-suite is available), start  network benchmarks using a master script, "startBenchmark". Requires peer host name or IP address; netserver process and memcached processrunning on server and
 
+## Abyss In Action
+- **Application Dashboard**
+ ![Abyss](app.png)
+- **System Dashboard**
+ ![Abyss](sys.png)
+- **Benchmark Dashboard**
+ ![Abyss](bench.png)
 ## Metrics
  List of metrics collected by abyss toolset:
 - System Metrics: 
@@ -34,14 +41,14 @@ This will start Metrics accumulation in graphite server. Wait for few minutes to
   - **io:** system-wide IO throughput, IOPS, IO latency and IO size
 
 - Application Metrics:
-  **cassandra**
-  - coordinator and C* column family read and write latency
-  - IOPS coordinator and C* column family read and write Ops
-  - Pending Tasks: Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
-  - compaction: total bytes compacted, memtable size and memtable switch rate
-  - sstable stats, sstable cached in memory, sstable sizes and sstable counts
-  - java memory Heap and non heap usage
-  - GC garbage collection duration
+  - **cassandra**
+    - coordinator and C* column family read and write latency
+    - IOPS coordinator and C* column family read and write Ops
+    - Pending Tasks: Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
+    - compaction: total bytes compacted, memtable size and memtable switch rate
+    - sstable stats, sstable cached in memory, sstable sizes and sstable counts
+    - java memory Heap and non heap usage
+    - GC garbage collection duration
 
 - Benchmark Metrics
   - **ping -A:** measure net latency. Adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
