@@ -23,7 +23,11 @@ There is a master startup scripts (startMonitoring) available to start applicati
 
 $./startMonitoring
 
-This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on the dashboard. Similarly, If interested in benchmarking (network benchmark test-suite is available), start  network benchmarks using a master script, "startBenchmark". Requires peer host name or IP address; netserver process and memcached processrunning on server and
+This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on the dashboard. 
+
+Similarly, If interested in benchmarking (network benchmark test-suite is available), start network benchmarks using a master script, 
+
+$./startBenchmark (Requires peer host name/IP address; netserver process and memcached process running on peer on required ports
 
 ## Abyss In Action
 - **Application Dashboard**
