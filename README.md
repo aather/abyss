@@ -66,9 +66,11 @@ To interpret benchmark visualization correctly, it is important to understand ho
   - For memcached tests, I use the name/value of the bucket as a metric printed after the test ends. Each test ran for 10 seconds. Every data point in the graph represent a single test result. For memcached tests, "gets" RPS of 70k were used to measure its impact on overall Network latency.
 
 ## Future Enhancements
-- Support for new Applications: kafka, tomcat, ES
+- Support for new Applications: kafka, tomcat, Elasticsearch
+- Support for low level kernel metrics collected using: perf, ftrace, systemtap, sysdig  
+- Support influxDB instead of Graphite. InfluxDB can be sharded and scale better than Graphite
+- Support for collecting java and system stack using perf and accumulating it into influxDB or Graphite for visualization using Brenden Gregg's Flame Graph
 - Support additional benchmarks: IO, CPU, Memory and Application specific benchmarks
-- More low level metrics to have better visibility into application and system stacks
 - Better visualization by using new features and enhancement introduced in grafana
 
 ## Disclaimer
