@@ -68,8 +68,8 @@ To interpret benchmark visualization correctly, it is important to understand ho
 ## Future Enhancements
 - Support for new Applications: kafka, tomcat, Elasticsearch
 - Support for low level kernel metrics collected using: perf, ftrace, systemtap, sysdig  
-- Support influxDB instead of Graphite. InfluxDB can be sharded and scale better than Graphite
-- Support for collecting java and system stack using perf and accumulating it into influxDB or Graphite for visualization using Brenden Gregg's Flame Graph
+- Support influxDB as well as Graphite. InfluxDB allows data sharding and scale better than Graphite
+- Support for collecting java and system stack using perf and jstack and accumulating it into influxDB or Graphite for visualization using Brenden Gregg's Flame Graph. With support for frame pointer fix in openJDK and OracleJDK and java perf-agent integration, it is possible to have full java stack traces with symbols of even java JIT (Just In Time) compile code,  
 - Support additional benchmarks: IO, CPU, Memory and Application specific benchmarks
 - Better visualization by using new features and enhancement introduced in grafana
 
