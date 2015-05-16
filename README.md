@@ -66,7 +66,8 @@ To interpret benchmark visualization correctly, it is important to understand ho
   - For memcached tests, I use the name/value of the bucket as a metric printed after the test ends. Each test ran for 10 seconds. Every data point in the graph represent a single test result. For memcached tests, "gets" RPS of 70k were used to measure its impact on overall Network latency.
 
 ## Future Enhancements
-- Support for new Applications: kafka, tomcat, Elasticsearch
+- On-demand remote invocation of agent scripts on cloud instances via web Browser 
+- Support for new Applications: Kafka, Tomcat, Elasticsearch, Hadoop, Logstash.. 
 - Support for low level kernel metrics collected using: perf, ftrace, systemtap, sysdig  
 - Support influxDB as well as Graphite. InfluxDB allows data sharding and scale better than Graphite
 - Support for collecting java and system stack using perf and jstack and accumulating it into influxDB or Graphite for visualization using Brenden Gregg's Flame Graph. With support for frame pointer fix in openJDK and OracleJDK and java perf-agent integration, it is possible to have full java stack traces with symbols of even java JIT (Just In Time) compile code,  
