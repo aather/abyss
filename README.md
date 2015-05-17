@@ -75,7 +75,7 @@ To interpret benchmark visualization correctly, it is important to understand ho
 - Better visualization by using new features and enhancement introduced in grafana
 
 ## Disclaimer
-Use it at your own risk. 
+Use it at your own risk. Tested on Ubuntu Trusty.  
 
 ## License
 

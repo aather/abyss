@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# check if it is centOS, then install netcat 'nc' package 
+# check if it is centOS, then install netcat 'nc' package. It is not installed on CentOS instances 
 version=`uname -r`
-if [ -f "/usr/bin/yum" ]
-then
+if [ -f "/usr/bin/yum" ] then
    sudo yum install -y nc
 fi
 
@@ -30,8 +29,7 @@ fi
 
 # Agent to monitor Application stats via JMX port. Only Cassandra agent is available. kafka, elasticsearch and 
 # tomcat are planned
-if [ -d "/apps/nfcassandra_server" ] 
-then
+if [ -d "/apps/nfcassandra_server" ] then
  cd app/cassandra
  nohup ./loop-cassandra.sh &
  cd ../..

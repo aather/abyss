@@ -4,9 +4,9 @@ use Data::Dumper qw(Dumper);
 #use warnings;
 use strict;
 
-my $num_args = $#ARGV + 1;
-if ($num_args != 1) {
-   print "\nUsage: memcachedRTT.pl EC2_PUBLIC_HOSTNAME or IP ADDRESS\n";
+my $num_args = $#ARGV + 2;
+if ($num_args != 2) {
+   print "\nUsage: memcachedRTT.pl hostname port. it should be a port number of memcached running on peer host";
    exit;
 }
 
@@ -28,6 +28,7 @@ my %hash;
 my $total;
 my $i=0;
 my $peer = $ARGV[0];
+my $port = $ARGV[1];
 my $exit;
 
 if ( $env =~ /prod/) {
@@ -41,24 +42,24 @@ else {
 #setpriority(0,$$,19);
 
 # Warm up the memcache with 2 million entries of size 100 bytes
-$exit = `./mcblaster -p 7002 -t 8 -z 100 -k 2000000  -d 30 -w 20000 -c 10 -r 1 $peer 2>&1`;
+$exit = `./mcblaster -p $port -t 8 -z 100 -k 2000000  -d 30 -w 20000 -c 10 -r 1 $peer 2>&1`;
  if ($exit =~ /Hostname lookup failed/) {
    print "\nHostname lookup failed: $!\n";
    printf "command exited with value %d\n", $? >> 8;
    exit;
  }
 
-# Open a connection to the carbon server where we will be pushing the metrics
+# Open a connection to the carbon server where we will be pushing metrics
 open(GRAPHITE, "| nc -w 25 $carbon_server 7001") || die print "failed to send data: $!\n";
 
 # Capture metrics every 5 seconds until interrupted.
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
- #------------------
- # Uncomment it if interested in varying RPS rate instead of fixed 70000
- #open (INTERFACE, " ./mcblaster -p 7002 -z 100 -d 10 -r $TPS[$i] -c 20 $peer |")|| die print "failed to get data: $!\n";
+ #------------------Varying RPS RATE-------------
+ # Uncomment this and another section at the end if interested in varying RPS rate instead of fixed 50000
+ #open (INTERFACE, " ./mcblaster -p $port -z 100 -d 10 -r $TPS[$i] -c 20 $peer |")|| die print "failed to get data: $!\n";
  # ----------------
- open (INTERFACE, " ./mcblaster -p 7002 -z 100 -d 10 -r 50000 -c 20 $peer |")|| die print "failed to get data: $!\n";
+ open (INTERFACE, " ./mcblaster -p $port -z 100 -d 10 -r 50000 -c 20 $peer |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/);
   last if (/RTT distribution for 'set' requests:/);
@@ -95,7 +96,7 @@ push @data, "$server.$host.benchmark.memcached.total $total $now \n";
   @data=();     # Initialize the array for next set of metrics
   $total=0;  # initialize total count
   #
-  # ------
+  # ------Varying RPS RATE---------
   # Uncomment it if interested in varying TPS rate instead of 70000 fixed rate
   #if ($i == $#TPS){ $i=0; }
   #else { $i=$i+1;}

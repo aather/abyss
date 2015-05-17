@@ -3,9 +3,9 @@
 #use warnings;
 use strict;
 
-my $num_args = $#ARGV + 1;
-if ($num_args != 1) {
-   print "\nUsage: netBW.pl EC2_PUBLIC_HOSTNAME or IP ADDRESS\n"; 
+my $num_args = $#ARGV + 2;
+if ($num_args != 2) {
+   print "\nUsage: netBW.pl hostname port. it should be a port number of netserver running on peer host"; 
    exit;
 }
 my @data = ();
@@ -20,6 +20,7 @@ my @percentile;
 my $iterations = 500;
 my $interval = 1;
 my $peer = $ARGV[0];
+my $port = $ARGV[1];
 
 if ( $env =~ /prod/) {
  $carbon_server = "abyss.$region.prod.netflix.net";
@@ -38,7 +39,7 @@ open(GRAPHITE, "| nc -w 15 $carbon_server 7001") || die print "failed to send da
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
 # graphite metrics are sent with date stamp 
- open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p 7101 -- -P 7102 |")|| die print "failed to get data: $!\n";
+ open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $port -- -P 7102 |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ );
   next if !(/^Interim/);

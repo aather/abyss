@@ -3,7 +3,7 @@
 #use warnings;
 use strict;
 
-my @data = ();
+my @data = ();   # array to store metrics
 my $now = `date +%s`;
 my $env = $ENV{'NETFLIX_ENVIRONMENT'}; # test or prod
 my $region = $ENV{'EC2_REGION'};
@@ -14,7 +14,6 @@ my $publicIP =  $ENV{'EC2_PUBLIC_IPV4'};
 my $carbon_server;
 my @stats;
 my @percentile;
-my $iterations = 10000;
 my $interval = 5;
 my $exit;
 my $key1;
