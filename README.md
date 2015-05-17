@@ -20,18 +20,18 @@ Abyss relies on following components to function:
 - ElasticSearch: Dashboards are saved on ES for quick retrieval.
 
 ## Abyss Config Options
-**There are config options provided in each agent to set the environment**
+There are config options provided in each agent to set the environment
 
- - region           Sets Amazon Region: us-east-1, us-west-1..
- - host             Sets Amazon cloud instance id: i-c3a4e33d
- - server           Sets Server name or Application cluster name
- - env 		    Sets deployment environment: test or prod
- - domain           Sets domain: netflix.net, cloudperf.net
- - carbon_server    Sets hostname of graphite carbon server for storing metrics
- - carbon_port      Sets Port where graphite carbon server is listening
- - interval         Sets metrics collection granularity
- - iterations 	    Sets Test iterations
- - set priority     Allows running agent at a lower cpu scheduling priority
+ - **region-**           Sets Amazon Region: us-east-1, us-west-1..
+ - **host-**             Sets Amazon cloud instance id: i-c3a4e33d
+ - **server-**           Sets Server name or Application cluster name
+ - **env-** 		    Sets deployment environment: test or prod
+ - **domain-**          Sets domain: netflix.net, cloudperf.net
+ - **carbon_server-**    Sets hostname of graphite carbon server for storing metrics
+ - **carbon_port-**      Sets Port where graphite carbon server is listening
+ - **interval-**         Sets metrics collection granularity
+ - **iterations-**	    Sets Test iterations
+ - **priority-**     Allows running agent at a lower cpu scheduling priority
 
 You can run individual agent or Start all by running script below on the cloud instance or system
 
