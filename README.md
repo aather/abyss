@@ -9,15 +9,15 @@ Sample dashboards created using Grafana (available in Dashboard folder) to visua
 
 Abyss relies on following components to function:
 
-- Agents: Agents run on the instance and are written using perl, python and C.
+- **Agents:** Agents run on the instance and are written using perl, python and C.
   - **App:** App agents capture java application and jvm metrics via JMX port on localhost. Cassandra agent is available. Kafka, ES and 
         Tomcat agents are planned
   - **System:** System agent captures system metrics: cpu, mem, net, io
   - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics
   - **Benchmark:** benchmarking agents to automate the process of running benchmarks and collecting relevent metrics. 
-- Graphite Server: All agents periodically (default: every 5 seconds) ship metrics to graphite server. 
-- Visualization: Grafana is used for creating dashboards. Sample dashboards are available in Dashboard folder
-- ElasticSearch: Dashboards are saved on ES for quick retrieval.
+- **Graphite Server:** All agents periodically (default: every 5 seconds) ship metrics to graphite server. 
+- **Visualization:** Grafana is used for creating dashboards. Sample dashboards are available in Dashboard folder
+- **ElasticSearch:** Dashboards are saved on ES for quick retrieval.
 
 ## Abyss Config Options
 There are config options provided in each agent to set the environment
@@ -33,7 +33,7 @@ There are config options provided in each agent to set the environment
  - **iterations-**	    Sets Test iterations
  - **priority-**     Allows running agent at a lower cpu scheduling priority
 
-You can run individual agent or Start all by running script below on the cloud instance or system
+You can run individual agent or start all by running script below on the cloud instance or system
 
 $./startMonitoring
 
