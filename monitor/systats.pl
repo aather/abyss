@@ -3,6 +3,30 @@
 #use warnings;
 use strict;
 
+# ---- Start of Config options -----
+
+my $region = $ENV{'EC2_REGION'};        	# Sets Amazon Region: us-east-1, us-west-1..
+my $host = $ENV{'EC2_INSTANCE_ID'};     	# Sets Amazon cloud instance id: i-c3a4e33d
+my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name 
+my $env = $ENV{'NETFLIX_ENVIRONMENT'}; 		# Sets deployment environment: test or prod
+my $domain = "netflix.net";			# Sets domain: netflix.net, cloudperf.net
+my $carbon_server = "abyss";			# Sets hostname of graphite carbon server for storing metrics
+my $carbon_port = "7001";			# Port where graphite carbon server is listening
+my $interval = 5;				# Sets metrics collection granularity  
+#setpriority(0,$$,19);				# Uncomment if running script at a lower priority
+
+# ------ End of Config options ---
+
+$SIG{INT} = \&signal_handler; 
+$SIG{TERM} = \&signal_handler; 
+
+my @data = ();					# array to store metrics
+my $now = `date +%s`;				# metrics are sent with date stamp to graphite server
+
+# carbon server hostname: example: abyss.us-east-1.test.netflix.net
+open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") || die "failed to send: $!\n";
+ 
+# ------------------------------agent specific sub routines-------------------
 sub build_HashArray;
 sub collect_NetStats;
 sub collect_TCPRetrans;
@@ -11,60 +35,27 @@ sub collect_IOStats;
 sub collect_VMStats;
 sub collect_CPUStats;
 
-$SIG{INT} = \&signal_handler; 
-$SIG{TERM} = \&signal_handler; 
-
-my @data = ();
-my $now = `date +%s`;
-my $env = $ENV{'NETFLIX_ENVIRONMENT'}; # test or prod
-my $region = $ENV{'EC2_REGION'};
-my $host = $ENV{'EC2_INSTANCE_ID'};  # ex: i-c3a4e33d 
-my $server = "cluster.$ENV{'NETFLIX_APP'}";   # ex:  abcassandra_2
-my $carbon_server; 
-my $interval = 5; 
-
-# I have setup two servers to store metrics. One is in production and other is in test
-if ( $env =~ /prod/) {
- $carbon_server = "abyss.$region.prod.netflix.net";
- }
-else {
- $carbon_server = "abyss.$region.test.netflix.net";
- }
-
-# Run at lowest priority possible to avoid competing for cpu cycles with the workload
-#setpriority(0,$$,19);
-
-# Make sure you nc installed on the system
-
-# Open a connection to the carbon server where we will be pushing the metrics
-open(GRAPHITE, "| nc -w 15 $carbon_server 7001") || die print "failed to send data: $!\n";
-
-# Capture metrics every 5 seconds until interrupted.
 while (1) {
 
-# graphite metrics are sent with date stamp 
  $now = `date +%s`;
 
-# collect metrics
+# Comment out stats that you are not interested in collecting 
 
-collect_NetStats;       # Net stats 
-collect_TCPRetrans;     # TCP stats 
-collect_TCPSegs;	# TCP segments
-collect_IOStats;	# io stats
-collect_CPUStats;	# cpu stats
-collect_VMStats;	# vm stats
+ collect_NetStats;       		# Net stats 
+ collect_TCPRetrans;     		# TCP stats 
+ collect_TCPSegs;			# TCP segments
+ collect_IOStats;			# io stats
+ collect_CPUStats;			# cpu stats
+ collect_VMStats;			# vm stats
 
-# Ship Metrics to carbon server ----
+ #print @data; 				# Testing only 
+ #print "\n------\n"; 			# Testing only
+ @data=();  	
 
- #print @data; # For Testing only 
- #print "\n------\n"; # for Testing only
- print GRAPHITE  @data;  #  Dump metrics to carbon server
- @data=();  	# Initialize the array for next set of metrics
-
-  sleep $interval ;  #Default interval is 5 seconds
+ sleep $interval ;  
 }
 
-# ----------------------- All subroutines -----------------
+# ----------------------- subroutines -----------------
 
 sub signal_handler {
   die "Caught a signal $!";
@@ -83,7 +74,6 @@ sub build_HashArray {
 		
 sub collect_NetStats {
  my @stats;
- # Net packets and bytes IN and OUT
  open (INTERFACE, "cat /proc/net/dev |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ || /^Inter/ || /face/) ;

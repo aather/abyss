@@ -3,36 +3,34 @@
 #use warnings;
 use strict;
 
-my @data = ();
-my $now = `date +%s`;
-my $env = $ENV{'NETFLIX_ENVIRONMENT'}; # test or prod
-my $host = "$ENV{'EC2_INSTANCE_ID'}";  # ex: i-c3a4e33d 
-my $region = $ENV{'EC2_REGION'};
-my $server = "cluster.$ENV{'NETFLIX_APP'}";   # ex:  abcassandra_2
-my $localIP = $ENV{'EC2_LOCAL_IPV4'};
-my $publicIP =  $ENV{'EC2_PUBLIC_IPV4'};
-my $carbon_server;
+# ---- Start of Config options -----
+
+my $region = $ENV{'EC2_REGION'};                # Sets Amazon Region: us-east-1, us-west-1..
+my $host = $ENV{'EC2_INSTANCE_ID'};             # Sets Amazon cloud instance id: i-c3a4e33d
+my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name
+my $env = $ENV{'NETFLIX_ENVIRONMENT'};          # Sets deployment environment: test or prod
+my $domain = "netflix.net";                     # Sets domain: netflix.net, cloudperf.net
+my $carbon_server = "abyss";                    # Sets hostname of graphite carbon server for storing metrics
+my $carbon_port = "7001";                       # Port where graphite carbon server is listening
+my $interval = 5;                               # Sets metrics collection granularity
+#setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
+
+# ------ End of Config options ---
+
+$SIG{INT} = \&signal_handler;
+$SIG{TERM} = \&signal_handler;
+
+my @data = ();                                  # array to store metrics
+my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
+
+# carbon server hostname: example: abyss.us-east-1.test.netflix.net
+open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") || die "failed to send: $!\n";
+
+# ------------------------------agent specific sub routines-------------------
+
 my @stats;
 my @rpercentile;
 my @wpercentile;
-my $interval = 5;
-
-# I have setup two servers to store metrics. One is in production and other is in test
-if ( $env =~ /prod/) {
- $carbon_server = "abyss.$region.prod.netflix.net";
- }
-else {
- $carbon_server = "abyss.$region.test.netflix.net";
- }
-
-# Run at lowest priority possible to avoid competing for cpu cycles with the workload
-#setpriority(0,$$,19);
-
-# Open a connection to the carbon server where we will be pushing the metrics
-open(GRAPHITE, "| nc -w 25 $carbon_server 7001") || die print "failed to send data: $!\n";
-
-# Run at lowest priority possible to avoid competing for cpu cycles with the workload
-#setpriority(0,$$,19);
 
 while (1) {
    open (PERF, " ./diskstats|")|| die print "failed to get data: $!\n";
@@ -67,11 +65,10 @@ my $tmp = $wpercentile[sprintf("%.0f",(0.99*($#wpercentile)))];
  push @data, "$server.$host.system.io.Latency.Write.99th $tmp $now \n";
 
 
-# Ship Metrics to carbon server --- 
-  #print @data; # For Testing only 
-  #print "\n------\n"; # for Testing only
-  print GRAPHITE  @data;  # Shipping the metrics to carbon server
-  @data=();     # Initialize the array for next set of metrics
+  #print @data; 			# For Testing only 
+  #print "\n------\n"; 			# For Testing only
+  print GRAPHITE  @data;  		# Ship metrics to carbon server
+  @data=();     			# Initialize for next set of metrics
   @rpercentile=();
   @wpercentile=();
 
