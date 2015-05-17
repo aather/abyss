@@ -38,14 +38,23 @@ else {
  $carbon_server = "abyss.$region.test.netflix.net";
  }
 
-#compile kernel module tcp_prob_plus if it has not been compiled yet
+#compile and load kernel module tcp_prob_plus 
+
 if (-e '.compiled') { 
    print "tcp_probe_plus module is already been compiled"; 
 }
 else {
-   `make`;
-   `touch .compiled`;
+   $exit = `make`;
+   if (($? >> 8) == 1 ){ 
+     print "\n failed to compile kernel module";
+     exit;
+   }  
+   else {
+     print "\n kernel module is compiled successfully";
+    `touch .compiled`;
+ }
 }
+
 # load kernel module tcp_probe_plus if it has not been loaded yet     
 $exit = `/sbin/lsmod|grep tcp_prob`;
 if (($? >> 8) == 1 ) { # if not loaded then load tcp_probe module 
@@ -69,16 +78,32 @@ if (-e '.pythonmodules') {
    print "python modules are already been installed";
 }
 else {
-	# install required python packages
-     `sudo mv /etc/apt/sources.list /etc/apt/sources.list-ORIG`;
-     `sudo cp sources.list /etc/apt/sources.list`;
-     `sudo apt-get update`;
-     `sudo apt-get -y install python-pip`;
-     `sudo pip install -U pip`;
-     `sudo -H pip install Django==1.6.2`;
-
+      # install required python packages
+     $exit = `lsb_release -c`; 
+     if ($exit =~ /trusty/) {
+      `sudo mv /etc/apt/sources.list /etc/apt/sources.list-ORIG`;
+      `sudo cp sources-trusty.list /etc/apt/sources.list`;
+      `sudo apt-get update`;
+      `sudo apt-get -y install python-pip`;
+      `sudo pip install -U pip`;
+      `sudo -H pip install Django==1.6.2`;
      `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
      `touch .pythonmodules`;
+     }
+    elsif ($exit =~ /precise/) {
+      `sudo mv /etc/apt/sources.list /etc/apt/sources.list-ORIG`;
+      `sudo cp sources-precise.list /etc/apt/sources.list`;
+      `sudo apt-get update`;
+      `sudo apt-get -y install python-pip`;
+      `sudo pip install -U pip`;
+      `sudo -H pip install Django==1.6.2`;
+     `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
+     `touch .pythonmodules`;
+    }
+   else { 
+       print "\n please perform manual install of python required packages";
+       exit;
+   }
 }
 # Start the python server process 
 # one thread reads from /proc/net/tcpprobe buffer for tcp traffic 
@@ -86,7 +111,6 @@ else {
 # nohup python manage.py runserver $localIP:7403
 $exit = `/bin/ps -elf|grep manage.py |grep -v grep`;
 if (($? >> 8) == 1 ) {
-  #$exit = `python ./CLOUDSTAT/manage.py runserver $localIP:7403 &`;
   system("python ./CLOUDSTAT/manage.py runserver $localIP:7403 &");
   if (($? >> 8) == 1 ) {
     print "\nfailed to start python server \n";
@@ -156,6 +180,7 @@ while (1) {
      push @data, "$server.$host.system.tcp.traffic.CumulativeBytes.$keyjoined $value3 $now\n"; 
      $value4 = 0 if $value4 =~ /2147483647/;
      push @data, "$server.$host.system.tcp.traffic.SSTRESH.$keyjoined $value4 $now\n"; 
+     $value5 = 0 if $value5 =~ /65535/; # last sample of a connection
      push @data, "$server.$host.system.tcp.traffic.LENGTH.$keyjoined $value5 $now\n"; 
      push @data, "$server.$host.system.tcp.traffic.CWND.$keyjoined $value6 $now\n"; 
      push @data, "$server.$host.system.tcp.traffic.RWND.$keyjoined $value7 $now\n"; 
