@@ -19,20 +19,22 @@ Abyss relies on following components to function:
 - Visualization: Grafana is used for creating dashboards. Sample dashboards are available in Dashboard folder
 - ElasticSearch: Dashboards are saved on ES for quick retrieval.
 
-There are config options provided in each agent to set the environment
+## Abyss Config Options
+**There are config options provided in each agent to set the environment**
 
-my $region = $ENV{'EC2_REGION'};                # Sets Amazon Region: us-east-1, us-west-1..
-my $host = $ENV{'EC2_INSTANCE_ID'};             # Sets Amazon cloud instance id: i-c3a4e33d
-my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name
-my $env = $ENV{'NETFLIX_ENVIRONMENT'};          # Sets deployment environment: test or prod
-my $domain = "netflix.net";                     # Sets domain: netflix.net, cloudperf.net
-my $carbon_server = "abyss";                    # Sets hostname of graphite carbon server for storing metrics
-my $carbon_port = "7001";                       # Port where graphite carbon server is listening
-my $interval = 1;                               # Sets metrics collection granularity
-my $iterations = 500;				# Test iterations
-.#setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
+ - region           Sets Amazon Region: us-east-1, us-west-1..
+ - host             Sets Amazon cloud instance id: i-c3a4e33d
+ - server           Sets Server name or Application cluster name
+ - env 		    Sets deployment environment: test or prod
+ - domain           Sets domain: netflix.net, cloudperf.net
+ - carbon_server    Sets hostname of graphite carbon server for storing metrics
+ - carbon_port      Sets Port where graphite carbon server is listening
+ - interval         Sets metrics collection granularity
+ - iterations 	    Sets Test iterations
+ - set priority     Allows running agent at a lower cpu scheduling priority
 
 You can run individual agent or Start all by running script below on the cloud instance or system
+
 $./startMonitoring
 
 This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. Similarly, If interested in benchmarking (network benchmark test-suite is available), start network benchmarks script, 
