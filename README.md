@@ -37,7 +37,7 @@ You can run individual agent or Start all by running script below on the cloud i
 
 $./startMonitoring
 
-This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. Similarly, If interested in benchmarking (network benchmark test-suite is available), start network benchmarks script, 
+This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. Similarly, If interested in automating benchmarking (network benchmark test-suite is available) run: 
 
 $./startBenchmark 
 
