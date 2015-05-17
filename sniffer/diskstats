@@ -1,15 +1,8 @@
 #!/bin/bash 
 
-# check if it is centOS, then use matching perf
-version=`uname -r`
-if [[ $version  =~ "3.2.41-nflx" ]]
-then
- sudo ./perf record -e block:block_rq_issue -e block:block_rq_complete -a -o PERF.DATA sleep 10 1>/dev/null 2>/dev/null
- sudo ./perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%s %.f\n", $7, ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
- #sudo ./perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%.f\n", ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
-else
  sudo perf record -e block:block_rq_issue -e block:block_rq_complete -a -o PERF.DATA sleep 10 1>/dev/null 2>/dev/null
  sudo perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%s %.f\n", $7, ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
+
  #sudo perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%.f\n", ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
 fi
 sudo rm PERF.DATA
