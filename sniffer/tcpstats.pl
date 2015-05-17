@@ -14,7 +14,10 @@ my $carbon_server = "abyss";                    # Sets hostname of graphite carb
 my $carbon_port = "7001";                       # Port where graphite carbon server is listening
 my $interval = 5;                               # Sets metrics collection granularity
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
-
+my $localIP = $ENV{'EC2_LOCAL_IPV4'};		# Private IP Address of Amazon instance
+my $publicIP =  $ENV{'EC2_PUBLIC_IPV4'};	# Public IP Address of Amazon instance
+my cloudstat_port = "7403"			# cloudstat python server port that reads tcp stats 
+						# from kernel and publish in json
 # ------ End of Config options ---
 
 $SIG{INT} = \&signal_handler;
@@ -28,8 +31,6 @@ open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") ||
 
 # ------------------------------agent specific sub routines-------------------
 
-my $localIP = $ENV{'EC2_LOCAL_IPV4'};
-my $publicIP =  $ENV{'EC2_PUBLIC_IPV4'};
 my @stats;
 my @percentile;
 my $exit;
@@ -117,10 +118,10 @@ else {
 # Start the python server process 
 # one thread reads from /proc/net/tcpprobe buffer for tcp traffic 
 # and then insert flows into the queue
-# nohup python manage.py runserver $localIP:7403
+# nohup python manage.py runserver $localIP:$cloudstat_port
 $exit = `/bin/ps -elf|grep manage.py |grep -v grep`;
 if (($? >> 8) == 1 ) {
-  system("python ./CLOUDSTAT/manage.py runserver $localIP:7403 &");
+  system("python ./CLOUDSTAT/manage.py runserver $localIP:$cloudstat_port &");
   if (($? >> 8) == 1 ) {
     print "\nfailed to start python server \n";
     exit;
@@ -133,7 +134,7 @@ else { print "\n python server is already running\n"; }
 
 # Other python server thread waits for client requests and return the 
 # flows in JSON. Start the fetcher thread
-$exit = `curl -s http://$localIP:7403/app/startThread/1/`;
+$exit = `curl -s http://$localIP:$cloudstat_port/app/startThread/1/`;
 if (($exit =~ /Thread is already running/) || ($exit =~ /Thread started/))
  {
          print "\n  fetcher thread started successfully\n";
@@ -147,9 +148,7 @@ else {
 # Start collecting samples
 
 while (1) {
-   # python server will stop capturing after 30 seconds of inactivity. Make sure it is running
-   #`curl -s http://$localIP:7403/app/startThread/1/`;
-   open (SNIFFER, "curl -s http://$localIP:7403/app/startCapturing/|json_pp |")|| die print "failed to get data: $!\n";
+   open (SNIFFER, "curl -s http://$localIP:$cloudstat_port/app/startCapturing/|json_pp |")|| die print "failed to get data: $!\n";
    $now = `date +%s`;
    while (<SNIFFER>) {
     next if /^$/;
