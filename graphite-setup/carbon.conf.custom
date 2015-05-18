@@ -61,17 +61,20 @@ MAX_UPDATES_PER_SECOND = 500
 MAX_CREATES_PER_MINUTE = 50
 
 LINE_RECEIVER_INTERFACE = 0.0.0.0
-LINE_RECEIVER_PORT = 7001
+#LINE_RECEIVER_PORT = 7001
+LINE_RECEIVER_PORT =  7405
 
 # Set this to True to enable the UDP listener. By default this is off
 # because it is very common to run multiple carbon daemons and managing
 # another (rarely used) port for every carbon instance is not fun.
 ENABLE_UDP_LISTENER = False
 UDP_RECEIVER_INTERFACE = 0.0.0.0
-UDP_RECEIVER_PORT = 7001
+#UDP_RECEIVER_PORT = 7001
+UDP_RECEIVER_PORT =  7405
 
 PICKLE_RECEIVER_INTERFACE = 0.0.0.0
-PICKLE_RECEIVER_PORT = 7003
+#PICKLE_RECEIVER_PORT = 7003
+PICKLE_RECEIVER_PORT = 7407
 
 # Set to false to disable logging of successful connections
 LOG_LISTENER_CONNECTIONS = True
@@ -82,7 +85,8 @@ LOG_LISTENER_CONNECTIONS = True
 USE_INSECURE_UNPICKLER = False
 
 CACHE_QUERY_INTERFACE = 0.0.0.0
-CACHE_QUERY_PORT = 7002
+#CACHE_QUERY_PORT = 7002
+CACHE_QUERY_PORT = 7406
 
 # Set this to False to drop datapoints received after the cache
 # reaches MAX_CACHE_SIZE. If this is True (the default) then sockets

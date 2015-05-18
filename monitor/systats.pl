@@ -1,21 +1,9 @@
 #! /usr/bin/perl 
 
 #use warnings;
-use strict;
+#use strict;
 
-# ---- Start of Config options -----
-
-my $region = $ENV{'EC2_REGION'};                # Sets Amazon Region: us-east-1, us-west-1..
-my $host = $ENV{'EC2_INSTANCE_ID'};     	# Sets Amazon cloud instance id: i-c3a4e33d
-my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name 
-my $env = $ENV{'NETFLIX_ENVIRONMENT'}; 		# Sets deployment environment: test or prod
-my $domain = "netflix.net";			# Sets domain: netflix.net, cloudperf.net
-my $carbon_server = "abyss";			# Sets hostname of graphite carbon server for storing metrics
-my $carbon_port = "7001";			# Port where graphite carbon server is listening
-my $interval = 5;				# Sets metrics collection granularity  
-#setpriority(0,$$,19);				# Uncomment if running script at a lower priority
-
-# ------ End of Config options ---
+require "../env.pl";				# Sets up environment varilables for all agents
 
 $SIG{INT} = \&signal_handler; 
 $SIG{TERM} = \&signal_handler; 
@@ -24,7 +12,7 @@ my @data = ();					# array to store metrics
 my $now = `date +%s`;				# metrics are sent with date stamp to graphite server
 
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
  
 # ------------------------------agent specific sub routines-------------------
 sub build_HashArray;

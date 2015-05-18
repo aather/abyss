@@ -1,31 +1,5 @@
 #!/bin/bash
 
-# You need to provide peer host address. Make sure peer host has netserver and memcached running on open ports
-# $sudo netserver -p $port
-# $sudo memcached -p $port -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
-
-if [ "$#" -ne 1 ]; then
-    echo "Please provide peer host public address.
-    exit 1
-fi
-
-$peer = $1
-
-if [ "$#" -ne 1 ]; then
-    echo "Please provide netserver process port number on peer host"
-    exit 1
-fi
-
-$netport = $1
-
-if [ "$#" -ne 1 ]; then
-    echo "Please provide memcached process port number on peer host"
-    exit 1
-fi
-
-$memport = $1
-
-
 # check if it is centOS, then install netcat 'nc' package 
 version=`uname -r`
 if [ -f "/usr/bin/yum" ]
@@ -55,12 +29,12 @@ if [ -f "/usr/bin/make" ] then
 fi
 
 #Start net latency and throughput tests one by one and let them run forever
-cd TEST-SUITES/NET-TESTS
+cd test-suites/net-tests
 while :
 do
- nohup ./netBW.pl $peer $netport            # Network throughput tests
- nohup ./netTPS.pl $peer $netport&       # Next two network latency tests starts together
- nohup ./pingRTT.pl $peer 
- nohup ./memcachedRTT.pl $peer $memport     # memcache RPS test
+ nohup ./netBW.pl             		# Network throughput tests
+ nohup ./netTPS.pl &       		# Next two network latency tests starts together
+ nohup ./pingRTT.pl 
+ nohup ./memcachedRTT.pl		# memcache RPS test
 done
 

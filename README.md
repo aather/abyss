@@ -19,25 +19,24 @@ Abyss relies on following components to function:
 - **Visualization:** Grafana is used for creating dashboards. Sample dashboards are available in Dashboard folder
 - **ElasticSearch:** Dashboards are saved on ES for quick retrieval.
 
-## Abyss Config Options
-There are config options provided in each agent to set the environment
+## Abyss Config 
+All config options for abyss agents are provided in a single file: **env.pl**. Few options are listed below: 
 
  - **region-**           Sets Amazon Region: us-east-1, us-west-1..
  - **host-**             Sets Amazon cloud instance id: i-c3a4e33d
  - **server-**           Sets Server name or Application cluster name
- - **env-** 		    Sets deployment environment: test or prod
- - **domain-**          Sets domain: netflix.net, cloudperf.net
  - **carbon_server-**    Sets hostname of graphite carbon server for storing metrics
  - **carbon_port-**      Sets Port where graphite carbon server is listening
  - **interval-**         Sets metrics collection granularity
- - **iterations-**	    Sets Test iterations
- - **priority-**     Allows running agent at a lower cpu scheduling priority
+ - **iterations-**	 Sets number of benchmark iterations to perform
 
 You can run individual agent or start all by running script below on the cloud instance or system
 
 $./startMonitoring
 
-This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. Similarly, If interested in automating benchmarking (network benchmark test-suite is available) run: 
+This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. 
+
+To automate Benchmark (network benchmark test-suite is available) run: 
 
 $./startBenchmark 
 

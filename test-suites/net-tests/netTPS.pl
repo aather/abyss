@@ -1,44 +1,26 @@
 #! /usr/bin/perl 
 
 #use warnings;
-use strict;
-# ---- Start of Config options -----
+#use strict;
 
-my $region = $ENV{'EC2_REGION'};                # Sets Amazon Region: us-east-1, us-west-1..
-my $host = $ENV{'EC2_INSTANCE_ID'};             # Sets Amazon cloud instance id: i-c3a4e33d
-my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name
-my $env = $ENV{'NETFLIX_ENVIRONMENT'};          # Sets deployment environment: test or prod
-my $domain = "netflix.net";                     # Sets domain: netflix.net, cloudperf.net
-my $carbon_server = "abyss";                    # Sets hostname of graphite carbon server for storing metrics
-my $carbon_port = "7001";                       # Port where graphite carbon server is listening
-my $iterations = 500;				# Test iterations
-my $interval = 5;                               # Sets metrics collection granularity
+require "../env.pl";                            # Sets up environment varilables for all agents
+
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 
-# ------ End of Config options ---
 
 $SIG{INT} = \&signal_handler;
 $SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
+my $iterations = 500;				# Test iterations
 
-# carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 
-my $num_args = $#ARGV + 2;
-if ($num_args != 3) {
-   print "\nUsage: netBW.pl hostname port. it should be a port number of netserver running on peer host";
-   exit;
-}
-
 my @stats;
 my @percentile;
-my $peer = $ARGV[0];
-my $port = $ARGV[1];
-my $cport = $port + 1;
 
 # Start Capturing
 while ($iterations-- > 0 ) {
