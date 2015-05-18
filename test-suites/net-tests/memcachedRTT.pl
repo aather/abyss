@@ -58,7 +58,7 @@ $exit = `./mcblaster -p $port -t 8 -z 100 -k 2000000  -d 30 -w 20000 -c 10 -r 1 
 # Capture metrics every 5 seconds until interrupted.
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
-open (INTERFACE, " ./mcblaster -p $port -z 100 -d 10 -r 70000 -c 20 $peer |")|| die print "failed to get data: $!\n";
+open (INTERFACE, " ./mcblaster -p $port -z 100 -d 10 -r $RPS -c 20 $peer |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/);
   last if (/RTT distribution for 'set' requests:/);

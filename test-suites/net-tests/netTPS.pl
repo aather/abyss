@@ -29,7 +29,7 @@ open(GRAPHITE, "| nc -w 25 $carbon_server.$region.$env.$domain $carbon_port") ||
 # ------------------------------agent specific sub routines-------------------
 
 my $num_args = $#ARGV + 2;
-if ($num_args != 2) {
+if ($num_args != 3) {
    print "\nUsage: netBW.pl hostname port. it should be a port number of netserver running on peer host";
    exit;
 }
@@ -38,11 +38,12 @@ my @stats;
 my @percentile;
 my $peer = $ARGV[0];
 my $port = $ARGV[1];
+my $cport = $port + 1;
 
-# Start capturing metrics 
+# Start Capturing
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
-open (INTERFACE, "netperf -H $peer -t TCP_RR -j -v 2 -l 5 -D 1 -p $port -- -P 7102 |")|| die print "failed to get data: $!\n";
+open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $port -- -P $cport |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ );
   next if !(/^Interim/);

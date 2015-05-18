@@ -16,7 +16,7 @@ my $interval = 5;                               # Sets metrics collection granul
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 my $localIP = $ENV{'EC2_LOCAL_IPV4'};		# Private IP Address of Amazon instance
 my $publicIP =  $ENV{'EC2_PUBLIC_IPV4'};	# Public IP Address of Amazon instance
-my cloudstat_port = "7403"			# cloudstat python server port that reads tcp stats 
+my cloudstat_port = "7403";			# cloudstat python server port that reads tcp stats 
 						# from kernel and publish in json
 # ------ End of Config options ---
 
@@ -97,6 +97,7 @@ else {
       `sudo apt-get -y install python-pip`;
       `sudo pip install -U pip`;
       `sudo -H pip install Django==1.6.2`;
+      `sudo pip install -U datautil`;
      `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
      `touch .pythonmodules`;
      }
@@ -107,6 +108,7 @@ else {
       `sudo apt-get -y install python-pip`;
       `sudo pip install -U pip`;
       `sudo -H pip install Django==1.6.2`;
+      `sudo pip install -U datautil`;
      `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
      `touch .pythonmodules`;
     }

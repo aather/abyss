@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Run as root or sudo 
 # This script will install carbon graphite, apache2 and elastic search components and configure them
 # Caution: It may over write your local carbon, apache2 and elastic search configuration
 export DEBIAN_FRONTEND=noninteractive
@@ -29,6 +29,8 @@ service apache2 restart
 curl -s http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -
 echo "deb http://packages.elasticsearch.org/elasticsearch/1.0/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list
 update-rc.d elasticsearch defaults
+cp /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml-ORIG
+cp elasticsearch.yml.custom /etc/elasticsearch/elasticsearch.yml
 service elasticsearch start
 cp grafana.tar /usr/share/
 tar -xvf /usr/share/grafana.tar

@@ -24,7 +24,7 @@ define(['settings'], function(Settings) {
         },
         elasticsearch: {
           type: 'elasticsearch',
-          url: "http://"+window.location.hostname+":9200",
+          url: "http://"+window.location.hostname+":7410",
           index: 'grafana-dash',
           grafanaDB: true,
         }

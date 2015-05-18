@@ -9,18 +9,21 @@ netBW.pl: Measures network bandwidth or throughput of instance.	Message size equ
 network bandwidth limit. Higher number is better.
 
    Metric: bandwidth in MB
-   Requirment: peer should have netserver process running on an open port e.g: 7101: $ sudo netserver -p 7101
+   Requirment: peer should have netserver process running on an open port e.g: 7405: $ sudo netserver -p 7405
+	       netserver requires two ports: data and control. Two consecutive ports are used 
 
 
 netTPS.pl: Measures network latency by sending small payload of 1 byte at a time. It measures number of trasactions completed per second. There can be only one transaction pending at any time. Higher number of transactions (TPS) is better representing lower network latency	
 
   Metric: TPS (Trasactions Per Second)
-  Requirments: peer should have netserver process running on an port e.g: 7101: $ sudo netserver -p 7101
+  Requirments: peer should have netserver process running on an port e.g: 7405: $ sudo netserver -p 7405
+	       netserver requires two ports: data and control. Two consecutive ports are used 
+  
 
 pingRTT.pl: Measure network latency by using adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
 
   Metric: Time in ms
-  Requirements: no additional setup required.
+  Requirements: ICMP ingress traffic to the cloud instance should be allowed  
 
 memcached.pl: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs 70k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better.
 
@@ -29,5 +32,5 @@ memcached.pl: Open source memcached client "mcblaster" is used to warm up the me
   - Peer host should have memcached installed and running on an open port, .e.g: 7002. 
 
     $sudo apt-get -y install memcached
-    $sudo memcached -p 7002 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
+    $sudo memcached -p 7407 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
 

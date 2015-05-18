@@ -5,7 +5,7 @@ use strict;
 
 # ---- Start of Config options -----
 
-my $region = $ENV{'EC2_REGION'};        	# Sets Amazon Region: us-east-1, us-west-1..
+my $region = $ENV{'EC2_REGION'};                # Sets Amazon Region: us-east-1, us-west-1..
 my $host = $ENV{'EC2_INSTANCE_ID'};     	# Sets Amazon cloud instance id: i-c3a4e33d
 my $server = "cluster.$ENV{'NETFLIX_APP'}";     # Sets Server name or Application cluster name 
 my $env = $ENV{'NETFLIX_ENVIRONMENT'}; 		# Sets deployment environment: test or prod
@@ -50,6 +50,7 @@ while (1) {
 
  #print @data; 				# Testing only 
  #print "\n------\n"; 			# Testing only
+ print GRAPHITE @data;			# Ship metrics to graphite server
  @data=();  	
 
  sleep $interval ;  
