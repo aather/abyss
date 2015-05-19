@@ -41,12 +41,12 @@ of peer host running netserver and memcached on the matching ports with options:
 - netserver: sudo netserver -p 7420
 - memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
 
-$peer =  "ec2-instance-name-here";              # peer host running netserver and memcached daemons
-$net_dport = 7420;                              # netserver data port on peer host for network benchmark
-$net_cport = 7421;                              # netserver control port on peer host for network benchmark
-$mem_port  = 7425;                              # memcached port
-$RPS = 50000;                                   # Sets RPS rate for memcached benchmark
-$iterations = 500;                              # Sets number of benchmark test iterations
+ - peer =  "ec2-instance-name-here";              # peer host running netserver and memcached daemons
+ - net_dport = 7420;                              # netserver data port on peer host for network benchmark
+ - net_cport = 7421;                              # netserver control port on peer host for network benchmark
+ - mem_port  = 7425;                              # memcached port
+ - RPS = 50000;                                   # Sets RPS rate for memcached benchmark
+ - iterations = 500;                              # Sets number of benchmark test iterations
 
 $./startBenchmark 
 
