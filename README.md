@@ -34,7 +34,7 @@ You can run individual agent or start all by running script below on the cloud i
 
 $./startMonitoring
 
-This will start Metrics accumulation in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. 
+This will start accumulating metrics in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. 
 
 To automate Benchmark (network benchmark test-suite is available) run: 
 
@@ -42,7 +42,7 @@ $./startBenchmark
 
 ## Abyss In Action
 
-See [System Dashboard Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/system-benchmark-prod) and [Benchmark Dashboard Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/benchmark-dashboard-prod)
+See [System Dashboard](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/system-performance-prod) and [Benchmark Dashboard Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/benchmark-dashboard-prod)
 - **Application Dashboard**
  ![Abyss](app.png)
 - **System Dashboard**
