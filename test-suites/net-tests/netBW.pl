@@ -14,7 +14,6 @@ $SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
-my $iterations = 500;				# Test iterations
 
 open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
@@ -52,5 +51,5 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
   @data=();     			# Initialize for next set of metrics
   @percentile=();
 
-  sleep $interval;
+  sleep 1;
 } # while

@@ -77,6 +77,6 @@ push @data, "$server.$host.benchmark.memcached.total $total $now \n";
         delete $hash{$_};
     }
 
-  sleep $interval;
+  sleep 1;
 
 }

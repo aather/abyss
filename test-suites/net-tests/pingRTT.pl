@@ -27,7 +27,7 @@ my @percentile;
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
 # graphite metrics are sent with date stamp 
- open (INTERFACE, "ping -A -w 5 $peer |")|| die print "failed to get data: $!\n";
+ open (INTERFACE, "ping -A -w 10 $peer |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ || /^PING/ || /packets/ || /^rtt/ || /^---/) ;
   s/=/ /g;
@@ -52,5 +52,5 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
   @data=();     		# Initialize for next set of metrics
   @percentile=();
 
-  sleep $interval;
+  sleep 1;
 } # while
