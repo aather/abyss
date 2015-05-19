@@ -26,18 +26,17 @@ if(defined $ENV{'NETFLIX_APP'}) {		# Sets Server name or Application cluster nam
 }
 
 if(!defined $ENV{'NETFLIX_ENVIRONMENT'}){ 	# graphite server hostname or IP address 
- $carbon_server = "my-graphite-server.$region.amazonaws.com";	
+ $carbon_server = "graphiteserver.cloudperf.net";	
 } else {
  $carbon_server = "abyss.$ENV{'EC2_REGION'}.$ENV{'NETFLIX_ENVIRONMENT'}.netflix.net";
 }
 
 if(!defined $ENV{'EC2_LOCAL_IPV4'}) { 		# Private IP Address of Amazon instance  
- $localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`          
-
+ $localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
+}
 if(!defined $ENV{'EC2_PUBLIC_IPV4'}) { 		# Public IP Address of Amazon instance  
- $localIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`          
-
-cloudstat_port = "7415";                     	# cloudstat python server port that reads low level tcp stats
+ $localIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
+}
 
 if(!defined $ENV{'NETFLIX_ENVIRONMENT'}){       # graphite server hostname or IP address
  $carbon_port = 7405;				# Port where graphite carbon server is running
@@ -45,14 +44,15 @@ if(!defined $ENV{'NETFLIX_ENVIRONMENT'}){       # graphite server hostname or IP
  $carbon_port = 7001;
 }
 
+$cloudstat_port = "7415";                     	# cloudstat python server port that reads low level tcp stats
 $interval = 5;					# Sets sample interval
 
 #-------Benchmark Environment Variables ---------
 # For network latency and throughput benchmark, You need to set peer hostname or IP address and port numbers 
 
 $peer =  "ec2-instance-name-here";		# peer host running netserver and memcached daemons
-$net_cport = 7420;				# netserver data port on peer host for network benchmark
-$net_dport = 7421;				# netserver control port on peer host for network benchmark
+$net_dport = 7420;				# netserver data port on peer host for network benchmark
+$net_cport = 7421;				# netserver control port on peer host for network benchmark
 
 # For network RPS benchmark with memcache, peer host should be running memcached process on port below:
 $mem_port = 7425;

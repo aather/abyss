@@ -42,7 +42,7 @@ $./startBenchmark
 
 ## Abyss In Action
 
-See [System Dashboard Demo](http://ec2-52-8-120-26.us-west-1.compute.amazonaws.com/grafana/#/dashboard/db/system-performance-prod) and [Benchmark Dashboard Demo](http://ec2-52-8-120-26.us-west-1.compute.amazonaws.com/grafana/#/dashboard/db/benchmark-dashboard-prod)
+See [System Dashboard Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/system-benchmark-prod) and [Benchmark Dashboard Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/benchmark-dashboard-prod)
 - **Application Dashboard**
  ![Abyss](app.png)
 - **System Dashboard**

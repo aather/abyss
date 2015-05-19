@@ -15,11 +15,11 @@ cp /etc/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf-ORIG
 cp storage-schemas.conf.custom /etc/carbon/storage-schemas.conf
 # uncomment lines below if interested in installing whisper database in non-default place
 #-------
-#rm -r /var/lib/graphite/whisper
-#mkdir /mnt/data/whisper
-#chown -R _graphite /mnt/data/whisper
-#chgrp -R _graphite /mnt/data/whisper
-#ln -s /mnt/data/whisper /var/lib/graphite/whisper
+#sudo rm -r /var/lib/graphite/whisper
+#sudo mkdir /mnt/whisper
+#sudo chown -R _graphite /mnt/whisper
+#sudo chgrp -R _graphite /mnt/whisper
+#sudo ln -s /mnt/whisper /var/lib/graphite/whisper
 #--------
 sudo -u _graphite graphite-manage syncdb --noinput
 cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf-ORIG

@@ -4,5 +4,4 @@
  sudo perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%s %.f\n", $7, ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
 
  #sudo perf script -i PERF.DATA | awk '{ gsub(/:/, "") } $5 ~ /issue/ { ts[$6, $10] = $4 } $5 ~ /complete/ { if (l = ts[$6, $9]) { printf "%.f\n", ($4 - l) * 1000000; ts[$6, $10] = 0 } }'
-fi
 sudo rm PERF.DATA
