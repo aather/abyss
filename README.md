@@ -52,7 +52,7 @@ $./startBenchmark
 
 ## Abyss In Action
 
-There are ready to use dashboards available for prod and test:
+There are ready to use dashboards available in Dashboard folder:
 
   - **Application Dashboard**
     ![Abyss](app.png)
