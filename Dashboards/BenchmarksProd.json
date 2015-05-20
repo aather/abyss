@@ -54,7 +54,7 @@
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "bits",
+            "bytes",
             "short"
           ],
           "grid": {
@@ -185,7 +185,7 @@
           "links": []
         },
         {
-          "title": "netTPS - Net Latency: Transactions per Second",
+          "title": "pingRTT: Roud Trip Time",
           "error": false,
           "span": 6,
           "editable": true,
@@ -4137,7 +4137,7 @@
   ],
   "time": {
     "to": "now",
-    "from": "now-2h",
+    "from": "now-5m",
     "now": false
   },
   "templating": {
@@ -4159,6 +4159,10 @@
           {
             "text": "cass_subscriber_1",
             "value": "cass_subscriber_1"
+          },
+          {
+            "text": "csekafkapartitioner",
+            "value": "csekafkapartitioner"
           },
           {
             "text": "kafka",

@@ -2,6 +2,10 @@
 
 #use warnings;
 #use strict;
+use Fcntl qw/:flock/;
+
+open SELF, "< $0" or die ;
+flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
 require "../../env.pl";                            # Sets up environment varilables for all agents
 
@@ -24,7 +28,7 @@ my @percentile;
 # Start Capturing
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
-open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $port -- -P $cport |")|| die print "failed to get data: $!\n";
+open (INTERFACE, "netperf -H $peer -t TCP_RR -j -v 2 -l 10 -D 1 -p $net_dport -- -P $net_rport |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ );
   next if !(/^Interim/);

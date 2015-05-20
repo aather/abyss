@@ -2,8 +2,13 @@
 
 #use warnings;
 #use strict;
+use Fcntl qw/:flock/;
+
+open SELF, "< $0" or die ;
+flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
 require "../env.pl";    			# Sets up common environment varilables for all agents
+
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 						# from kernel and publish in json

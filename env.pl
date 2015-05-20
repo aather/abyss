@@ -8,7 +8,7 @@
 #
 #  ----- For running benchmarks ----
 #
-#  netserver (net benchmark):  			7420, 7421
+#  netserver (net benchmark):  			7420, 7421, 7422
 #  memcached (RPS benchmark): 			7425
 #  ping RTT:					ICMP traffic should be allowed
 #
@@ -32,7 +32,8 @@ $interval = 5;						# Sets sample interval
 
 $peer =  "ec2-instance-name-here";		# peer host running netserver and memcached daemons
 $net_dport = 7420;				# netserver data port on peer host for network benchmark
-$net_cport = 7421;				# netserver control port on peer host for network benchmark
+$net_cport = 7421;				# netserver control port on peer host for net throughput benchmark
+$net_rport = 7422;				# netserver control port on peer host for net latency benchmark
 $mem_port  = 7425;				# memcached port
 $RPS = 50000;					# Sets RPS rate for memcached benchmark
 $iterations = 500;				# Sets number of benchmark test iterations

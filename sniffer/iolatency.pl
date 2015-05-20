@@ -2,6 +2,10 @@
 
 #use warnings;
 #use strict;
+use Fcntl qw/:flock/;
+
+open SELF, "< $0" or die ;
+flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
 require "../env.pl";                            # Sets up environment varilables for all agents
 
