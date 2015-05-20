@@ -34,9 +34,9 @@ fi
 cd test-suites/net-tests/
 while :
 do
- nohup ./netBW.pl             		# Network throughput tests
+ nohup ./netBW.pl&             		# Network throughput tests
  nohup ./netTPS.pl &       		# Next two network latency tests starts together
- nohup ./pingRTT.pl 
+ nohup ./pingRTT.pl & 
  nohup ./memcachedRTT.pl		# memcache RPS test
 done
 
