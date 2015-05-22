@@ -167,21 +167,24 @@ while (1) {
     $value9 = $stats[1] if $stats[0] =~ /WQUEUE/;
     $value10 = $stats[1] if $stats[0] =~ /RQUEUE/;
 
+    if ($key2 !~ /127.0.0/ ){  # don't worry about loopback addresses
     $key2=~s/^\s+//; # Remove space in the begining
     $key2=~s/\./_/g; # change . into _ because of graphite
-    my $keyjoined = join "-", $key1,$key2;
-     push @data, "$server.$host.system.tcp.traffic.RTT.$keyjoined $value1 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.RETRANS.$keyjoined $value2 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.CumulativeBytes.$keyjoined $value3 $now\n"; 
-     $value4 = 0 if $value4 =~ /2147483647/;
-     push @data, "$server.$host.system.tcp.traffic.SSTRESH.$keyjoined $value4 $now\n"; 
-     $value5 = 0 if $value5 =~ /65535/; # last sample of a connection
-     push @data, "$server.$host.system.tcp.traffic.LENGTH.$keyjoined $value5 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.CWND.$keyjoined $value6 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.RWND.$keyjoined $value7 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.LOST.$keyjoined $value8 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.WQUEUE.$keyjoined $value9 $now\n"; 
-     push @data, "$server.$host.system.tcp.traffic.RQUEUE.$keyjoined $value10 $now\n"; 
+    $keyjoined = join "-", $key1,$key2;
+   } 
+
+    push @data, "$server.$host.system.tcp.traffic.RTT.$keyjoined $value1 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.RETRANS.$keyjoined $value2 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.CumulativeBytes.$keyjoined $value3 $now\n"; 
+    $value4 = 0 if $value4 =~ /2147483647/;
+    push @data, "$server.$host.system.tcp.traffic.SSTRESH.$keyjoined $value4 $now\n"; 
+    $value5 = 0 if $value5 =~ /65535/; # last sample of a connection
+    push @data, "$server.$host.system.tcp.traffic.LENGTH.$keyjoined $value5 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.CWND.$keyjoined $value6 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.RWND.$keyjoined $value7 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.LOST.$keyjoined $value8 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.WQUEUE.$keyjoined $value9 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.RQUEUE.$keyjoined $value10 $now\n"; 
   }
  close(SNIFFER);
 
