@@ -24,7 +24,11 @@ cp storage-schemas.conf.custom /etc/carbon/storage-schemas.conf
 sudo -u _graphite graphite-manage syncdb --noinput
 cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf-ORIG
 rm -f /etc/apache2/sites-enabled/000-default.conf
-cp /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-enabled/graphite.conf
+#cp /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-enabled/graphite.conf
+# support ACAO headers
+cp graphite.conf.custom /etc/apache2/sites-enabled/graphite.conf
+# load the header module to support ACAO headers
+sudo ln -sf /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
 service apache2 restart
 curl -s http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -
 echo "deb http://packages.elasticsearch.org/elasticsearch/1.0/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list
@@ -41,3 +45,4 @@ service elasticsearch restart
 service carbon-cache restart 
 cp crontab-root.custom /var/spool/cron/crontabs/root
 service cron restart
+sudo netstat -ltpn 
