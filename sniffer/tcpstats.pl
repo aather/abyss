@@ -13,8 +13,8 @@ require "../env.pl";    			# Sets up common environment varilables for all agent
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 						# from kernel and publish in json
 
-$SIG{INT} = \&signal_handler;
-$SIG{TERM} = \&signal_handler;
+#$SIG{INT} = \&signal_handler;
+#$SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server

@@ -9,8 +9,8 @@ flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is a
 
 require "../env.pl";				# Sets up environment varilables for all agents
 
-$SIG{INT} = \&signal_handler; 
-$SIG{TERM} = \&signal_handler; 
+#$SIG{INT} = \&signal_handler; 
+#$SIG{TERM} = \&signal_handler; 
 
 my @data = ();					# array to store metrics
 my $now = `date +%s`;				# metrics are sent with date stamp to graphite server

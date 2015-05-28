@@ -13,13 +13,24 @@
 #  ping RTT:					ICMP traffic should be allowed
 #
 # --- Environment Variables exported to all agents
-
+# Amazon Cloud specific environment variables. Uncomment if running agents on cloud instance
 $region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
 $host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
 $localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
 $publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
 $server = "cluster.cloudperf";				# Metrics are accumulated under application name
-							# e.g: cloudperf. Change to match your application
+							# e.g: cloudperf. Change to match your app.
+#--------------end-of-amazon-env-variables---------
+
+# Vagrant/VirtualBox specific environment varilables. Uncomment if running agents on Vagrant VM
+$region="vagrant";
+$host = "VM1";
+$localIP = "192.168.33.79";                             # IP address of VM running agents to capture metrics 
+$publicIP = "192.168.33.79";                            # Same as above
+$server = "cluster.aather";                             # Metrics are accumulated under application name
+                                                        # e.g: cloudperf. Change to match your name
+#------------end-of-vagrant-env-variables--------
+
 $carbon_server = "graphiteserver.cloudperf.net";	# graphite server for storing metrics	
 $carbon_port = 7405;					# Port where graphite carbon server is running
 $cloudstat_port = "7415";                     		# python server port. It reads low level tcp stats

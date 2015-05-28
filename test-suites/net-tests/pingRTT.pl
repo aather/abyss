@@ -2,6 +2,8 @@
 
 #use warnings;
 #use strict;
+
+use Scalar::Util qw(looks_like_number);
 use Fcntl qw/:flock/;
 
 open SELF, "< $0" or die ;
@@ -13,8 +15,8 @@ require "../../env.pl";                            # Sets up environment varilab
 
 # ------ End of Config options ---
 
-$SIG{INT} = \&signal_handler;
-$SIG{TERM} = \&signal_handler;
+#$SIG{INT} = \&signal_handler;
+#$SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
@@ -35,7 +37,14 @@ $now = `date +%s`;
   next if (/^$/ || /^PING/ || /packets/ || /^rtt/ || /^---/) ;
   s/=/ /g;
   @stats= split;
-  push (@percentile, $stats[10]);
+  #print "$stats[9] is", looks_like_number($stats[10]) ? '' : ' not ', "a number\n";
+  #print "$stats[10] is", looks_like_number($stats[10]) ? '' : ' not ', "a number\n";
+  if(looks_like_number($stats[9])){
+   push (@percentile, $stats[9]);
+  }
+  else {
+   push (@percentile, $stats[10]);
+  }
  }
  close(INTERFACE);
 

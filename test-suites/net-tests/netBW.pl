@@ -13,8 +13,8 @@ require "../../env.pl";                            # Sets up environment varilab
 
 # ------ End of Config options ---
 
-$SIG{INT} = \&signal_handler;
-$SIG{TERM} = \&signal_handler;
+#$SIG{INT} = \&signal_handler;
+#$SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server

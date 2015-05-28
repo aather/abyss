@@ -20,6 +20,15 @@ isactive=0
 threads=[]
 import time
 from time import gmtime, strftime
+
+def myview(_request):
+    response = HttpResponse(json.dumps({"key": "value", "key2": "value"}))
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
+
 def startCapturing(request):
     global qConn
     global isactive
