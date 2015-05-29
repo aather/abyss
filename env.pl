@@ -13,22 +13,25 @@
 #  ping RTT:					ICMP traffic should be allowed
 #
 # --- Environment Variables exported to all agents
+#
 # Amazon Cloud specific environment variables. Uncomment if running agents on cloud instance
-$region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
-$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
-$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
-$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
-$server = "cluster.cloudperf";				# Metrics are accumulated under application name
+#
+#$region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
+#$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
+#$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
+#$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
+#$server = "cluster.cloudperf";				# Metrics are accumulated under application name
 							# e.g: cloudperf. Change to match your app.
 #--------------end-of-amazon-env-variables---------
-
+#
 # Vagrant/VirtualBox specific environment varilables. Uncomment if running agents on Vagrant VM
+#
 $region="vagrant";
 $host = "VM1";
 $localIP = "192.168.33.79";                             # IP address of VM running agents to capture metrics 
 $publicIP = "192.168.33.79";                            # Same as above
-$server = "cluster.aather";                             # Metrics are accumulated under application name
-                                                        # e.g: cloudperf. Change to match your name
+$server = "cluster.myapp";                             # Metrics are accumulated under application name
+                                                        # e.g: myapp. Change to match your app name
 #------------end-of-vagrant-env-variables--------
 
 $carbon_server = "graphiteserver.cloudperf.net";	# graphite server for storing metrics	
@@ -37,6 +40,7 @@ $cloudstat_port = "7415";                     		# python server port. It reads l
 $interval = 5;						# Sets sample interval
 
 #-------Benchmark Environment Variables ---------
+#
 # To run benchmark, you need to set peer host and run netserver and memcached on the matching ports
 # netserver: sudo netserver -p 7420
 # memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
