@@ -26,7 +26,8 @@ my @stats;
 my @percentile;
 
 # Start Capturing
-while ($iterations-- > 0 ) {
+#while ($iterations-- > 0 ) {
+while (1) {
 $now = `date +%s`;
 open (INTERFACE, "netperf -H $peer -t TCP_RR -j -v 2 -l 10 -D 1 -p $net_dport -- -P $net_rport |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {

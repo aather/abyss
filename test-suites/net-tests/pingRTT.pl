@@ -29,7 +29,8 @@ my @stats;
 my @percentile;
 
 # Start capturing
-while ($iterations-- > 0 ) {
+#while ($iterations-- > 0 ) {
+while (1) {
 $now = `date +%s`;
 # graphite metrics are sent with date stamp 
  open (INTERFACE, "ping -A -w 5 $peer |")|| die print "failed to get data: $!\n";
