@@ -7,7 +7,7 @@ use Fcntl qw/:flock/;
 open SELF, "< $0" or die ;
 flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../env.pl";                          # Sets up environment varilables for all agents
+require "../../env.pl";                            # Sets up environment varilables for all agents
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 
@@ -45,9 +45,11 @@ my @CMS = ('ConcurrentMarkSweep', 'ParNew');
 my @Par = ('PS MarkSweep', 'PS Scavenge');
 my @GCStats = ('CollectionCount', 'CollectionTime');
 
-my $pid = `jps|grep DseDaemon|awk '{print $1}'`;
-chomp($pid);
-$exit = `java -jar jolokia-jvm-1.2.2-agent.jar start $pid 2>&1`;  # Attaching to JMX port
+my $token = `jps|grep DseDaemon`;
+my @pid = split / /, $token;
+my $user = `/bin/ps -p $pid[0] -o user|grep -v USER`;
+chomp($user);
+$exit = `sudo -u $user java -jar jolokia-jvm-1.2.2-agent.jar start $pid[0] 2>&1`;  # Attaching to JMX port
  if ($exit =~ /Cannot attach/) {
    print "\nfailed to connect to JMX port: $!\n";
    printf "command exited with value %d\n", $? >> 8;
@@ -56,11 +58,8 @@ $exit = `java -jar jolokia-jvm-1.2.2-agent.jar start $pid 2>&1`;  # Attaching to
 
 # Build hash array for JVM Heap and GC Stats
 %jvmhash  = build_HashArray(\@MemoryTypes, \@MemoryUsage);
-
-# ----TODO: Fix it . How to find if JVM is configured to use CMS or parellel--
-my $GC = 'CMS';
-# my $GC = `/bin/ps -p 4985 pid -o command |grep CMS`;
-
+my $GC;
+$GC= `/bin/ps -p $pid[0] -o command |grep CMS`;
 if ($GC =~ /CMS/) {
     %gchash = build_HashArray(\@CMS, \@GCStats);
  }
@@ -95,7 +94,7 @@ while (1) {
 # ----------------------- All subroutines -----------------
 
 sub signal_handler {
- `java -jar jolokia-jvm-1.2.2-agent.jar --quiet stop $pid`;
+ `sudo -u $user java -jar jolokia-jvm-1.2.2-agent.jar --quiet stop $pid[0]`;
   die "Caught a signal $!";
 }
 
