@@ -1,9 +1,9 @@
 {
   "id": null,
-  "title": "Cassandra Dash - Test",
-  "originalTitle": "Cassandra Dash - Test",
+  "title": "Cassandra Dash - Prod",
+  "originalTitle": "Cassandra Dash - Prod",
   "tags": [],
-  "style": "light",
+  "style": "dark",
   "timezone": "browser",
   "editable": true,
   "hideControls": false,
@@ -466,19 +466,11 @@
           },
           "targets": [
             {
-              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.PGC.ConcurrentMarkSweep.CollectionTime), 2, 6, 7)",
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ConcurrentMarkSweep.CollectionTime), 2, 7)",
               "hide": false
             },
             {
-              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.PGC.ParNew.CollectionTime), 2, 6, 7)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ConcurrentMarkSweep.CollectionTime), 2, 6, 7)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ParNew.CollectionTime), 2, 6, 7)",
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ParNew.CollectionTime), 2, 7)",
               "hide": false
             }
           ],
@@ -1383,7 +1375,7 @@
       "collapse": false,
       "panels": [
         {
-          "title": "xvdb -IO Throughput",
+          "title": "IO Throughput",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1436,10 +1428,10 @@
           },
           "targets": [
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors), 512), 1), '$Instance-md0-rbytes')"
             },
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-wbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors), 512), 1), '$Instance-md0-wbytes')"
             }
           ],
           "aliasColors": {},
@@ -1447,7 +1439,7 @@
           "links": []
         },
         {
-          "title": "xvdb - IOPS",
+          "title": "IOPS",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1497,10 +1489,10 @@
           },
           "targets": [
             {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS, ReadIOPS), 1), 2, 5, 6)"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS, ReadIOPS), 1), 2, 5, 6)"
             },
             {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS, ReadIOPS), 1), 2, 5, 6)"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS, ReadIOPS), 1), 2, 5, 6)"
             }
           ],
           "aliasColors": {},
@@ -1509,7 +1501,7 @@
           "height": ""
         },
         {
-          "title": "All Storage - IO LATENCY",
+          "title": "IO LATENCY",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1542,7 +1534,7 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": true,
+            "show": false,
             "values": true,
             "min": false,
             "max": true,
@@ -1589,7 +1581,7 @@
           "height": ""
         },
         {
-          "title": "xvdb - Read/Write IO Size",
+          "title": "Read/Write IO Size",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1639,19 +1631,19 @@
           },
           "targets": [
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS), 1)",
               "hide": true
             },
             {
@@ -4624,20 +4616,16 @@
             "value": "*"
           },
           {
-            "text": "cass_sub_lcs",
-            "value": "cass_sub_lcs"
-          },
-          {
-            "text": "cass_sub_lcs_12",
-            "value": "cass_sub_lcs_12"
+            "text": "cass_pds_event",
+            "value": "cass_pds_event"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.cass_*",
         "current": {
-          "text": "cass_sub_lcs_12",
-          "value": "cass_sub_lcs_12"
+          "text": "All",
+          "value": "*"
         },
         "refresh": true
       },
@@ -4652,28 +4640,16 @@
             "value": "*"
           },
           {
-            "text": "i-17623fc7",
-            "value": "i-17623fc7"
-          },
-          {
-            "text": "i-a58eca5a",
-            "value": "i-a58eca5a"
-          },
-          {
-            "text": "i-badd7013",
-            "value": "i-badd7013"
-          },
-          {
-            "text": "i-e8228c41",
-            "value": "i-e8228c41"
+            "text": "i-45f2dfbe",
+            "value": "i-45f2dfbe"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.cass_*.*",
         "current": {
-          "text": "i-a58eca5a",
-          "value": "i-a58eca5a"
+          "text": "All",
+          "value": "*"
         },
         "refresh": true
       }
