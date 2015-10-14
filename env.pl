@@ -1,6 +1,9 @@
 #! /usr/bin/perl 
 
-# Abyss expect ingress network traffic to be allowed on the following ports. Default ports:
+# Abyss agents fetch system and application metrics from the monitored server 
+# ship it to graphite server. grafana Dashboards are used to graph the metrics
+# Abyss expect ingress network traffic to be opened on the following ports. 
+# ----------Default ports----------
 #  graphite carbon server:  			7405, 7406, 7407
 #  elasticSearch (saves dashboards): 		7410, 7411
 #  cloudstat_port (fetches tcp stats):		7415 
@@ -13,39 +16,36 @@
 #  ping RTT:					ICMP traffic should be allowed
 #
 # --- Environment Variables exported to all agents
-#
-# Amazon Cloud specific environment variables. Uncomment if running agents on cloud instance
+
+$carbon_server = "NAME OR IP OF GRAPHITE SERVER";  # graphite server name or IP address
+$carbon_port = 7405;                               # graphite carbon server port
+$cloudstat_port = "7415";                          # sniffer agent port
+$interval = 5;                                     # Sets agents sample interval
+#-----------------------
+# Uncomment if running abyss agents on Amazon cloud instance
 #
 #$region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
 #$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
 #$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
 #$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
-#$server = "cluster.cloudperf";				# Metrics are accumulated under application name
-							# e.g: cloudperf. Change to match your app.
-#--------------end-of-amazon-env-variables---------
-#
-# Vagrant/VirtualBox specific environment varilables. Uncomment if running agents on Vagrant VM
-#
-$region="vagrant";
-$host = "VM1";
-$localIP = "192.168.33.79";                             # IP address of VM running agents to capture metrics 
-$publicIP = "192.168.33.79";                            # Same as above
-$server = "cluster.myapp";                             # Metrics are accumulated under application name
-                                                        # e.g: myapp. Change to match your app name
-#------------end-of-vagrant-env-variables--------
-
-$carbon_server = "graphiteserver.cloudperf.net";	# graphite server for storing metrics	
-$carbon_port = 7405;					# Port where graphite carbon server is running
-$cloudstat_port = "7415";                     		# python server port. It reads low level tcp stats
-$interval = 5;						# Sets sample interval
+#$server = "cluster.cloudperf";		# Metrics are accumulated under application name
+					# e.g: cloudperf. Change to match your app.
+#-----------------------
+# Uncomment if running agents on system in data center or VirtualBox VM. 
+$host = "MYHOST";
+$localIP = "IP ADDRESS OF MYHOST";      # IP address of VM running agents to capture metrics 
+$publicIP = "IP ADDRESS OF MYHOST";     # Same as above
+$server = "cluster.myapp";              # Metrics are accumulated under application name
+                                        # e.g: myapp. Change it to match your app name
+$interval = 5;					  # Sets sample interval
 
 #-------Benchmark Environment Variables ---------
 #
-# To run benchmark, you need to set peer host and run netserver and memcached on the matching ports
-# netserver: sudo netserver -p 7420
+# To run benchmark, you need to setup peer host and run: 
+# netserver and memcached server as follows:
+# netserver: $sudo netserver -p 7420
 # memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
-
-$peer =  "ec2-instance-name-here";		# peer host running netserver and memcached daemons
+$peer =  "HOST-RUNNING-MEMCACHED-NETSERVER";	# peer host running netserver and memcached daemons
 $net_dport = 7420;				# netserver data port on peer host for network benchmark
 $net_cport = 7421;				# netserver control port on peer host for net throughput benchmark
 $net_rport = 7422;				# netserver control port on peer host for net latency benchmark

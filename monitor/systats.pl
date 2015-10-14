@@ -1,7 +1,5 @@
 #! /usr/bin/perl 
 
-#use warnings;
-#use strict;
 use Fcntl qw/:flock/;
 
 open SELF, "< $0" or die ;
@@ -26,6 +24,7 @@ sub collect_TCPSegs;
 sub collect_IOStats;
 sub collect_VMStats;
 sub collect_CPUStats;
+sub collect_NFSiostats;
 
 while (1) {
 
@@ -39,6 +38,7 @@ while (1) {
  collect_IOStats;			# io stats
  collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
+ collect_NFSiostats;			# NFS stats
 
  #print @data; 				# Testing only 
  #print "\n------\n"; 			# Testing only
@@ -195,3 +195,23 @@ close(MPSTAT);
   push @data, "$server.$host.system.CPU.$key.intr $intr $now\n";
  }
 }
+
+sub collect_NFSiostats {
+  my @stats;
+  open(NFS, "cat /proc/self/mountstats |") || die print "failed to get data: $!\n";
+  while (<NFS>) {
+  if (/READ:/ || /WRITE:/) {
+  s/:/ /g;
+  @stats = split;
+  push @data, "$server.$host.system.nfs.$stats[0].Ops $stats[1] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].Trans $stats[2] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].Timeouts $stats[3] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].BytesSent $stats[4] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].BytesRecv $stats[5] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].Queueing $stats[6] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].RpcRTT $stats[7] $now\n";
+  push @data, "$server.$host.system.nfs.$stats[0].RpcExec $stats[8] $now\n";
+  }
+ }
+}
+

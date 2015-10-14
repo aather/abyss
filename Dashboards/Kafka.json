@@ -1,7 +1,7 @@
 {
   "id": null,
-  "title": "System Performance - Prod",
-  "originalTitle": "System Performance - Prod",
+  "title": "Kafka",
+  "originalTitle": "Kafka",
   "tags": [],
   "style": "dark",
   "timezone": "browser",
@@ -35,6 +35,609 @@
         }
       ],
       "showTitle": false
+    },
+    {
+      "title": "Kafka GC Stats",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "kafka GC Duration",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 117,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.Memory.GCDuration.CMS.*.CollectionTime), 2, 7, 8)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "kafka Heap",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 118,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.kafka.Memory.HeapMemoryUsage.used, 2, 5)"
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.kafka.Memory.NonHeapMemoryUsage.used, 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
+    },
+    {
+      "title": "Message Rate",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "Bytes IN/OUT",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 120,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.MsgRate.BytesInPerSec), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.MsgRate.BytesOutPerSec), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.MsgRate.BytesRejectedPerSec), 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Message Rate",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 121,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.MsgRate.MessagesInPerSec), 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
+    },
+    {
+      "title": "Request Rate",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "Producer Request Rate",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 122,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.LocalTimeMs.Produce), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RemoteTimeMs.Produce), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RequestsPerSec.Produce), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.ResponseSendTimeMs.Produce), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.TotalTimeMs.Produce), 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "FetchConsumer Request Rate",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 123,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.LocalTimeMs.FetchConsumer), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RemoteTimeMs.FetchConsumer), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RequestsPerSec.FetchConsumer), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.ResponseSendTimeMs.FetchConsumer), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.TotalTimeMs.FetchConsumer), 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "FetchFollower Request Rate",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 124,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.LocalTimeMs.FetchFollower), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RemoteTimeMs.FetchFollower), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.RequestsPerSec.FetchFollower), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.ResponseSendTimeMs.FetchFollower), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReqRate.TotalTimeMs.FetchFollower), 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
+    },
+    {
+      "title": "Log Flush and Replica Lag",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "Log Flush Rate",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 125,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.LogFlushRate), 2, 4)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Replica Lag",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 126,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.kafka.ReplicaMaxLag), 2, 4)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
     },
     {
       "title": "CPU and Memory stats",
@@ -221,7 +824,7 @@
           "id": 12,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 6,
           "title": "Net Throughput",
           "tooltip": {
             "query_as_alias": true,
@@ -275,7 +878,7 @@
         {
           "title": "Net Packets IN/OUT",
           "error": false,
-          "span": 3,
+          "span": 6,
           "editable": true,
           "type": "graph",
           "id": 24,
@@ -332,120 +935,6 @@
           "aliasColors": {},
           "seriesOverrides": [],
           "links": []
-        },
-        {
-          "title": "Net Latency (RTT)",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 105,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "µs",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(cluster.$Clusters.$Instance.system.tcp.traffic.RTT.*)"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Throughput Per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 106,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.CumulativeBytes.*), 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
         }
       ],
       "height": "250px",
@@ -472,7 +961,7 @@
           "id": 14,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 4,
           "title": "TCP Timeouts",
           "tooltip": {
             "query_as_alias": true,
@@ -534,7 +1023,7 @@
         {
           "title": "TCP Stats",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 26,
@@ -614,74 +1103,10 @@
           ],
           "linewidth": 1,
           "steppedLine": false,
-          "id": 56,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "TCP Retransmit Per Connection",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": false,
-            "min": false,
-            "max": false,
-            "show": false,
-            "current": false,
-            "values": false,
-            "total": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.RETRANS.*), 1))"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
-          "lines": false,
-          "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot",
-          "links": []
-        },
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
           "id": 107,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 4,
           "title": "TCP Segments",
           "tooltip": {
             "query_as_alias": true,
@@ -741,252 +1166,6 @@
       "collapse": false,
       "title": "TCP Stats",
       "showTitle": true
-    },
-    {
-      "title": "TCP CWND, RWND, QUEUE, PACKET LENGTH PER CONNECTION",
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "panels": [
-        {
-          "title": "TCP SSTRESH and CWND per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 94,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.SSTRESH.*, 1))"
-            },
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.CWND.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "TCP Read/Write Queue Size per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 95,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RQUEUE.*, 1))"
-            },
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.WQUEUE.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "TCP RWND per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 96,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RWND.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Packet Length per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 98,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.LENGTH.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        }
-      ]
     },
     {
       "title": "md - IO STATS: No stats if instance has a single disk",
@@ -1285,7 +1464,7 @@
       "title": "xvdb - IO Stats: Only needed when instance have single disk",
       "height": "250px",
       "editable": true,
-      "collapse": false,
+      "collapse": true,
       "panels": [
         {
           "title": "xvdb - IO Throughput",
@@ -1615,6 +1794,272 @@
           "aliasColors": {
             "context switch": "#962D82"
           },
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "Per CPU stats",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "Per CPU: CPU3",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 63,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Per CPU: CPU4",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 64,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Per CPU: CPU5",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 65,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+            }
+          ],
+          "aliasColors": {},
           "seriesOverrides": [],
           "links": []
         }
@@ -2530,272 +2975,6 @@
       "collapse": true,
       "panels": [
         {
-          "title": "Per CPU: CPU3",
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "id": 63,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "percent",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": true,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.*))",
-              "hide": true
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.idle)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.sys)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.user)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu3.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Per CPU: CPU4",
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "id": 64,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "percent",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": true,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.*))",
-              "hide": true
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.idle)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.sys)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.user)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu4.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Per CPU: CPU5",
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "id": 65,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "percent",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": true,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.*))",
-              "hide": true
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.idle)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.sys)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.user)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu5.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        }
-      ]
-    },
-    {
-      "title": "Per CPU stats",
-      "height": "250px",
-      "editable": true,
-      "collapse": true,
-      "panels": [
-        {
           "title": "Per CPU: CPU6",
           "error": false,
           "span": 4,
@@ -3678,6 +3857,67 @@
           "aliasColors": {},
           "seriesOverrides": [],
           "links": []
+        },
+        {
+          "title": "Tomcat WebApp GC Duration",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 119,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.tomcat.Memory.GCDuration.PGC.PS-MarkSweep.CollectionTime), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.tomcat.Memory.GCDuration.PGC.PS-Scavenge.CollectionTime), 2, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
         }
       ]
     }
@@ -3721,7 +3961,7 @@
   ],
   "time": {
     "to": "now",
-    "from": "now-15m",
+    "from": "now-5m",
     "now": false
   },
   "templating": {
@@ -3737,20 +3977,24 @@
             "value": "*"
           },
           {
-            "text": "cass_pds_event",
-            "value": "cass_pds_event"
+            "text": "abyssagents",
+            "value": "abyssagents"
           },
           {
-            "text": "csefs",
-            "value": "csefs"
+            "text": "cass_ppd",
+            "value": "cass_ppd"
+          },
+          {
+            "text": "kafka",
+            "value": "kafka"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
-        "query": "cluster.*",
+        "query": "cluster.Kafka*",
         "current": {
-          "text": "csefs",
-          "value": "csefs"
+          "text": "kafka",
+          "value": "kafka"
         },
         "refresh": true
       },
@@ -3765,16 +4009,20 @@
             "value": "*"
           },
           {
-            "text": "i-0f337ff2",
-            "value": "i-0f337ff2"
+            "text": "i-4f848098",
+            "value": "i-4f848098"
+          },
+          {
+            "text": "i-dc143e70",
+            "value": "i-dc143e70"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "All",
-          "value": "*"
+          "text": "i-4f848098",
+          "value": "i-4f848098"
         },
         "refresh": true
       }

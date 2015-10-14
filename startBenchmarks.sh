@@ -1,11 +1,12 @@
 #!/bin/bash
 
+DIR=/usr/share/abyss
+
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null
  kill  `pgrep tcpstats.pl`  2>/dev/null
  kill  `pgrep iolatency.pl` 2>/dev/null
- kill  `pgrep cassandra.pl` 2>/dev/null
  kill  `ps -elf|grep CLOUDSTAT|grep -v grep |awk '{print $4}'` 2>/dev/null
 
 for PID in $PIDLIST
@@ -17,14 +18,8 @@ exit
 
 trap killall HUP INT QUIT KILL TERM USR1 USR2 EXIT
 
-# check if it is centOS, then install netcat 'nc' package 
-if [ -f "/usr/bin/yum" ]
-then
-   sudo yum install -y nc
-fi
-
 # Agent to monitor system stats: cpu, io, disk, net, mem
-cd monitor
+cd $DIR/monitor
 nohup ./loop-systats.sh &
 PIDLIST="$PIDLIST $!"
 cd ..
@@ -33,7 +28,7 @@ cd ..
 # check if perf is installed
 if [ -f "/usr/bin/perf" ] 
 then
- cd sniffer
+ cd $DIR/sniffer
  nohup ./loop-iolatency.sh &
  PIDLIST="$PIDLIST $!"
  cd ..
@@ -42,16 +37,16 @@ else
 fi
 
 # Agent to monitor low level tcp stats: per connection RTT, Throughput, Retransmit, Congestion, etc..
-if [ -f "/usr/bin/make" ] 
-then
-   cd sniffer
-   nohup ./loop-tcpstats.sh &
-   PIDLIST="$PIDLIST $!"
-   cd ..
-fi
+#if [ -f "/usr/bin/make" ] 
+#then
+#   cd $DIR/sniffer
+#   nohup ./loop-tcpstats.sh &
+#   PIDLIST="$PIDLIST $!"
+#   cd ..
+#fi
 
 # Start Net latency, throughput and memcached RPS Benchmarks
-cd test-suites/net-tests/
+cd $DIR/test-suites/net-tests/
 while :
 do
  nohup ./netTPS.pl &       		# Run network latency tests nonstop. Low net overhead!

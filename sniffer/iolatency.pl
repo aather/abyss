@@ -1,7 +1,5 @@
 #! /usr/bin/perl 
 
-#use warnings;
-#use strict;
 use Fcntl qw/:flock/;
 
 open SELF, "< $0" or die ;

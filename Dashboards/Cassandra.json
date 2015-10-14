@@ -1,9 +1,9 @@
 {
   "id": null,
-  "title": "System Performance - Test",
-  "originalTitle": "System Performance - Test",
+  "title": "Cassandra Dash",
+  "originalTitle": "Cassandra Dash",
   "tags": [],
-  "style": "light",
+  "style": "dark",
   "timezone": "browser",
   "editable": true,
   "hideControls": false,
@@ -37,7 +37,1056 @@
       "showTitle": false
     },
     {
-      "title": "CPU and Memory stats",
+      "panels": [
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "µs",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 4,
+          "fill": 0,
+          "scale": 1,
+          "span": 6,
+          "title": "Coordinator Latency",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": true,
+            "current": true,
+            "values": true,
+            "total": false,
+            "alignAsTable": true
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Coordinator.WriteLatency95thPercentile, 2,5)"
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Coordinator.WriteLatency99thPercentile, 2, 5)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Coordinator.ReadLatency95thPercentile, 2, 5)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Coordinator.ReadLatency99thPercentile, 2, 5)",
+              "hide": false
+            }
+          ],
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true
+        },
+        {
+          "title": "Coordinator Read and Write Ops",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 23,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "thresholdLine": false
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Coordinator.ReadOperations), 1), '$Instance-ReadOps')"
+            },
+            {
+              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Coordinator.WriteOperations), 1), '$Instance-WriteOps')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "title": "Coordinator Read Write Latency"
+    },
+    {
+      "panels": [
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "µs",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 8,
+          "fill": 0,
+          "scale": 1,
+          "span": 6,
+          "title": "ColunmFamily Latency",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": false,
+            "current": true,
+            "values": true,
+            "total": false,
+            "alignAsTable": true
+          },
+          "targets": [
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.ReadLatency95thPercentile"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.ReadLatency99thPercentile"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.WriteLatency95thPercentile"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.WriteLatency99thPercentile"
+            }
+          ],
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true
+        },
+        {
+          "title": "Column Family Read and Write Ops",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 27,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.ReadCount), 1)",
+              "hide": false
+            },
+            {
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.ColumnFamilies.*.*.WriteCount), 1)",
+              "hide": false
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "title": "Column Family Read Write Latency"
+    },
+    {
+      "title": "Java Heap and GC Time and Objects Collected",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "Java Heap and Non Heap",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 18,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Memory.HeapMemoryUsage.used, 2, 5)"
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Memory.NonHeapMemoryUsage.used, 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "GC Duration",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 19,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.PGC.ConcurrentMarkSweep.CollectionTime), 2, 6, 7)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.PGC.ParNew.CollectionTime), 2, 6, 7)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ConcurrentMarkSweep.CollectionTime), 2, 6, 7)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memory.GCDuration.CMS.ParNew.CollectionTime), 2, 6, 7)",
+              "hide": false
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
+    },
+    {
+      "panels": [
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 6,
+          "fill": 0,
+          "scale": 1,
+          "span": 3,
+          "title": "Pending Tasks",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": false,
+            "current": false,
+            "values": true,
+            "total": false,
+            "alignAsTable": true,
+            "sortDesc": true
+          },
+          "targets": [
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.Compaction.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.FlushWriter.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.GossipStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.HintedHandoff.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.InternalResponseStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.MemoryMeter.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.MemtablePostFlusher.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.MigrationStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.MutationStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.PendingRangeCalculator.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.ReadStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.RequestResponseStage.PendingTasks, 2, 4)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.commitlog_archiver.PendingTasks, 2, 4)"
+            }
+          ],
+          "leftYAxisLabel": "",
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true,
+          "links": []
+        },
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 100,
+          "fill": 0,
+          "scale": 1,
+          "span": 3,
+          "title": "TotalBytesCompacted",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": true,
+            "current": false,
+            "values": true,
+            "total": false,
+            "alignAsTable": true
+          },
+          "targets": [
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Compaction.TotalBytesCompacted), 2, 5)"
+            }
+          ],
+          "leftYAxisLabel": "",
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true,
+          "links": []
+        },
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 102,
+          "fill": 0,
+          "scale": 1,
+          "span": 3,
+          "title": "Memtable Size",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": false,
+            "current": false,
+            "values": true,
+            "total": false,
+            "alignAsTable": true
+          },
+          "targets": [
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.MemtableDataSize"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": true,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.MemtableColumnsCount"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.ColumnFamilies.*.*.MemtableDataSize"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": true,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.ColumnFamilies.*.*.MemtableColumnsCount"
+            }
+          ],
+          "leftYAxisLabel": "",
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true,
+          "links": []
+        },
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "spyable": true,
+          "timezone": "browser",
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 103,
+          "fill": 0,
+          "scale": 1,
+          "span": 3,
+          "title": "Live sstables and Memtable Switch Rate",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": true,
+            "min": true,
+            "max": true,
+            "show": false,
+            "current": true,
+            "values": true,
+            "total": false,
+            "alignAsTable": true
+          },
+          "targets": [
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memtable.MemtableSwitchCount)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.LiveSSTableCount"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.cassandra.Memtable.ColumnFamilies.*.*.MemtableSwitchCount)"
+            },
+            {
+              "function": "mean",
+              "column": "value",
+              "hide": false,
+              "target": "cluster.$Clusters.$Instance.cassandra.Memtable.ColumnFamilies.*.*.LiveSSTableCount"
+            }
+          ],
+          "leftYAxisLabel": "",
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "min": null,
+            "threshold1": null,
+            "max": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "legend_counts": true,
+          "aliasYAxis": {},
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "renderer": "flot",
+          "datasource": "graphite",
+          "pointradius": 1,
+          "resolution": 100,
+          "options": false,
+          "interactive": true,
+          "links": []
+        }
+      ],
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "title": "C* Pending Tasks and Bytes Compacted"
+    },
+    {
+      "title": "C* SSTABLE cached Size and Count - HIGH OVERHEAD",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "Cached SStables",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 16,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.cachedSSTABLES.*.db.percent, 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "SStable Sizes",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 28,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.cassandra.cachedSSTABLES.*.db.size, 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "SSTable Count",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 59,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "alias(cluster.$Clusters.$Instance.cassandra.cachedSSTABLES.count, 'SSTables Count')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "CPU and Memory Stats",
       "height": "250px",
       "editable": true,
       "collapse": false,
@@ -77,13 +1126,12 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": true,
+            "values": false,
             "min": false,
-            "max": true,
+            "max": false,
             "current": false,
             "total": false,
-            "avg": true,
-            "alignAsTable": true
+            "avg": false
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -134,12 +1182,12 @@
           "links": []
         },
         {
-          "title": "Memory Usage",
+          "title": "Memory",
           "error": false,
           "span": 6,
           "editable": true,
           "type": "graph",
-          "id": 108,
+          "id": 109,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
@@ -168,206 +1216,6 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.free_cached, 1024), 2, 5)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.free_unused, 1024), 2, 5)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.used, 1024), 2, 5)",
-              "hide": false
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        }
-      ],
-      "showTitle": true
-    },
-    {
-      "panels": [
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
-          "id": 12,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "Net Throughput",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": true,
-            "min": false,
-            "max": true,
-            "show": true,
-            "current": false,
-            "values": true,
-            "total": false,
-            "alignAsTable": true
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.txbytes, rxbytes), 1), 2, 6)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.rxbytes, rxbytes), 1), 2, 6)"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
-          "lines": true,
-          "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot"
-        },
-        {
-          "title": "Net Packets IN/OUT",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 24,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": true,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.rxpackets), 1), 2, 6)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.txpackets), 1), 2, 6)"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Net Latency (RTT)",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 105,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "µs",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
             "values": false,
             "min": false,
             "max": false,
@@ -383,20 +1231,35 @@
           },
           "targets": [
             {
-              "target": "aliasByMetric(cluster.$Clusters.$Instance.system.tcp.traffic.RTT.*)"
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.free_cached, 1024), 2, 4, 5)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.free_unused, 1024), 2, 4, 5)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.mem.used, 1024), 2, 4, 5)"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
           "links": []
-        },
+        }
+      ],
+      "showTitle": true
+    },
+    {
+      "title": "IO Throughput, IOPS, LATENCY",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
         {
-          "title": "Throughput Per Connection",
+          "title": "md0 - Throughput",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
-          "id": 106,
+          "id": 112,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
@@ -415,346 +1278,50 @@
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.CumulativeBytes.*), 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        }
-      ],
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "title": "Net Throughput and Latency",
-      "showTitle": true
-    },
-    {
-      "panels": [
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
-          "id": 14,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "TCP Timeouts",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": false,
-            "min": false,
-            "max": false,
-            "show": false,
-            "current": false,
-            "values": false,
-            "total": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.ListenDrops, ListenDrops), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPBacklogDrop, ListenDrops), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPFastRetrans, ListenDrops), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPSlowStartRetrans, ListenDrops), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPTimeOuts, ListenDrops), 1), 2, 5)"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
-          "lines": false,
-          "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot"
-        },
-        {
-          "title": "TCP Stats",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 26,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.ActiveOpens), 1), 2, 5)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.EstabRsts), 1), 2, 5)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.OutRst), 1), 2, 5)",
-              "hide": false
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.PassiveOpens), 1), 2, 5)",
-              "hide": false
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
-          "id": 56,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "TCP Retransmit Per Connection",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": false,
-            "min": false,
-            "max": false,
-            "show": false,
-            "current": false,
-            "values": false,
-            "total": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.RETRANS.*), 1))"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
-          "lines": false,
-          "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot",
-          "links": []
-        },
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
-          "id": 107,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "TCP Segments",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": false,
-            "min": false,
-            "max": false,
-            "show": true,
-            "current": false,
-            "values": false,
-            "total": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.OutSegs), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.InSegs), 1), 2, 5)"
-            },
-            {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.RetransSegs), 1), 2, 5)"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
           "lines": true,
+          "fill": 0,
+          "linewidth": 1,
           "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot",
-          "links": []
-        }
-      ],
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "title": "TCP Stats",
-      "showTitle": true
-    },
-    {
-      "title": "TCP CWND, RWND, QUEUE, PACKET LENGTH PER CONNECTION",
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "panels": [
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors, ReadIOPS), 512), 1), 2, 5, 6)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors, ReadIOPS), 512), 1), 2, 5, 6)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": [],
+          "height": ""
+        },
         {
-          "title": "TCP SSTRESH and CWND per Connection",
+          "title": "md0 - IOPS",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
-          "id": 94,
+          "id": 113,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
@@ -773,7 +1340,7 @@
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
-          "lines": false,
+          "lines": true,
           "fill": 0,
           "linewidth": 1,
           "points": true,
@@ -782,11 +1349,11 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": false,
+            "show": true,
             "values": true,
             "min": true,
             "max": true,
-            "current": true,
+            "current": false,
             "total": false,
             "avg": true,
             "alignAsTable": true
@@ -794,89 +1361,29 @@
           "nullPointMode": "connected",
           "steppedLine": false,
           "tooltip": {
-            "value_type": "cumulative",
+            "value_type": "individual",
             "shared": false
           },
           "targets": [
             {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.SSTRESH.*, 1))"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS, ReadIOPS), 1), 2, 5, 6)"
             },
             {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.CWND.*, 1))"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS, ReadIOPS), 1), 2, 5, 6)"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
-          "links": []
+          "links": [],
+          "height": ""
         },
         {
-          "title": "TCP Read/Write Queue Size per Connection",
+          "title": "md0 - IO Size",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
-          "id": 95,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RQUEUE.*, 1))"
-            },
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.WQUEUE.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "TCP RWND per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 96,
+          "id": 114,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
@@ -895,7 +1402,7 @@
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
-          "lines": false,
+          "lines": true,
           "fill": 0,
           "linewidth": 1,
           "points": true,
@@ -904,11 +1411,11 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": false,
+            "show": true,
             "values": true,
             "min": true,
             "max": true,
-            "current": true,
+            "current": false,
             "total": false,
             "avg": true,
             "alignAsTable": true
@@ -916,86 +1423,48 @@
           "nullPointMode": "connected",
           "steppedLine": false,
           "tooltip": {
-            "value_type": "cumulative",
+            "value_type": "individual",
             "shared": false
           },
           "targets": [
             {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RWND.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Packet Length per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 98,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors, ReadIOPS), 1)",
+              "hide": true
+            },
             {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.LENGTH.*, 1))"
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors, ReadIOPS), 1)",
+              "hide": true
+            },
+            {
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS, ReadIOPS), 1)",
+              "hide": true
+            },
+            {
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS, ReadIOPS), 1)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#A, #C), 512), '$Instance:ReadSize')"
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #D), 512), '$Instance:WriteSize')"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
-          "links": []
+          "links": [],
+          "height": ""
         }
       ]
     },
     {
-      "title": "md - IO STATS: No stats if instance has a single disk",
+      "title": "IO Throughput, IOPS, LATENCY",
       "height": "250px",
       "editable": true,
       "collapse": false,
       "panels": [
         {
-          "title": "IO Throughput",
+          "title": "xvdb -IO Throughput",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1030,7 +1499,7 @@
           "legend": {
             "show": true,
             "values": true,
-            "min": false,
+            "min": true,
             "max": true,
             "current": false,
             "total": false,
@@ -1048,10 +1517,10 @@
           },
           "targets": [
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors), 512), 1), '$Instance-md0-rbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
             },
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors), 512), 1), '$Instance-md0-wbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-wbytes')"
             }
           ],
           "aliasColors": {},
@@ -1059,7 +1528,7 @@
           "links": []
         },
         {
-          "title": "IOPS",
+          "title": "xvdb - IOPS",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1094,7 +1563,7 @@
           "legend": {
             "show": true,
             "values": true,
-            "min": false,
+            "min": true,
             "max": true,
             "current": false,
             "total": false,
@@ -1109,10 +1578,10 @@
           },
           "targets": [
             {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS, ReadIOPS), 1), 2, 5, 6)"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS, ReadIOPS), 1), 2, 5, 6)"
             },
             {
-              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS, ReadIOPS), 1), 2, 5, 6)"
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS, ReadIOPS), 1), 2, 5, 6)"
             }
           ],
           "aliasColors": {},
@@ -1121,7 +1590,7 @@
           "height": ""
         },
         {
-          "title": "IO LATENCY",
+          "title": "All Storage - IO LATENCY",
           "error": false,
           "span": 3,
           "editable": true,
@@ -1133,86 +1602,6 @@
           "y-axis": true,
           "y_formats": [
             "ms",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.min, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.max, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.95th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.99th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.min, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.max, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.95th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.99th, 0.001), 2, 6, 7)"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": [],
-          "height": ""
-        },
-        {
-          "title": "Read/Write IO Size",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 104,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
             "short"
           ],
           "grid": {
@@ -1251,116 +1640,52 @@
           },
           "targets": [
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors), 1)",
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.95th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.99th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.max, 0.001), 2, 6, 7)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors), 1)",
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.min, 0.001), 2, 6, 7)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadIOPS), 1)",
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.95th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.99th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.max, 0.001), 2, 6, 7)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteIOPS), 1)",
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.min, 0.001), 2, 6, 7)",
               "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#A, #C), 512), '$Instance:ReadSize')"
-            },
-            {
-              "target": "alias(scale(divideSeries(#B, #D), 512), '$Instance:WriteSize')"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
           "links": [],
           "height": ""
-        }
-      ],
-      "showTitle": true
-    },
-    {
-      "title": "xvdb - IO Stats: Only needed when instance have single disk",
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "panels": [
-        {
-          "title": "xvdb - IO Throughput",
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "id": 114,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
-            },
-            {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-rbytes')"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
         },
         {
-          "title": "xvdb - IOPS",
+          "title": "xvdb - Read/Write IO Size",
           "error": false,
-          "span": 4,
+          "span": 3,
           "editable": true,
           "type": "graph",
-          "id": 115,
+          "id": 104,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "bytes",
+            "short",
             "short"
           ],
           "grid": {
@@ -1384,7 +1709,7 @@
           "legend": {
             "show": true,
             "values": true,
-            "min": false,
+            "min": true,
             "max": true,
             "current": false,
             "total": false,
@@ -1394,68 +1719,7 @@
           "nullPointMode": "connected",
           "steppedLine": false,
           "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS), 1), '$Instance-xvdb-ReadIOPS')"
-            },
-            {
-              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS), 1), '$Instance-xvdb-WriteIOPS')"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "xvdb - Read-Write IO size",
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "id": 116,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": true,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
+            "value_type": "individual",
             "shared": false
           },
           "targets": [
@@ -1476,20 +1740,18 @@
               "hide": true
             },
             {
-              "target": "alias(scale(divideSeries(#A, #C), 512), '$Instance:ReadSize')",
-              "hide": false
+              "target": "alias(scale(divideSeries(#A, #C), 512), '$Instance:ReadSize')"
             },
             {
-              "target": "alias(scale(divideSeries(#B, #D), 512), '$Instance:WriteSize')",
-              "hide": false
+              "target": "alias(scale(divideSeries(#B, #D), 512), '$Instance:WriteSize')"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
-          "links": []
+          "links": [],
+          "height": ""
         }
-      ],
-      "showTitle": true
+      ]
     },
     {
       "title": "Process Blocked and Runnable",
@@ -1619,6 +1881,366 @@
           "links": []
         }
       ]
+    },
+    {
+      "panels": [
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 12,
+          "fill": 0,
+          "scale": 1,
+          "span": 6,
+          "title": "Net Throughput",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": false,
+            "min": false,
+            "max": false,
+            "show": true,
+            "current": false,
+            "values": false,
+            "total": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.txbytes, rxbytes), 1), 2, 6)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.rxbytes, rxbytes), 1), 2, 6)"
+            }
+          ],
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "pointradius": 1,
+          "editable": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "datasource": null,
+          "error": false,
+          "resolution": 100,
+          "renderer": "flot"
+        },
+        {
+          "title": "Net Packets IN/OUT",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 24,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.rxpackets), 1), 2, 6)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.interface.eth0.txpackets), 1), 2, 6)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "title": "Network Throughput and Packet/sec Rate",
+      "showTitle": true
+    },
+    {
+      "panels": [
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 14,
+          "fill": 0,
+          "scale": 1,
+          "span": 4,
+          "title": "TCP Timeouts",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": false,
+            "min": false,
+            "max": false,
+            "show": false,
+            "current": false,
+            "values": false,
+            "total": false,
+            "alignAsTable": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.ListenDrops, ListenDrops), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPBacklogDrop, ListenDrops), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPFastRetrans, ListenDrops), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPSlowStartRetrans, ListenDrops), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.TCPTimeOuts, ListenDrops), 1), 2, 5)"
+            }
+          ],
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "pointradius": 2,
+          "editable": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "datasource": null,
+          "error": false,
+          "resolution": 100,
+          "renderer": "flot"
+        },
+        {
+          "title": "TCP Stats",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 26,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.ActiveOpens), 1), 2, 5)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.EstabRsts), 1), 2, 5)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.OutRst), 1), 2, 5)",
+              "hide": false
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.PassiveOpens), 1), 2, 5)",
+              "hide": false
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "bars": false,
+          "aliasColors": {},
+          "nullPointMode": "connected",
+          "annotate": {
+            "enable": false
+          },
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "linewidth": 1,
+          "steppedLine": false,
+          "id": 107,
+          "fill": 0,
+          "scale": 1,
+          "span": 4,
+          "title": "TCP Segments",
+          "tooltip": {
+            "query_as_alias": true,
+            "value_type": "individual",
+            "shared": false
+          },
+          "legend": {
+            "avg": false,
+            "min": false,
+            "max": false,
+            "show": true,
+            "current": false,
+            "values": false,
+            "total": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.OutSegs), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.InSegs), 1), 2, 5)"
+            },
+            {
+              "target": "aliasByNode(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.RetransSegs), 1), 2, 5)"
+            }
+          ],
+          "seriesOverrides": [],
+          "percentage": false,
+          "type": "graph",
+          "x-axis": true,
+          "pointradius": 1,
+          "editable": true,
+          "zerofill": true,
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "rightMin": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "leftMin": null
+          },
+          "stack": false,
+          "y-axis": true,
+          "lines": true,
+          "points": true,
+          "datasource": null,
+          "error": false,
+          "resolution": 100,
+          "renderer": "flot",
+          "links": []
+        }
+      ],
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "title": "TCP Timeouts Segment IN/OUT and RETRANSMIT",
+      "showTitle": true
     },
     {
       "title": "Per Disk Read IO Latency",
@@ -3678,6 +4300,134 @@
           "aliasColors": {},
           "seriesOverrides": [],
           "links": []
+        },
+        {
+          "title": "xvdb -IO Throughput",
+          "error": false,
+          "span": 3,
+          "editable": true,
+          "type": "graph",
+          "id": 110,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true,
+            "rightSide": false,
+            "sortDesc": false,
+            "sort": "min"
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
+            },
+            {
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-wbytes')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "xvdb -IO Throughput",
+          "error": false,
+          "span": 3,
+          "editable": true,
+          "type": "graph",
+          "id": 111,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true,
+            "rightSide": false,
+            "sortDesc": false,
+            "sort": "min"
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
+            },
+            {
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-wbytes')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
         }
       ]
     }
@@ -3721,7 +4471,7 @@
   ],
   "time": {
     "to": "now",
-    "from": "now-15m",
+    "from": "now-5m",
     "now": false
   },
   "templating": {
@@ -3737,20 +4487,16 @@
             "value": "*"
           },
           {
-            "text": "cass_pds_event",
-            "value": "cass_pds_event"
-          },
-          {
-            "text": "csefs",
-            "value": "csefs"
+            "text": "cass_ppd",
+            "value": "cass_ppd"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
-        "query": "cluster.*",
+        "query": "cluster.cass_*",
         "current": {
-          "text": "csefs",
-          "value": "csefs"
+          "text": "cass_ppd",
+          "value": "cass_ppd"
         },
         "refresh": true
       },
@@ -3765,16 +4511,16 @@
             "value": "*"
           },
           {
-            "text": "i-0f337ff2",
-            "value": "i-0f337ff2"
+            "text": "i-d47e0df8",
+            "value": "i-d47e0df8"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "All",
-          "value": "*"
+          "text": "i-d47e0df8",
+          "value": "i-d47e0df8"
         },
         "refresh": true
       }

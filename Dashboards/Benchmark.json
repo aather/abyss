@@ -1,9 +1,9 @@
 {
   "id": null,
-  "title": "Benchmark Dashboard - Test",
-  "originalTitle": "Benchmark Dashboard - Test",
+  "title": "Benchmark Dashboard",
+  "originalTitle": "Benchmark Dashboard",
   "tags": [],
-  "style": "light",
+  "style": "dark",
   "timezone": "browser",
   "editable": true,
   "hideControls": false,
@@ -54,7 +54,7 @@
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "bytes",
+            "bits",
             "short"
           ],
           "grid": {
@@ -185,7 +185,7 @@
           "links": []
         },
         {
-          "title": "pingRTT: Roud Trip Time",
+          "title": "netTPS - Net Latency: Transactions per Second",
           "error": false,
           "span": 6,
           "editable": true,
@@ -196,7 +196,7 @@
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "ms",
+            "short",
             "short"
           ],
           "grid": {
@@ -637,7 +637,7 @@
           "id": 12,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 6,
           "title": "Net Throughput",
           "tooltip": {
             "query_as_alias": true,
@@ -691,7 +691,7 @@
         {
           "title": "Net Packets IN/OUT",
           "error": false,
-          "span": 3,
+          "span": 6,
           "editable": true,
           "type": "graph",
           "id": 24,
@@ -748,120 +748,6 @@
           "aliasColors": {},
           "seriesOverrides": [],
           "links": []
-        },
-        {
-          "title": "Net Latency (RTT)",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 105,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "µs",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(cluster.$Clusters.$Instance.system.tcp.traffic.RTT.*)"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Throughput Per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 106,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.CumulativeBytes.*), 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
         }
       ],
       "height": "250px",
@@ -888,7 +774,7 @@
           "id": 14,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 4,
           "title": "TCP Timeouts",
           "tooltip": {
             "query_as_alias": true,
@@ -950,7 +836,7 @@
         {
           "title": "TCP Stats",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 26,
@@ -1030,74 +916,10 @@
           ],
           "linewidth": 1,
           "steppedLine": false,
-          "id": 56,
-          "fill": 0,
-          "scale": 1,
-          "span": 3,
-          "title": "TCP Retransmit Per Connection",
-          "tooltip": {
-            "query_as_alias": true,
-            "value_type": "individual",
-            "shared": false
-          },
-          "legend": {
-            "avg": false,
-            "min": false,
-            "max": false,
-            "show": false,
-            "current": false,
-            "values": false,
-            "total": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.tcp.traffic.RETRANS.*), 1))"
-            }
-          ],
-          "seriesOverrides": [],
-          "percentage": false,
-          "type": "graph",
-          "x-axis": true,
-          "pointradius": 1,
-          "editable": true,
-          "zerofill": true,
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)",
-            "rightMin": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "leftMin": null
-          },
-          "stack": false,
-          "y-axis": true,
-          "lines": false,
-          "points": true,
-          "datasource": null,
-          "error": false,
-          "resolution": 100,
-          "renderer": "flot",
-          "links": []
-        },
-        {
-          "bars": false,
-          "aliasColors": {},
-          "nullPointMode": "connected",
-          "annotate": {
-            "enable": false
-          },
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "linewidth": 1,
-          "steppedLine": false,
           "id": 107,
           "fill": 0,
           "scale": 1,
-          "span": 3,
+          "span": 4,
           "title": "TCP Segments",
           "tooltip": {
             "query_as_alias": true,
@@ -1159,252 +981,6 @@
       "showTitle": true
     },
     {
-      "title": "TCP CWND, RWND, QUEUE, PACKET LENGTH PER CONNECTION",
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "panels": [
-        {
-          "title": "TCP SSTRESH and CWND per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 94,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.SSTRESH.*, 1))"
-            },
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.CWND.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "TCP Read/Write Queue Size per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 95,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RQUEUE.*, 1))"
-            },
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.WQUEUE.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "TCP RWND per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 96,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.RWND.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        },
-        {
-          "title": "Packet Length per Connection",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 98,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": true,
-            "max": true,
-            "current": true,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByMetric(scaleToSeconds(cluster.$Clusters.$Instance.system.tcp.traffic.LENGTH.*, 1))"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": []
-        }
-      ]
-    },
-    {
       "title": "md - IO STATS: No stats if instance has a single disk",
       "height": "250px",
       "editable": true,
@@ -1464,10 +1040,10 @@
           },
           "targets": [
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.ReadSectors), 512), 1), '$Instance-md0-rbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.ReadSectors), 512), 1), '$Instance-md0-rbytes')"
             },
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.WriteSectors), 512), 1), '$Instance-md0-wbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.md0.WriteSectors), 512), 1), '$Instance-md0-wbytes')"
             }
           ],
           "aliasColors": {},
@@ -4137,7 +3713,7 @@
   ],
   "time": {
     "to": "now",
-    "from": "now-5m",
+    "from": "now-2h",
     "now": false
   },
   "templating": {
@@ -4153,20 +3729,32 @@
             "value": "*"
           },
           {
-            "text": "aather",
-            "value": "aather"
+            "text": "cass_cs",
+            "value": "cass_cs"
           },
           {
-            "text": "myapp",
-            "value": "myapp"
+            "text": "cass_dhs",
+            "value": "cass_dhs"
+          },
+          {
+            "text": "cass_pds_event",
+            "value": "cass_pds_event"
+          },
+          {
+            "text": "gps_precompute",
+            "value": "gps_precompute"
+          },
+          {
+            "text": "pappy_dyno",
+            "value": "pappy_dyno"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.*",
         "current": {
-          "text": "myapp",
-          "value": "myapp"
+          "text": "All",
+          "value": "*"
         },
         "refresh": true
       },
@@ -4181,16 +3769,32 @@
             "value": "*"
           },
           {
-            "text": "VM1",
-            "value": "VM1"
+            "text": "i-0c59b5fd",
+            "value": "i-0c59b5fd"
+          },
+          {
+            "text": "i-3ac5061b",
+            "value": "i-3ac5061b"
+          },
+          {
+            "text": "i-45f2dfbe",
+            "value": "i-45f2dfbe"
+          },
+          {
+            "text": "i-906992ba",
+            "value": "i-906992ba"
+          },
+          {
+            "text": "i-bc4da469",
+            "value": "i-bc4da469"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "VM1",
-          "value": "VM1"
+          "text": "All",
+          "value": "*"
         },
         "refresh": true
       }
