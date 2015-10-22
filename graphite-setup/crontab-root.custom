@@ -27,6 +27,5 @@
 */15 * * * * find /mnt/data/whisper/cluster/*/*/cassandra/cachedSSTABLES/* -mmin +30 -exec rm -rf {} \;
 */5 * * * * find /mnt/data/whisper/cluster/*/*/system/tcp/traffic/* -mmin +15 -exec rm -rf {} \;
 0 */6 * * *  find /mnt/logs/system/carbon/* -exec rm -rf {} \;
-0 */2 * * *  service carbon-cache restart;
 0 */6 * * *  find /mnt/data/whisper/cluster/* -mmin +5760 -exec rm -rf {} \;
 

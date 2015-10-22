@@ -37,6 +37,134 @@
       "showTitle": false
     },
     {
+      "title": "Tomcat GC Stats",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "Tomcat WebApp GC Duration",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 117,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.tomcat.Memory.GCDuration.*.*.CollectionTime), 2, 6, 7, 8)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Tomcat WebApp Heap",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 118,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": true,
+            "current": true,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.tomcat.Memory.HeapMemoryUsage.used, 2, 5)"
+            },
+            {
+              "target": "aliasByNode(cluster.$Clusters.$Instance.tomcat.Memory.NonHeapMemoryUsage.used, 2, 5)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ],
+      "showTitle": true
+    },
+    {
       "title": "CPU and Memory stats",
       "height": "250px",
       "editable": true,
@@ -568,7 +696,7 @@
       "title": "md - IO STATS: No stats if instance has a single disk",
       "height": "250px",
       "editable": true,
-      "collapse": true,
+      "collapse": false,
       "panels": [
         {
           "title": "IO Throughput",
@@ -858,13 +986,13 @@
       "showTitle": true
     },
     {
-      "title": "xvdb - IO Stats:",
+      "title": "xvdb - IO Stats: Only needed when instance have single disk",
       "height": "250px",
       "editable": true,
-      "collapse": false,
+      "collapse": true,
       "panels": [
         {
-          "title": "xvda - IO Throughput",
+          "title": "xvdb - IO Throughput",
           "error": false,
           "span": 4,
           "editable": true,
@@ -914,10 +1042,10 @@
           },
           "targets": [
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 512), 1), '$Instance-xvda-rbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 512), 1), '$Instance-xvdb-rbytes')"
             },
             {
-              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 512), 1), '$Instance-xvda-rbytes')"
+              "target": "alias(scaleToSeconds(scale(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 512), 1), '$Instance-xvdb-rbytes')"
             }
           ],
           "aliasColors": {},
@@ -925,7 +1053,7 @@
           "links": []
         },
         {
-          "title": "xvda - IOPS",
+          "title": "xvdb - IOPS",
           "error": false,
           "span": 4,
           "editable": true,
@@ -975,10 +1103,10 @@
           },
           "targets": [
             {
-              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1), '$Instance-xvda-ReadIOPS')"
+              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS), 1), '$Instance-xvdb-ReadIOPS')"
             },
             {
-              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1), '$Instance-xvda-WriteIOPS')"
+              "target": "alias(scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS), 1), '$Instance-xvdb-WriteIOPS')"
             }
           ],
           "aliasColors": {},
@@ -986,7 +1114,7 @@
           "links": []
         },
         {
-          "title": "xvda - Read-Write IO size",
+          "title": "xvdb - Read-Write IO size",
           "error": false,
           "span": 4,
           "editable": true,
@@ -1036,19 +1164,19 @@
           },
           "targets": [
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadSectors), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteSectors), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.ReadIOPS), 1)",
               "hide": true
             },
             {
-              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.sda.select metric), 1)",
+              "target": "scaleToSeconds(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvdb.WriteIOPS), 1)",
               "hide": true
             },
             {
@@ -1197,24 +1325,24 @@
       ]
     },
     {
-      "title": "Per CPU stats",
+      "title": "NFS Read/Write Throughput and ops",
       "height": "250px",
       "editable": true,
-      "collapse": false,
+      "collapse": true,
       "panels": [
         {
-          "title": "Per CPU: CPU0",
+          "title": "NFS Read/Write Throughput",
           "error": false,
-          "span": 4,
+          "span": 6,
           "editable": true,
           "type": "graph",
-          "id": 60,
+          "id": 120,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "percent",
+            "bytes",
             "short"
           ],
           "grid": {
@@ -1237,12 +1365,13 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
+            "values": true,
+            "min": true,
+            "max": true,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": true,
+            "alignAsTable": true
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -1252,36 +1381,10 @@
           },
           "targets": [
             {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.*))",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.BytesSent), 5, 6, 7)"
             },
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.idle)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.sys)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.user)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.BytesRecv), 5, 6, 7)"
             }
           ],
           "aliasColors": {},
@@ -1289,18 +1392,18 @@
           "links": []
         },
         {
-          "title": "Per CPU: CPU1",
+          "title": "NFS Read/Write Ops",
           "error": false,
-          "span": 4,
+          "span": 6,
           "editable": true,
           "type": "graph",
-          "id": 61,
+          "id": 121,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "percent",
+            "short",
             "short"
           ],
           "grid": {
@@ -1323,12 +1426,13 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
+            "values": true,
+            "min": true,
+            "max": true,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": true,
+            "alignAsTable": true
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -1338,36 +1442,79 @@
           },
           "targets": [
             {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.*))",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.Ops), 5, 6, 7)"
             },
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.idle)",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.Ops), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "NFS Read/Write Latency",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "NFS Read/Write RPC RTT (Latency)",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 122,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.RpcRTT), 5, 6, 7)"
             },
             {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.sys)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.user)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
-            {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.RpcRTT), 5, 6, 7)"
             }
           ],
           "aliasColors": {},
@@ -1375,18 +1522,18 @@
           "links": []
         },
         {
-          "title": "Per CPU: CPU2",
+          "title": "NFS Read/Write RPC Exectime (Latency)",
           "error": false,
-          "span": 4,
+          "span": 6,
           "editable": true,
           "type": "graph",
-          "id": 62,
+          "id": 123,
           "datasource": null,
           "renderer": "flot",
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "percent",
+            "ms",
             "short"
           ],
           "grid": {
@@ -1409,12 +1556,13 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
+            "values": true,
+            "min": true,
+            "max": true,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": true,
+            "alignAsTable": true
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -1424,36 +1572,391 @@
           },
           "targets": [
             {
-              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.*))",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.RpcExec), 5, 6, 7)"
             },
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.idle)",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.RpcExec), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "NFS Read/Write Queuing and Timeouts",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "NFS Read/Write RPC Timeouts (Latency)",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 124,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.Timeouts), 5, 6, 7)"
             },
             {
-              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.Timeouts), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "NFS Read/Write Wait Time Before Transfer (Latency)",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 125,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.WRITE.Queueing), 5, 6, 7)"
             },
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.sys)",
-              "hide": true
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.READ.Queueing), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "NFS ALL RPC Throughput and Ops",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "NFS ALL RPC Throughput",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 126,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.*.BytesRecv), 5, 6, 7)"
             },
             {
-              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
-            },
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.*.BytesSent), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "NFS ALL RPC OPS",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 127,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.user)",
-              "hide": true
-            },
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.*.Ops), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "NFS ALL RPC LATENCY",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "NFS ALL RPC OPS",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 128,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
             {
-              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
-            },
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.*.RpcRTT), 5, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "NFS ALL RPC WAIT TIME",
+          "error": false,
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "id": 129,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": false,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
             {
-              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.intr)",
-              "hide": true
-            },
-            {
-              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+              "target": "aliasByNode(nonNegativeDerivative(cluster.$Clusters.$Instance.system.nfs.*.*.Queueing), 5, 6, 7)"
             }
           ],
           "aliasColors": {},
@@ -2357,6 +2860,272 @@
             {
               "target": "aliasByNode(scaleToSeconds(divideSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.io.xvde.ReadIOPS), #A), 1), 2, 5)",
               "hide": false
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "title": "Per CPU stats",
+      "height": "250px",
+      "editable": true,
+      "collapse": true,
+      "panels": [
+        {
+          "title": "Per CPU: CPU0",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 60,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu0.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Per CPU: CPU1",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 61,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu1.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Per CPU: CPU2",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 62,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "sumSeries(nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.*))",
+              "hide": true
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.idle)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#B, #A), 100), '$Instance-idle')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.sys)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#D, #A), 100), '$Instance-sys')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.user)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#F, #A), 100), '$Instance-user')"
+            },
+            {
+              "target": "nonNegativeDerivative(cluster.$Clusters.$Instance.system.CPU.cpu2.intr)",
+              "hide": true
+            },
+            {
+              "target": "alias(scale(divideSeries(#H, #A), 100), '$Instance-intr')"
             }
           ],
           "aliasColors": {},
@@ -3374,16 +4143,20 @@
             "value": "*"
           },
           {
-            "text": "myapp",
-            "value": "myapp"
+            "text": "abyssagents",
+            "value": "abyssagents"
+          },
+          {
+            "text": "bastion",
+            "value": "bastion"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.*",
         "current": {
-          "text": "myapp",
-          "value": "myapp"
+          "text": "bastion",
+          "value": "bastion"
         },
         "refresh": true
       },
@@ -3398,16 +4171,16 @@
             "value": "*"
           },
           {
-            "text": "cloudperf",
-            "value": "cloudperf"
+            "text": "i-04e0bec2",
+            "value": "i-04e0bec2"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "cloudperf",
-          "value": "cloudperf"
+          "text": "All",
+          "value": "*"
         },
         "refresh": true
       }

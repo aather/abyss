@@ -1,9 +1,11 @@
 #! /usr/bin/perl 
 
+#use warnings;
+#use strict;
 use Fcntl qw/:flock/;
 
-open SELF, "< $0" or die ;
-flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
+#open SELF, "< $0" or die ;
+#flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
 require "../env.pl";				# Sets up environment varilables for all agents
 
@@ -196,21 +198,31 @@ close(MPSTAT);
  }
 }
 
+#device bastion-efs.us-west-2a.mgmt.netflix.net:/ mounted on /efs with fstype nfs4 statvers=1.1
+#device bastion-efs.us-west-2a.mgmt.netflix.net://home mounted on /home with fstype nfs4 statvers=1.1
+#device bastion-efs.us-west-2a.mgmt.netflix.net://scratchdata mounted on /scratchdata with fstype nfs4 statvers=1.1
 sub collect_NFSiostats {
   my @stats;
+  my @mounts;
   open(NFS, "cat /proc/self/mountstats |") || die print "failed to get data: $!\n";
   while (<NFS>) {
-  if (/READ:/ || /WRITE:/) {
+  if (/nfs4/){
+    s/:/ /g; 
+    s/\//mpt-/g;
+    print;
+    @mounts=split;
+   }
+  if (/(READ:|WRITE:|OPEN:|CLOSE:|SETATTR:|LOCK:|ACCESS:|GETATTR:|LOOKUP:|REMOVE:|RENAME:|LINK:|SYMLINK:|CREATE:|STATFS:|READLINK:|READDIR:)/) {
   s/:/ /g;
   @stats = split;
-  push @data, "$server.$host.system.nfs.$stats[0].Ops $stats[1] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].Trans $stats[2] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].Timeouts $stats[3] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].BytesSent $stats[4] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].BytesRecv $stats[5] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].Queueing $stats[6] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].RpcRTT $stats[7] $now\n";
-  push @data, "$server.$host.system.nfs.$stats[0].RpcExec $stats[8] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].Ops $stats[1] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].Trans $stats[2] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].Timeouts $stats[3] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].BytesSent $stats[4] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].BytesRecv $stats[5] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].Queueing $stats[6] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].RpcRTT $stats[7] $now\n";
+  push @data, "$server.$host.system.nfs.$mounts[5].$stats[0].RpcExec $stats[8] $now\n";
   }
  }
 }
