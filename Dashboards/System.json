@@ -693,6 +693,99 @@
       "showTitle": true
     },
     {
+      "title": "IO Latency",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "IO LATENCY",
+          "error": false,
+          "span": 12,
+          "editable": true,
+          "type": "graph",
+          "id": 130,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": false,
+          "fill": 0,
+          "linewidth": 1,
+          "points": true,
+          "pointradius": 1,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": true,
+            "max": true,
+            "current": false,
+            "total": false,
+            "avg": true,
+            "alignAsTable": true
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.min, 0.001), 2, 6, 7)",
+              "hide": true
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.max, 0.001), 2, 6, 7)",
+              "hide": true
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.95th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.99th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.min, 0.001), 2, 6, 7)",
+              "hide": true
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.max, 0.001), 2, 6, 7)",
+              "hide": true
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.95th, 0.001), 2, 6, 7)"
+            },
+            {
+              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.99th, 0.001), 2, 6, 7)"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": [],
+          "height": ""
+        }
+      ],
+      "showTitle": true
+    },
+    {
       "title": "md - IO STATS: No stats if instance has a single disk",
       "height": "250px",
       "editable": true,
@@ -701,7 +794,7 @@
         {
           "title": "IO Throughput",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 20,
@@ -765,7 +858,7 @@
         {
           "title": "IOPS",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 21,
@@ -825,89 +918,9 @@
           "height": ""
         },
         {
-          "title": "IO LATENCY",
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "graph",
-          "id": 99,
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "ms",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "lines": false,
-          "fill": 0,
-          "linewidth": 1,
-          "points": true,
-          "pointradius": 1,
-          "bars": false,
-          "stack": false,
-          "percentage": false,
-          "legend": {
-            "show": false,
-            "values": true,
-            "min": false,
-            "max": true,
-            "current": false,
-            "total": false,
-            "avg": true,
-            "alignAsTable": true
-          },
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.min, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.max, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.95th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Read.99th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.min, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.max, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.95th, 0.001), 2, 6, 7)"
-            },
-            {
-              "target": "aliasByNode(scale(cluster.$Clusters.$Instance.system.io.Latency.Write.99th, 0.001), 2, 6, 7)"
-            }
-          ],
-          "aliasColors": {},
-          "seriesOverrides": [],
-          "links": [],
-          "height": ""
-        },
-        {
           "title": "Read/Write IO Size",
           "error": false,
-          "span": 3,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 104,
@@ -4143,20 +4156,16 @@
             "value": "*"
           },
           {
-            "text": "abyssagents",
-            "value": "abyssagents"
-          },
-          {
-            "text": "bastion",
-            "value": "bastion"
+            "text": "cloudperf",
+            "value": "cloudperf"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.*",
         "current": {
-          "text": "bastion",
-          "value": "bastion"
+          "text": "cloudperf",
+          "value": "cloudperf"
         },
         "refresh": true
       },
@@ -4171,16 +4180,16 @@
             "value": "*"
           },
           {
-            "text": "i-04e0bec2",
-            "value": "i-04e0bec2"
+            "text": "i-9a39b328",
+            "value": "i-9a39b328"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "All",
-          "value": "*"
+          "text": "i-9a39b328",
+          "value": "i-9a39b328"
         },
         "refresh": true
       }
