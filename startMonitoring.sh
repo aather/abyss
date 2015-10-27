@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/usr/share/abyss
+DIR=`pwd`
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null
@@ -24,16 +24,14 @@ trap "killall" HUP INT QUIT KILL TERM USR1 USR2 EXIT
 cd $DIR/monitor
 nohup ./loop-systats.sh &
 PIDLIST="$PIDLIST $!"
-cd ..
 
 # Agent to monitor Storage IO latencies
 # check if perf is installed
 if [ -f "/usr/bin/perf" ] 
 then
- cd $DIR/sniffer
+ cd $DIR/sniffer/IO
  nohup ./loop-iolatency.sh &
  PIDLIST="$PIDLIST $!"
- cd ..
 else
   echo "perf is not available. iolatency agent is not started"
 fi
@@ -41,10 +39,9 @@ fi
 # Agent to monitor low level tcp stats: per connection RTT, Throughput, Retransmit, Congestion, etc..
 #if [ -f "/usr/bin/make" ] 
 #then
-#   cd $DIR/sniffer
+#   cd $DIR/sniffer/NET
 #   nohup ./loop-tcpstats.sh &
 #   PIDLIST="$PIDLIST $!"
-#   cd ..
 #fi
 
 # Agent to monitor Application stats via JMX port. 
@@ -59,7 +56,6 @@ then
  cd $DIR/apps/cassandra
  nohup ./loop-cassandra.sh &
  PIDLIST="$PIDLIST $!"
- cd ../..
 fi
 
 # Kafka Agent
@@ -73,7 +69,6 @@ then
    nohup ./loop-kafka.sh &
    PIDLIST="$PIDLIST $!"
  fi
- cd ../..
 fi
 
 # Tomcat Agent
@@ -86,7 +81,6 @@ then
   nohup ./loop-tomcat.sh &
   PIDLIST="$PIDLIST $!"
  fi
- cd ../..
 fi
 
 

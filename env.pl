@@ -17,7 +17,7 @@
 #
 # --- Environment Variables exported to all agents
 
-$carbon_server = "NAME OR IP OF GRAPHITE SERVER";  # graphite server name or IP address
+$carbon_server = "HOST-OR-IP-GRAPHITE-SERVER";     # graphite server name or IP address
 $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
@@ -46,7 +46,7 @@ $interval = 5;					  # Sets sample interval
 # Start netserver and memcached server on peer host as follows:
 # netserver: $sudo netserver -p 7420
 # memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
-$peer =  "HOST-OR-IP-OF-MEMCACHED-NETSERVER";   # peer host running netserver and memcached daemons
+$peer =  "HOST-OR-IP-MEMCACHED-NETSERVER";      # peer host running netserver and memcached daemons
 $net_dport = 7420;				# netserver data port on peer host for network benchmark
 $net_cport = 7421;				# netserver control port on peer host for net throughput benchmark
 $net_rport = 7422;				# netserver control port on peer host for net latency benchmark

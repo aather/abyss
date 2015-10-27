@@ -60,7 +60,7 @@ service carbon-cache restart
 cp crontab-root.custom /var/spool/cron/crontabs/root
 service cron restart
 sudo netstat -ltpn 
-echo "********************************************************"
+echo "***********************************"
 echo ""
 echo "To open dashboard, type into browser" 
 echo "System Dashboard: http://hostname/grafana/#/dashboard/file/System.json"
@@ -69,4 +69,4 @@ echo "System Dashboard: http://hostname/grafana/#/dashboard/file/Tomcat.json"
 echo "System Dashboard: http://hostname/grafana/#/dashboard/file/Cassandra.json"
 echo "System Dashboard: http://hostname/grafana/#/dashboard/file/Kafka.json"
 echo ""
-echo "********************************************************"
+echo "******************************************"

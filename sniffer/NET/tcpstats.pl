@@ -5,7 +5,7 @@ use Fcntl qw/:flock/;
 open SELF, "< $0" or die ;
 flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../env.pl";    			# Sets up common environment varilables for all agents
+require "../../env.pl";    			# Sets up common environment varilables for all agents
 
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
@@ -15,9 +15,6 @@ require "../env.pl";    			# Sets up common environment varilables for all agent
 #$SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
-my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
-
-open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 
@@ -78,30 +75,16 @@ if (-e '.pythonmodules') {
    print "python modules are already been installed";
 }
 else {
-      # install required python packages
-     $exit = `lsb_release -c`; 
-     if ($exit =~ /trusty/) {
-      `sudo mv /etc/apt/sources.list /etc/apt/sources.list-ORIG`;
-      `sudo cp sources-trusty.list /etc/apt/sources.list`;
+   # install required python packages
+   $exit = `uname -v`;
+     if ($exit =~ /Ubuntu/) {
       `sudo apt-get update`;
       `sudo apt-get -y install python-pip`;
-      `sudo pip install -U pip`;
-      `sudo -H pip install Django==1.6.2`;
-      `sudo pip install -U datautil`;
-     `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
-     `touch .pythonmodules`;
+      `sudo -H pip install -U pip`;
+      `sudo -H pip install Django==1.7`;
+      `sudo -H pip install -U datautil`;
+      `touch .pythonmodules`;
      }
-    elsif ($exit =~ /precise/) {
-      `sudo mv /etc/apt/sources.list /etc/apt/sources.list-ORIG`;
-      `sudo cp sources-precise.list /etc/apt/sources.list`;
-      `sudo apt-get update`;
-      `sudo apt-get -y install python-pip`;
-      `sudo pip install -U pip`;
-      `sudo -H pip install Django==1.6.2`;
-      `sudo pip install -U datautil`;
-     `sudo mv /etc/apt/sources.list-ORIG /etc/apt/sources.list`;
-     `touch .pythonmodules`;
-    }
    else { 
        print "\n please perform manual install of python required packages";
        exit;
@@ -120,22 +103,34 @@ if (($? >> 8) == 1 ) {
   }
   else {
    print "\n python server is started successfully\n"; }
-   sleep 2
+   sleep 5
  }
 else { print "\n python server is already running\n"; }
 
 # Other python server thread waits for client requests and return the 
 # flows in JSON. Start the fetcher thread
-$exit = `curl -s http://$localIP:$cloudstat_port/app/startThread/1/`;
-if (($exit =~ /Thread is already running/) || ($exit =~ /Thread started/))
- {
+
+ $exit = `curl -s http://$localIP:$cloudstat_port/app/startThread/1/`;
+ if (($exit =~ /Thread is already running/) || ($exit =~ /Thread started/)){
          print "\n  fetcher thread started successfully\n";
- }
-else {
-        print "\n Problem starting fetcher thread\n";
-        print "\n exit: $exit\n";
-        exit;
-   }
+  }
+ else {
+        print "\n Problem starting fetcher thread, Retrying..\n";
+        sleep 5;
+        $exit = `curl -s http://$localIP:$cloudstat_port/app/startThread/1/`;
+        if (($exit =~ /Thread is already running/) || ($exit =~ /Thread started/)){
+           print "\n  fetcher thread started successfully in second attempt\n";
+         }
+       else {
+         print "\n exiting due to problem with fetcher threads: $exit\n";
+         exit;
+        }
+  }
+
+#open connection to graphite server
+open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
+
 
 # Start collecting samples
 

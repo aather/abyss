@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/usr/share/abyss
+DIR=`pwd`
 
 killall()
 {
@@ -28,10 +28,9 @@ cd ..
 # check if perf is installed
 if [ -f "/usr/bin/perf" ] 
 then
- cd $DIR/sniffer
+ cd $DIR/sniffer/IO
  nohup ./loop-iolatency.sh &
  PIDLIST="$PIDLIST $!"
- cd ..
 else
   echo "perf is not available. iolatency agent is not started"
 fi
@@ -39,10 +38,9 @@ fi
 # Agent to monitor low level tcp stats: per connection RTT, Throughput, Retransmit, Congestion, etc..
 #if [ -f "/usr/bin/make" ] 
 #then
-#   cd $DIR/sniffer
+#   cd $DIR/sniffer/NET
 #   nohup ./loop-tcpstats.sh &
 #   PIDLIST="$PIDLIST $!"
-#   cd ..
 #fi
 
 # Start Net latency, throughput and memcached RPS Benchmarks
