@@ -42,13 +42,14 @@ $interval = 5;					  # Sets sample interval
 #-------Benchmark Environment Variables ---------
 #
 # To run benchmark, you need to setup peer host and run: 
-# netserver and memcached server as follows:
+# Do not install abyss agent on peer running netserver and memcached server
+# Start netserver and memcached server on peer host as follows:
 # netserver: $sudo netserver -p 7420
 # memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
-$peer =  "HOST-RUNNING-MEMCACHED-NETSERVER";	# peer host running netserver and memcached daemons
+$peer =  "HOST-OR-IP-OF-MEMCACHED-NETSERVER";   # peer host running netserver and memcached daemons
 $net_dport = 7420;				# netserver data port on peer host for network benchmark
 $net_cport = 7421;				# netserver control port on peer host for net throughput benchmark
 $net_rport = 7422;				# netserver control port on peer host for net latency benchmark
 $mem_port  = 7425;				# memcached port
-$RPS = 50000;					# Sets RPS rate for memcached benchmark
-$iterations = 500;				# Sets number of benchmark test iterations
+$RPS = 20000;					# Sets RPS rate for memcached benchmark
+$iterations = 100;				# Sets number of benchmark test iterations

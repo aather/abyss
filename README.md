@@ -1,26 +1,25 @@
 ![Abyss](abyss.jpg)
 
-Abyss is a toolset developed to solve performance issues requiring deeper analysis. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
-[Abyss Live Demo](http://graphiteserver.cloudperf.net/grafana/#/dashboard/db/system-performance-prod)
+Abyss is used to monitor application and server performance. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
 ## Abyss Design
 
-Abyss agents run on cloud instance capture application and system level metrics and periodically push them to a graphite server. 
-Sample dashboards created using Grafana (available in Dashboard folder) to visualize metrics and to perform data correlation.
+Abyss agents run on a server or a cloud instance to capture application and system level metrics and periodically push them to a graphite server (Support for influxdb and Elastic Search are planned) on the network. 
+
+Ready to use dashboards are created using Grafana (available in Dashboard folder) to visualize metrics and to perform data correlation.
 
 Abyss relies on following components to function:
 
 - **Agents:** Agents run on the instance and are written using perl, python and C.
-  - **App:** App agents capture java application and jvm metrics via JMX port on localhost. Cassandra agent is available. Kafka, ES and 
-        Tomcat agents are planned
-  - **System:** System agent captures system metrics: cpu, mem, net, io
-  - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics
-  - **Benchmark:** benchmarking agents to automate the process of running benchmarks and collecting relevent metrics. 
-- **Graphite Server:** All agents periodically (default: every 5 seconds) ship metrics to graphite server. 
-- **Visualization:** Grafana is used for creating dashboards. Sample dashboards are available in Dashboard folder
+  - **App:** App agents capture java application and jvm metrics via JMX port on localhost. Cassandra, kafka and tomcat agents are available. 
+  - **System:** System agent captures system metrics: cpu, mem, net, io, NFS
+  - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics using perl and kernel module
+  - **Benchmark:** benchmarking agents are used to automate benchmarking and relevent metrics collection. 
+- **Graphite Server:** All agents periodically (default: every 5 seconds) ship metrics to graphite server on the network. 
+- **Visualization:** Grafana is used for creating dashboards. Ready to use Dashboards are available in Dashboard folder
 - **ElasticSearch:** Dashboards are saved on ES for quick retrieval.
 
 ## Abyss Config 
-All config options for abyss agents are provided in a single file: **env.pl**. Few options are listed below: 
+All config options for abyss agents are provided in a single file: **env.pl**. There are separate section for server running in AWS cloud and datacenter. Few options are listed below: 
 
  - **region-**           Sets Amazon Region: us-east-1, us-west-1..
  - **host-**             Sets Amazon cloud instance id: i-c3a4e33d
@@ -34,7 +33,9 @@ You can run individual agent or start all by running script below on the cloud i
 
 $./startMonitoring
 
-This will start accumulating metrics in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard. 
+This will start accumulating metrics in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
+
+http://mygraphite-server/grafana/
 
 To run Benchmark (network benchmark test-suite is available), set environment variables to set hostname
 of peer host running netserver and memcached on the matching ports with options:

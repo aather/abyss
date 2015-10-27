@@ -119,7 +119,7 @@
       "collapse": false,
       "panels": [
         {
-          "title": "netTPS - Net Latency: Transactions per Second",
+          "title": "ping - Net Latency",
           "error": false,
           "span": 6,
           "editable": true,
@@ -130,7 +130,7 @@
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "short",
+            "ms",
             "short"
           ],
           "grid": {
@@ -153,12 +153,13 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
+            "values": true,
+            "min": true,
+            "max": true,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": true,
+            "alignAsTable": true
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -168,16 +169,7 @@
           },
           "targets": [
             {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.min, '$Instance-TPS-min')"
-            },
-            {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.max, '$Instance-TPS-max')"
-            },
-            {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.95th, '$Instance-TPS-95th')"
-            },
-            {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.99th, '$Instance-TPS-99th')"
+              "target": "aliasByNode(cluster.$Clusters.$Instance.benchmark.pingtest.*, 2, 4, 5)"
             }
           ],
           "aliasColors": {},
@@ -219,12 +211,14 @@
           "percentage": false,
           "legend": {
             "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
+            "values": true,
+            "min": true,
+            "max": true,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": true,
+            "alignAsTable": true,
+            "rightSide": false
           },
           "nullPointMode": "connected",
           "steppedLine": false,
@@ -260,7 +254,7 @@
       "collapse": false,
       "panels": [
         {
-          "title": "memcached - % Requests completed within  10ms",
+          "title": "memcached - % Requests completed within ms",
           "error": false,
           "span": 6,
           "editable": true,
@@ -271,7 +265,7 @@
           "x-axis": true,
           "y-axis": true,
           "y_formats": [
-            "short",
+            "percent",
             "short"
           ],
           "grid": {
@@ -367,7 +361,7 @@
           "links": []
         },
         {
-          "title": "memcached - Number of Requests completed within  10ms",
+          "title": "memcached - Number of Requests completed within  ms",
           "error": false,
           "span": 6,
           "editable": true,
@@ -3713,7 +3707,7 @@
   ],
   "time": {
     "to": "now",
-    "from": "now-2h",
+    "from": "now-5m",
     "now": false
   },
   "templating": {
@@ -3729,32 +3723,20 @@
             "value": "*"
           },
           {
-            "text": "cass_cs",
-            "value": "cass_cs"
+            "text": "abyssagents",
+            "value": "abyssagents"
           },
           {
-            "text": "cass_dhs",
-            "value": "cass_dhs"
-          },
-          {
-            "text": "cass_pds_event",
-            "value": "cass_pds_event"
-          },
-          {
-            "text": "gps_precompute",
-            "value": "gps_precompute"
-          },
-          {
-            "text": "pappy_dyno",
-            "value": "pappy_dyno"
+            "text": "katamari",
+            "value": "katamari"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.*",
         "current": {
-          "text": "All",
-          "value": "*"
+          "text": "katamari",
+          "value": "katamari"
         },
         "refresh": true
       },
@@ -3769,32 +3751,20 @@
             "value": "*"
           },
           {
-            "text": "i-0c59b5fd",
-            "value": "i-0c59b5fd"
+            "text": "i-1cd2ecde",
+            "value": "i-1cd2ecde"
           },
           {
-            "text": "i-3ac5061b",
-            "value": "i-3ac5061b"
-          },
-          {
-            "text": "i-45f2dfbe",
-            "value": "i-45f2dfbe"
-          },
-          {
-            "text": "i-906992ba",
-            "value": "i-906992ba"
-          },
-          {
-            "text": "i-bc4da469",
-            "value": "i-bc4da469"
+            "text": "i-9e470855",
+            "value": "i-9e470855"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "All",
-          "value": "*"
+          "text": "i-1cd2ecde",
+          "value": "i-1cd2ecde"
         },
         "refresh": true
       }

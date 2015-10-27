@@ -18,8 +18,6 @@ require "../../env.pl";                            # Sets up environment varilab
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
-open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
-
 # ------------------------------agent specific -------------------
 
 my @stats;
@@ -37,6 +35,9 @@ $exit = `./mcblaster -p $mem_port -t 8 -z 100 -k 2000000  -d 30 -w $RPS -c 10 -r
    printf "command exited with value %d\n", $? >> 8;
    exit;
  }
+
+# open connection to graphite server
+open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # Capture metrics every 5 seconds until interrupted.
 while ($iterations-- > 0 ) {
