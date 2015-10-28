@@ -28,8 +28,10 @@ $interval = 5;                                     # Sets agents sample interval
 #$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
 #$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
 #$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
-#$server = "cluster.cloudperf";		# Metrics are accumulated under application name
-					# e.g: cloudperf. Change to match your app.
+
+# IMPORTANT ENTRY. Dashboard looks "cluster." string. Only change the application name:
+#$server = "cluster.cloudperf";		# Metrics are accumulated under app name
+					# e.g: cloudperf. Change cloudperf to your app name.
 #-----------------------
 # Uncomment if running agents on system in data center or VirtualBox VM. 
 $host = "MYHOST";

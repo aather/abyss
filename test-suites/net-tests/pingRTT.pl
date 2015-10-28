@@ -33,7 +33,7 @@ my @percentile;
 while (1) {
 $now = `date +%s`;
 # graphite metrics are sent with date stamp 
- open (INTERFACE, "ping -A -w 5 $peer |")|| die print "failed to get data: $!\n";
+ open (INTERFACE, "sudo ping -A -w 5 $peer |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
   next if (/^$/ || /^PING/ || /packets/ || /^rtt/ || /^---/) ;
   s/=/ /g;
