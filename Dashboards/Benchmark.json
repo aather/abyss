@@ -228,16 +228,16 @@
           },
           "targets": [
             {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.pingtest.min, '$Instance-RTT-min')"
+              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.min, '$Instance-RTT-min')"
             },
             {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.pingtest.max, '$Instance-RTT-max')"
+              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.max, '$Instance-RTT-max')"
             },
             {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.pingtest.95th, '$Instance-RTT-95th')"
+              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.95th, '$Instance-RTT-95th')"
             },
             {
-              "target": "alias(cluster.$Clusters.$Instance.benchmark.pingtest.99th, '$Instance-RTT-99th')"
+              "target": "alias(cluster.$Clusters.$Instance.benchmark.TPS.99th, '$Instance-RTT-99th')"
             }
           ],
           "aliasColors": {},
@@ -3920,16 +3920,16 @@
             "value": "*"
           },
           {
-            "text": "i-9a39b328",
-            "value": "i-9a39b328"
+            "text": "cloudperf",
+            "value": "cloudperf"
           }
         ],
         "includeAll": true,
         "allFormat": "wildcard",
         "query": "cluster.$Clusters.*",
         "current": {
-          "text": "i-9a39b328",
-          "value": "i-9a39b328"
+          "text": "cloudperf",
+          "value": "cloudperf"
         },
         "refresh": true
       }
