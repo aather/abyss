@@ -25,7 +25,7 @@ pingRTT.pl: Measure network latency by using adoptive ping that adopts to RTT. T
   Metric: Time in ms
   Requirements: ICMP ingress traffic to the cloud instance should be allowed  
 
-memcached.pl: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs 70k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better.
+memcached.pl: Measure Latency at various RPS rates: 30k, 40k, .. 100k. Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then cycle through various RPS rates: 30k, 40k,.. 100k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better.
 
   Metric: buckets representing latencies in ranages from 1 ms to over 10 ms
   Requirements:

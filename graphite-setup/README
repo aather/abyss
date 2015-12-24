@@ -3,27 +3,11 @@ Abyss agents depends on following components:
 - graphite server to store metrics 
 - grafana dashboards for visualization 
 - apache web server for http requestes  
-- elasticsearch for storing dashboard. 
 
-setup-graphite.sh script will set up all graphite, grafana, apache and ES services on a single server.
+setup-graphite.sh script will set up graphite, grafana, and apache server on a single server.
 
 graphite carbon servers are configured to use port: 7405 7406,7407.
-grafana is client side application (java script) that runs in the browser. grafana can save dashboards on 
-any system running ES allowing ingress traffic to elasticsearch ports. 
-elastic search (ES) is configured to use port: 7410 7411. 
+grafana server runs on port: 7401. 
 apache server listens on standard http port: 80
 
-To confirm the setup successful , run "$sudo netstat -ltpn". It should show python (carbon) processes, 
-java (ES), and http (apache) are listening to correct ports. Make sure your systems have all these ingress ports open in firewall or security group.  
-$sudo netstat -ltpn
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1040/sshd       
-tcp        0      0 0.0.0.0:7405            0.0.0.0:*               LISTEN      12573/python  << graphite carbon
-tcp        0      0 0.0.0.0:7406            0.0.0.0:*               LISTEN      12573/python  << graphite carbon
-tcp        0      0 0.0.0.0:7407            0.0.0.0:*               LISTEN      12573/python  << graphite carbon
-...
-tcp6       0      0 :::7410                 :::*                    LISTEN      12554/java     << ES    
-tcp6       0      0 :::80                   :::*                    LISTEN      12382/apache2  << apache
-tcp6       0      0 :::7411                 :::*                    LISTEN      12554/java     << ES    
-
+To confirm the setup successful , run "$sudo netstat -ltpn". It should show python (carbon) processes, http (apache) and grafna servers are listening to configured ports. Make sure your systems have all these ingress ports open in firewall or security group.  

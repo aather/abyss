@@ -16,7 +16,7 @@ my @data = ();					# array to store metrics
 my $now = `date +%s`;				# metrics are sent with date stamp to graphite server
 
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
  
 # ------------------------------agent specific sub routines-------------------
 sub build_HashArray;

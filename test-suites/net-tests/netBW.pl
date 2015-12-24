@@ -19,7 +19,7 @@ require "../../env.pl";                            # Sets up environment varilab
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
-open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 my @stats;
@@ -41,12 +41,12 @@ open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $net_dport -- -P $net_c
 
 @percentile = sort {$a <=> $b} @percentile; 
 
-push @data, "$server.$host.benchmark.BW.min $percentile[0] $now \n";
-push @data, "$server.$host.benchmark.BW.max $percentile[-1] $now \n";
+push @data, "$server-netbench.$host.benchmark.BW.min $percentile[0] $now \n";
+push @data, "$server-netbench.$host.benchmark.BW.max $percentile[-1] $now \n";
 my $tmp = $percentile[sprintf("%.0f",(0.95*($#percentile)))];
- push @data, "$server.$host.benchmark.BW.95th $tmp $now \n";
+ push @data, "$server-netbench.$host.benchmark.BW.95th $tmp $now \n";
 my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
- push @data, "$server.$host.benchmark.BW.99th $tmp $now \n";
+ push @data, "$server-netbench.$host.benchmark.BW.99th $tmp $now \n";
 
 # Ship Metrics to carbon server --- 
   #print @data; 			# For Testing only 
@@ -57,3 +57,4 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
 
   sleep 1;
 } # while
+

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=`pwd`
+DIR=/usr/share/abyss
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null
@@ -8,7 +8,6 @@ killall()
  kill  `pgrep iolatency.pl` 2>/dev/null
  kill  `pgrep cassandra.pl` 2>/dev/null
  kill  `pgrep tomcat.pl` 2>/dev/null
- kill  `pgrep kafka.pl` 2>/dev/null
  kill  `ps -elf|grep CLOUDSTAT|grep -v grep |awk '{print $4}'` 2>/dev/null
 
 for PID in $PIDLIST
@@ -45,7 +44,7 @@ fi
 #fi
 
 # Agent to monitor Application stats via JMX port. 
-# We can monitor only one app per system or instance
+# We can monitor only one app per instance or system
 #
 # cassandra Agent
 found=0
@@ -53,7 +52,7 @@ pid=`jps|grep DseDaemon|awk '{print $1}'` >> /dev/null
 if ps --pid $pid &>/dev/null
 then
  found=1
- cd $DIR/apps/cassandra
+ cd $DIR/java-apps/cassandra
  nohup ./loop-cassandra.sh &
  PIDLIST="$PIDLIST $!"
 fi
@@ -65,7 +64,7 @@ then
  if ps --pid $pid &>/dev/null
  then
    found=1
-   cd $DIR/apps/kafka
+   cd $DIR/java-apps/kafka
    nohup ./loop-kafka.sh &
    PIDLIST="$PIDLIST $!"
  fi
@@ -77,7 +76,7 @@ then
  pid=`jps|grep Bootstrap|awk '{print $1}'` >> /dev/null
  if ps --pid $pid &>/dev/null
  then
-  cd $DIR/apps/tomcat
+  cd $DIR/java-apps/tomcat
   nohup ./loop-tomcat.sh &
   PIDLIST="$PIDLIST $!"
  fi
@@ -85,5 +84,3 @@ fi
 
 
 wait
-
-
