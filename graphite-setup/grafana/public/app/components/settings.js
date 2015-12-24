@@ -1,4 +1,0 @@
-/*! grafana - v2.5.0 - 2015-10-28
- * Copyright (c) 2015 Torkel Ödegaard; Licensed Apache-2.0 */
-
-define(["lodash"],function(a){"use strict";return function(b){var c={datasources:{},window_title_prefix:"Grafana - ",panels:{graph:{path:"app/panels/graph",name:"Graph"},singlestat:{path:"app/panels/singlestat",name:"Single stat"},text:{path:"app/panels/text",name:"Text"},dashlist:{path:"app/panels/dashlist",name:"Dashboard list"}},new_panel_title:"no title (click here)",plugins:{},default_route:"/dashboard/file/default.json",playlist_timespan:"1m",unsaved_changes_warning:!0,search:{max_results:100},appSubUrl:""},d=a.extend({},c,b);return d}});
