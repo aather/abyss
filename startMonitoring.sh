@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=/usr/share/abyss
+DIR=$PWD
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null

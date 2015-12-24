@@ -29,17 +29,13 @@ cp ./storage-schemas.conf.custom /etc/carbon/storage-schemas.conf
 sudo -u _graphite graphite-manage syncdb --noinput
 cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf-ORIG
 rm -f /etc/apache2/sites-enabled/000-default.conf
-#cp /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-enabled/graphite.conf
-# ----support ACAO headers
 cp ./graphite.conf.custom /etc/apache2/sites-enabled/graphite.conf
-# ----load the header module to support ACAO headers
 sudo ln -sf /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
-#service apache2 restart
-cp ./grafana.tar.gz /usr/share/
-tar -zxvf /usr/share/grafana.tar.gz > /dev/null 2>&1
+sudo cp ./grafana.tar.gz /usr/share/
+cd /usr/share
+sudo tar -zxvf grafana.tar.gz > /dev/null 2>&1
 cd /usr/share/grafana/bin
-nohup ./grafana-server start &
-service apache2 restart
-service carbon-cache restart 
-service cron restart
+sudo nohup ./grafana-server start &
+sudo service apache2 restart
+sudo service carbon-cache restart 
 sudo netstat -ltpn 

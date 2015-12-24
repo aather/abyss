@@ -6,7 +6,7 @@
 # Abyss expect ingress network traffic to be opened on the following ports. 
 # ----------Default ports----------
 #  graphite carbon server:  			7405, 7406, 7407
-#  grafana server:				7401
+#  grafana server:				7410
 #  cloudstat_port (tcp sniffer agent):		7415 
 #  apache2:			  		80
 #
@@ -55,4 +55,4 @@ $mem_port  = 7425;				# memcached port
 @RPS = (30000,40000,50000,60000,70000,80000,90000,100000);
 $iterations = 10;				# Sets number of benchmark test iterations
 
-1:
+1;

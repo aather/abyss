@@ -53,7 +53,7 @@ foreach my $RPS (@RPS){
      exec(@args);
   }
   while ($loops-- > 0 ) {
-   open (INTERFACE, " ./mcblaster -p $mem_port -z 100 -d 10 -r $RPS -c 20 $peer |")|| die print "failed to get data: $!\n";
+   open (INTERFACE, " ../../common/mcblaster -p $mem_port -z 100 -d 10 -r $RPS -c 20 $peer |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if (/^$/);
      last if (/RTT distribution for 'set' requests:/);
@@ -85,8 +85,8 @@ foreach my $RPS (@RPS){
   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.total-Packets $total $now \n";
 
   #print Dumper \%hash ;		# For Testing only
-  print @data; 			# For Testing only 
-  print "\n------\n"; 			# For Testing only
+  #print @data; 			# For Testing only 
+  #print "\n------\n"; 			# For Testing only
   print GRAPHITE  @data;  		# Ship metrics to graphite carbon server
 
   @data=();     			# Initialize for next set of metrics

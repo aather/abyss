@@ -1,0 +1,4 @@
+/*! grafana - v2.5.0 - 2015-10-28
+ * Copyright (c) 2015 Torkel Ödegaard; Licensed Apache-2.0 */
+
+define(["angular"],function(a){"use strict";var b=a.module("grafana.directives");b.directive("metricQueryEditorGraphite",function(){return{controller:"GraphiteQueryCtrl",templateUrl:"app/plugins/datasource/graphite/partials/query.editor.html"}}),b.directive("metricQueryOptionsGraphite",function(){return{templateUrl:"app/plugins/datasource/graphite/partials/query.options.html"}}),b.directive("annotationsQueryEditorGraphite",function(){return{templateUrl:"app/plugins/datasource/graphite/partials/annotations.editor.html"}})});
