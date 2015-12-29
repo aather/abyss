@@ -33,10 +33,10 @@ while (1) {
 $now = `date +%s`;				# metrics are sent with date stamp to graphite server
 # Comment out stats that you are not interested in collecting 
 
-# collect_NetStats;
-# collect_TCPRetrans;
-# collect_TCPSegs;
-# collect_CPUStats;			# cpu stats
+ collect_NetStats;
+ collect_TCPRetrans;
+ collect_TCPSegs;
+ collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
 
  print @data; 				# Testing only 
