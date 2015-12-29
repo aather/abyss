@@ -1,4 +1,0 @@
-/*! grafana - v2.5.0 - 2015-10-28
- * Copyright (c) 2015 Torkel Ödegaard; Licensed Apache-2.0 */
-
-define(["kbn","../core_module"],function(a,b){"use strict";b.directive("dashUpload",["timer","alertSrv","$location",function(b,c,d){return{restrict:"A",link:function(b){function e(c){for(var e,f=c.target.files,g=function(){return function(c){b.$apply(function(){try{window.grafanaImportDashboard=JSON.parse(c.target.result)}catch(e){return console.log(e),void b.appEvent("alert-error",["Import failed","JSON -> JS Serialization failed: "+e.message])}var f=a.slugifyForUrl(window.grafanaImportDashboard.title);window.grafanaImportDashboard.id=null,d.path("/dashboard-import/"+f)})}},h=0;e=f[h];h++){var i=new FileReader;i.onload=g(e),i.readAsText(e)}}window.File&&window.FileReader&&window.FileList&&window.Blob?document.getElementById("dashupload").addEventListener("change",e,!1):c.set("Oops","Sorry, the HTML5 File APIs are not fully supported in this browser.","error")}}}])});

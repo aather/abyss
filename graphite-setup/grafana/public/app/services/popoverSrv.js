@@ -1,4 +1,0 @@
-/*! grafana - v2.5.0 - 2015-10-28
- * Copyright (c) 2015 Torkel Ödegaard; Licensed Apache-2.0 */
-
-define(["angular","lodash","jquery"],function(a,b,c){"use strict";var d=a.module("grafana.services");d.service("popoverSrv",["$templateCache","$timeout","$q","$http","$compile",function(a,d,e,f,g){this.getTemplate=function(b){return e.when(a.get(b)||f.get(b,{cache:!0}))},this.show=function(a){var e;c(".popover").each(function(){e=c(this).prev().data("popover"),e&&(e.scope.$destroy(),e.destroy())}),a.scope.dismiss=function(){e=a.element.data("popover"),e&&e.destroy(),a.scope.$destroy()},this.getTemplate(a.templateUrl).then(function(c){d(function(){var d=b.isString(c)?c:c.data;a.element.popover({content:d,placement:a.placement||"bottom",html:!0}),e=a.element.data("popover"),e.hasContent=function(){return d},e.toggle(),e.scope=a.scope,g(e.$tip)(e.scope)},1)})}}])});

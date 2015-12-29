@@ -1,4 +1,0 @@
-/*! grafana - v2.5.0 - 2015-10-28
- * Copyright (c) 2015 Torkel Ödegaard; Licensed Apache-2.0 */
-
-define(["angular","config"],function(a,b){"use strict";var c=a.module("grafana.controllers");c.controller("InvitedCtrl",["$scope","$routeParams","contextSrv","backendSrv",function(a,c,d,e){d.sidemenu=!1,a.formModel={},a.init=function(){e.get("/api/user/invite/"+c.code).then(function(b){a.formModel.name=b.name,a.formModel.email=b.email,a.formModel.username=b.email,a.formModel.inviteCode=c.code,a.greeting=b.name||b.email||b.username,a.invitedBy=b.invitedBy})},a.submit=function(){a.inviteForm.$valid&&e.post("/api/user/invite/complete",a.formModel).then(function(){window.location.href=b.appSubUrl+"/"})},a.init()}])});
