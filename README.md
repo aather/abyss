@@ -47,8 +47,9 @@ $./startNetBenchmark
 
 ## Abyss In Action
 
-    ![Abyss](bench.png)
-    ![Abyss](app.png)
+![Abyss](abyss.jpg)
+![Abyss](bench.png)
+![Abyss](app.png)
 
 ## Metrics
  List of metrics collected by abyss toolset:
