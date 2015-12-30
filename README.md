@@ -47,7 +47,6 @@ $./startNetBenchmark
 
 ## Abyss In Action
 
-![Abyss](abyss.jpg)
 ![Abyss](bench.png)
 ![Abyss](app.png)
 
