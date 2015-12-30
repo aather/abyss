@@ -25,6 +25,16 @@ open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "fa
 my @stats;
 my @percentile;
 
+my @args = ("./sysnet.pl", "$now");
+  if (my $pid = fork) {
+     # No waiting for child 
+     #  waitpid($pid);  
+  }
+  else {
+     # I am child, now execute external command in context of new process.
+     exec(@args);
+  }
+
 # Start Capturing
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
@@ -57,4 +67,5 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
 
   sleep 1;
 } # while
+`pkill sysnet.pl`;
 

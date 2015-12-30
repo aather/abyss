@@ -13,7 +13,7 @@ require "../../env.pl";				# Sets up environment varilables for all agents
 #$SIG{TERM} = \&signal_handler; 
 
 my @data = ();					# array to store metrics
-my $now = `date +%s`;				# metrics are sent with date stamp to graphite server
+my $now = @ARGV;				# Capture stats in context of net throughput test
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
 open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 #open(GRAPHITE, "| ../../common/ncat -i 100000ms $carbon_server $carbon_port ") || die "failed to send: $!\n";
@@ -39,8 +39,8 @@ $now = `date +%s`;				# metrics are sent with date stamp to graphite server
  collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
 
- print @data; 				# Testing only 
- print "\n------\n"; 			# Testing only
+# print @data; 				# Testing only 
+# print "\n------\n"; 			# Testing only
  print GRAPHITE @data;			# Ship metrics to graphite server
  @data=();  	
 

@@ -1,66 +1,54 @@
 ![Abyss](abyss.jpg)
 
-Abyss is used to monitor application and server performance. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring access patterns across full software stack. Correlation is then performed across multiple resource dimensions to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
+Abyss is used to monitor application and server performance. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring relevent metrics across full software stack. Correlation is then performed to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
 ## Abyss Design
 
-Abyss agents run on a server or a cloud instance to capture application and system level metrics and periodically push them to a graphite server (Support for influxdb and Elastic Search are planned) on the network. 
+Abyss agents run on a server or a cloud instance to capture application and system level metrics and periodically push them to a graphite server (Support for influxdb and Elastic Search are planned).
 
-Ready to use dashboards are created using Grafana (available in Dashboard folder) to visualize metrics and to perform data correlation.
+Ready to use dashboards are created using Grafana to visualize metrics and to perform data correlation.
 
-Abyss relies on following components to function:
+Abyss is consist of three components:
 
-- **Agents:** Agents run on the instance and are written using perl, python and C.
+- **Agents:** Agents run on the instance being monitored and are written using perl, python and C.
   - **App:** App agents capture java application and jvm metrics via JMX port on localhost. Cassandra, kafka and tomcat agents are available. 
   - **System:** System agent captures system metrics: cpu, mem, net, io, NFS
-  - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics using perl and kernel module
-  - **Benchmark:** benchmarking agents are used to automate benchmarking and relevent metrics collection. 
-- **Graphite Server:** All agents periodically (default: every 5 seconds) ship metrics to graphite server on the network. 
-- **Visualization:** Grafana is used for creating dashboards. Ready to use Dashboards are available in Dashboard folder
-- **ElasticSearch:** Dashboards are saved on ES for quick retrieval.
+  - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics using perf and kernel module
+  - **Benchmark:** benchmarking agents are used to automate the process of running  network and IO benchmarks. Agents also collects relevent benchmark and system level metrics  
+- **Graphite Server:** Agents periodically (default: every 5 seconds) ship metrics to graphite server on the network. 
+- **Visualization:** Once sufficient metrics (15-30 minutes) are collected, Grafana dashboards are used to visualize it. Ready to use Dashboards are available. 
 
 ## Abyss Config 
 All config options for abyss agents are provided in a single file: **env.pl**. There are separate section for server running in AWS cloud and datacenter. Few options are listed below: 
 
  - **region-**           Sets Amazon Region: us-east-1, us-west-1..
- - **host-**             Sets Amazon cloud instance id: i-c3a4e33d
+ - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d
  - **server-**           Sets Server name or Application cluster name
  - **carbon_server-**    Sets hostname of graphite carbon server for storing metrics
  - **carbon_port-**      Sets Port where graphite carbon server is listening
  - **interval-**         Sets metrics collection granularity
  - **iterations-**	 Sets number of benchmark iterations to perform
 
-You can run individual agent or start all by running script below on the cloud instance or system
+You can run application and system agents running script below on the system or cloud instance being monitored
 
 $./startMonitoring
 
-This will start accumulating metrics in graphite server. Wait for few minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
+This will start accumulating metrics in to graphite server. Wait for **15-30** minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
 
-http://mygraphite-server/grafana/
+http://hostname-or-IPAddr-of-graphite-server:7410/
 
-To run Benchmark (network benchmark test-suite is available), set environment variables to set hostname
-of peer host running netserver and memcached on the matching ports with options:
+
+To run network Benchmark set environment variables in **env.pl** file to set hostname of peer host running netserver and memcached servers. Istall and start netserver and memcached server with options below:
 - netserver: sudo netserver -p 7420
 - memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
+- peer =  "hostname-or-IPADDR-of-peer-running-netserver-memcached"
 
- - peer =  "ec2-instance-name-here"  -peer host running netserver and memcached daemons
- - net_dport = 7420;                 -netserver data port on peer host for network benchmark
- - net_cport = 7421;                 -netserver control port on peer host for network benchmark
- - mem_port  = 7425;                 -memcached port
- - RPS = 50000;                      -Sets RPS rate for memcached benchmark
- - iterations = 500;                 -Sets number of benchmark test iterations
-
-$./startBenchmark 
+Start benchmark agents:
+$./startNetBenchmark 
 
 ## Abyss In Action
 
-There are ready to use dashboards available in Dashboard folder:
-
-  - **Application Dashboard**
-    ![Abyss](app.png)
-  - **System Dashboard**
-    ![Abyss](sys.png)
-  - **Benchmark Dashboard**
     ![Abyss](bench.png)
+    ![Abyss](app.png)
 
 ## Metrics
  List of metrics collected by abyss toolset:
@@ -92,16 +80,14 @@ To interpret benchmark visualization correctly, it is important to understand ho
   - For memcached tests, I use the name/value of the bucket as a metric printed after the test ends. Each test ran for 10 seconds. Every data point in the graph represent a single test result. For memcached tests, "gets" RPS of 70k were used to measure its impact on overall Network latency.
 
 ## Future Enhancements
-- On-demand remote invocation of agent scripts on cloud instances via web Browser 
-- Support for new Applications: Kafka, Tomcat, Elasticsearch, Hadoop, Logstash.. 
+- Web browser interface instead of config files to start and control metric collection
+- Support for new Applications
 - Support for low level kernel metrics collected using: perf, ftrace, systemtap, sysdig  
-- Support influxDB as well as Graphite. InfluxDB allows data sharding and scale better than Graphite
-- Support for collecting java and system stack using perf and jstack and accumulating it into influxDB or Graphite for visualization using Brenden Gregg's Flame Graph. With support for frame pointer fix in openJDK and OracleJDK and java perf-agent integration, it is possible to have full java stack traces with symbols of even java JIT (Just In Time) compile code,  
-- Support visualization of additional benchmarks by capturing and storing relevent metrics: IO, CPU, Memory and Application specific benchmarks
-- Better visualization by using new features and enhancement introduced in grafana
+- Support influxDB and ElasticSearch as a backend datastore
+- Support for collecting time based java and system stacktraces using perf and accumulating it into ElasticSearch, influxDb  or Graphite for visualization using Brenden Gregg's Flame Graph. With support for frame pointer fix in openJDK and OracleJDK and java perf-agent integration, it is possible to have full stack analysis by collecting stack traces with Java (JIT), JVM, libc, and kernel routines. 
 
 ## Disclaimer
-Use it at your own risk. Tested on Ubuntu Trusty.  
+Use it at your own risk. Tested on Ubuntu Trusty only.  
 
 ## License
 
