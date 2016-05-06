@@ -96,7 +96,7 @@ $./startNetBenchmark
     - **webserver:** Open source "wrk" client is used to run RPS test again nginx or any other web server
 
  *NOTE: Every data point in the graph represents a single test result. Considering Tests duration can be more than 5 seconds, Time 
-scale in graph is fabricated to keep data points to look like generated every 5 seoncs. This is to keep time series database happy* 
+scale in graph is fabricated to keep data points to look like generated every 5 seconds. This is to keep time series database happy* 
 
 ## Future Enhancements
 - Web browser interface instead of config file "env.pl" to setup and start metric collection
