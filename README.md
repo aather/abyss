@@ -76,7 +76,6 @@ $./startNetBenchmark
     - **memory:**  free (unused), free (cached) and used memory
     - **network:** system-wide Network throughput, pps, tcp segments, tcp timeouts, per connection stats: Network throughput, Latency (RTT), retransmit, packet size, ssthresh, cwnd, rwnd, read/write queue size
     - **io:** system-wide IO throughput, IOPS, IO latency and IO size
-
 - Application Metrics:
   - **cassandra**
     - JVM metrics: GC, heap and nonheap memory 
@@ -84,12 +83,10 @@ $./startNetBenchmark
     - Pending Tasks: Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
     - compaction: total bytes compacted, memtable size and memtable switch rate
     - sstable stats, sstable cached in memory, sstable sizes and sstable counts
-
   - **kafka**
     - 
   - **tomcat**
     - 
-
 - Benchmark Metrics
     Benchmark agents can automate running IO and Network benchmark and graphing results. Thousands of iterations can be performed
     - **ping -A:** measure net latency. Adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
