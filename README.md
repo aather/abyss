@@ -23,14 +23,14 @@ Abyss has following components:
 - **Agents:** Run on instance under investigation and generate metrics:  
   - *System Agents:* System  metrics: cpu, memory, net, tcp, io, nfs
   - *Application Agents:* Application metrics: Cassandra, kafka, Tomcat. 
-  - *Sniffer:* Low level tcp and io metrics collected via open source tcpip driver and Linux “perf” utility.
-  - *Benchmark:* Automate IO and Network benchmarking and graphing results:  Net, IO, memcache, web  
+  - *Sniffer Agents:* Low level tcp and io metrics collected via open source tcpip driver and Linux “perf” utility.
+  - *Benchmark Agents:* Automate IO and Network benchmarking and graphing results:  Net, IO, memcache, web  
 
 ## Abyess Agents Design
 - Abyss agents are simple to write and language agnostic.
-- There are sample agents written in Perl are available.
 - Basic requirement is to collect metrics and dump them to graphite server periodically.
-- For graphite database, metrics are sent in “.” formatted string with time stamp:
+- There are sample agents written in Perl are available.
+- Mtrics are sent in “.” formatted string with time stamp to graphite carbon server:
  - $server.$host.system.mem.free_cached $free_cached $datestamp
  - where: 
   - *metrics name:* $server.$host.system.mem.free_cached 
