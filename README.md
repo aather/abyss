@@ -27,10 +27,10 @@ Abyss relies on following components to function:
 - Agents collects metrics and ships them to graphite server periodically.
 - For graphite database, metrics are sent in “.” formatted string with time stamp:
  - $server.$host.system.mem.free_cached $free_cached $datestamp
- - where: metrics name: 
-  - $server.$host.system.mem.free_cached 
-  - metrics value: $free_cached 
-  - timestamp: $datestamp
+ - where: 
+  - *metrics name:* $server.$host.system.mem.free_cached 
+  - *metrics value:* $free_cached 
+  - *timestamp:* $datestamp
 - For graphing metrics, open source grafana dashboard builder is used to query metrics and to design custom dashboards. Sample and ready to use Dashboards are available. 
 - Grafana is feature rich and support: 
  - Several time-series data sources: Elasticsearch, Cloudwatch, InfluxDB ..
