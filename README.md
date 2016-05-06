@@ -16,7 +16,6 @@
 ## Abyss Model
 
 Abyss has following components:
-
 - **Time-Series Database:** All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
 - **Jolokia:** Captures JVM metrics via JMX port on localhost for Java applications: Cassandra, Kafka, Tomcat
 - **Visualization:** Grafana is used for querying metrics and designing dashboards
@@ -72,9 +71,8 @@ $./startNetBenchmark
 ![Abyss](bench.png)
 ![Abyss](app.png)
 
-## Metrics
+## Abyss Metrics
  List of metrics collected by abyss agents:
-
 - System Metrics: 
     - **cpu:**  cpu and percpu utilization: idle, sys, usr, intr, cpu load: runnable and blocked threads, context switches
     - **memory:**  free (unused), free (cached) and used memory
