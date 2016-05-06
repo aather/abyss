@@ -1,6 +1,7 @@
 ![Abyss](abyss.jpg)
 
-## Abyss 
+## Abyss Features
+
 - Collects system and application level performance metrics at a higher resolution
 - Helps automate benchmarks and interpret results 
 - Use time-series graphite database to store metrics
@@ -9,24 +10,26 @@
 - Abyss design fits well into self service model
 - Capture metrics across full software stack: application, JVM, system, network, and kernel. 
 - Higher granularity of metrics helps identify resource usage spikes and constraints
-- Low level profiling data to understand application characteristics
+- Low level profiling data to understand application characteristics better
 - Data correlation via custom dashboards
 
 ## Abyss Model
 
-Abyss relies on following components to function:
-- Agents: Run on instance under investigation
-- Application: Application and JVM metrics via JMX port. Available agents: Cassandra, Kafka, Tomcat
-- System: System level metrics: cpu, memory, net, tcp, io, nfs
-- Sniffer: Low level tcp and io metrics collected via kernel driver and linux “perf” utility.
-- Benchmark: Automate IO and Network benchmark and interpret results 
-- Time-Series Database:  All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
-- Visualization: Grafana is used for querying metrics and designing dashboards
+Abyss has following components:
 
-## Abyess Agents
+- **Time-Series Database:** All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
+- **Jolokia:** Captures JVM metrics via JMX port on localhost for Java applications: Cassandra, Kafka, Tomcat
+- **Visualization:** Grafana is used for querying metrics and designing dashboards
+- ** Agents:** Run on instance under investigation and generate metrics:  
+  - *System Agents:* System  metrics: cpu, memory, net, tcp, io, nfs
+  - *Application Agents:* Application metrics: Cassandra, kafka, Tomcat. 
+  - *Sniffer:* Low level tcp and io metrics collected via open source tcpip driver and Linux “perf” utility.
+  - *Benchmark:* Automate IO and Network benchmarking and graphing results:  Net, IO, memcache, web  
+
+## Abyess Agents Design
 - Abyss agents are simple to write and language agnostic.
 - There are sample agents written in Perl are available.
-- Agents collects metrics and ships them to graphite server periodically.
+- Basic requirement is to collect metrics and dump them to graphite server periodically.
 - For graphite database, metrics are sent in “.” formatted string with time stamp:
  - $server.$host.system.mem.free_cached $free_cached $datestamp
  - where: 
@@ -39,16 +42,15 @@ Abyss relies on following components to function:
  - Templating Variables automatically filled with values from database
  - Snapshot sharing of interactive graphs
 
-## Abyss Config 
-All config options for abyss agents are provided in a single file: **env.pl**. There are separate section for server running in AWS cloud and datacenter. Few options are listed below: 
+## Abyss Setup 
+Script, graphite-setup, is provided to quickly setup services: graphite, grafana, apache on a single server for testing Abyss agents. Ayss agents configuration is performed via single file: **env.pl** to set environment variables. 
 
- - **region-**           Sets Amazon Region: us-east-1, us-west-1..
- - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d
- - **server-**           Sets Server name or Application cluster name
- - **carbon_server-**    Sets hostname of graphite carbon server for storing metrics
- - **carbon_port-**      Sets Port where graphite carbon server is listening
- - **interval-**         Sets metrics collection granularity
- - **iterations-**	 Sets number of benchmark iterations to perform
+ - **carbon_server-**    Agents ships metrics to graphite server on this host
+ - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
+ - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
+ - **server-**           Sets Server name or Application cluster name, used by graphite server for storing metrics. 
+ - **interval-**         Sets metrics collection granularity. Default: 5 seconds
+ - **iterations-**	 Sets number of benchmark iterations to perform. Default: 5 seconds
 
 Run the command on the host that you plan to monitor: $./startMonitoring
 
@@ -71,7 +73,7 @@ $./startNetBenchmark
 ![Abyss](app.png)
 
 ## Metrics
- List of metrics collected by abyss toolset:
+ List of metrics collected by abyss agents:
 
 - System Metrics: 
     - **cpu:**  cpu and percpu utilization: idle, sys, usr, intr, cpu load: runnable and blocked threads, context switches
@@ -81,33 +83,36 @@ $./startNetBenchmark
 
 - Application Metrics:
   - **cassandra**
-    - coordinator and C* column family read and write latency
-    - IOPS coordinator and C* column family read and write Ops
+    - JVM metrics: GC, heap and nonheap memory 
+    - coordinator and Cassandra column family IO latency and IOPS
     - Pending Tasks: Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
     - compaction: total bytes compacted, memtable size and memtable switch rate
     - sstable stats, sstable cached in memory, sstable sizes and sstable counts
-    - java memory Heap and non heap usage
-    - GC garbage collection duration
+  -**kafka**
+    - 
+  -**tomcat**
+    - 
 
 - Benchmark Metrics
+    Benchmark agents can automate running IO and Network benchmark and graphing results. Thousands of iterations can be performed
     - **ping -A:** measure net latency. Adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
     - **netperf:** measure net latency: TCP request response test with request/response payload of 1 byte. There can be only one transaction pending at any time. Higher number of transactions (TPS) is better representing lower network latency
     - **netperf:** measure net throughput. TCP throughput test with message size equals to the default socket buffer size, Amazon AWS cloud instances are throttled for outbound traffic. This test validates if the instance is achieving amazon advertise instance network bandwidth limit. Higher number is better.
-    - **memcache:** measure net latency: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs 10k, 20k, 30k,... 80k gets/sec transactions to measure latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 1ms increments. Tests showing higher number of gets operations in low latency buckets is better. To measure the impact of high rate get/second request, ping and netperf latency tests were kept running during the memcache testing.
+    - **memcache:** measure net latency: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs "gets" request at various RPS rates and measure memcache latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 10ms increments.
+    - **webserver:** Open source "wrk" client is used to run RPS test again nginx or any other web server
 
-To interpret benchmark visualization correctly, it is important to understand how data points (metrics) in the graph are generated:
-  - For ping and netperf tests, I calculated min, max, 95th and 99th%ile on latency and throughput values printed during tests and then published them as metric. That means, every data point in the graph represents a single test result. Each test ran for 5-10 seconds
-  - For memcached tests, I use the name/value of the bucket as a metric printed after the test ends. Each test ran for 10 seconds. Every data point in the graph represent a single test result. For memcached tests, "gets" RPS of 70k were used to measure its impact on overall Network latency.
+*NOTE: Every data point in the graph represents a single test result. Considering Tests duration can be more than 5 seconds, Time 
+scale in graph is fabricated to keep data points to look like generated every 5 seoncs. This is to keep time series database happy 
 
 ## Future Enhancements
-- Web browser interface instead of config files to start and control metric collection
+- Web browser interface instead of config file "env.pl" to setup and start metric collection
 - Support for new Applications
-- Support for low level kernel metrics collected using: perf, ftrace, systemtap, sysdig  
-- Support influxDB and ElasticSearch as a backend datastore
-- Support for collecting time based java and system stacktraces using perf and accumulating it into ElasticSearch, influxDb  or Graphite for visualization using Brenden Gregg's Flame Graph. With support for frame pointer fix in openJDK and OracleJDK and java perf-agent integration, it is possible to have full stack analysis by collecting stack traces with Java (JIT), JVM, libc, and kernel routines. 
+- Support for low level kernel metrics collected using: perf, ftrace, ebpf, systemtap, sysdig  
+- Generate metrics in the format supported by other datasources: influxDB, ElasticSearch and Cloudwatch 
+- Support for collecting time based application and system stacktraces using perf and accumulating it into ElasticSearch, influxDb  or Graphite for visualization using Brenden Gregg's Flame Graph. Perf makes it possible to have full stack analysis capability by collecting stack traces with Java (JIT), JVM, libc, and kernel routines. 
 
 ## Disclaimer
-Use it at your own risk. Tested on Ubuntu Trusty only.  
+Use it at your own risk. Net benchmarks agents may cause high load and IO benchmark may overwrite and recreate a file system. Tested on Linux Ubuntu distribution only.  
 
 ## License
 
