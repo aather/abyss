@@ -21,9 +21,9 @@ Abyss has following components:
 - **Jolokia:** Captures JVM metrics via JMX port on localhost for Java applications: Cassandra, Kafka, Tomcat
 - **Visualization:** Grafana is used for querying metrics and designing dashboards
 - **Agents:** Run on instance under investigation and generate metrics:  
-  - *System Agents:* System  metrics: cpu, memory, net, tcp, io, nfs
-  - *Application Agents:* Application metrics: Cassandra, kafka, Tomcat. 
-  - *Sniffer Agents:* Low level tcp and io metrics collected via open source tcpip driver and Linux “perf” utility.
+  - *System Agents:* Collect system  metrics: cpu, memory, net, tcp, io, nfs
+  - *Application Agents:* Collect application metrics: Cassandra, kafka, Tomcat. 
+  - *Sniffer Agents:* Collect low level tcp and io metrics via open source tcpip driver and Linux “perf” utility.
   - *Benchmark Agents:* Automate IO and Network benchmarking and graphing results:  Net, IO, memcache, web  
 
 ## Abyess Agents Design
