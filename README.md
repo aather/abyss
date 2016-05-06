@@ -29,9 +29,7 @@ Abyss has following components:
 - Abyss agents are simple to write and language agnostic.
 - Basic requirement is to collect metrics and dump them to graphite server periodically.
 - There are sample agents written in Perl are available.
-- Mtrics are sent in “.” formatted string with time stamp to graphite carbon server:
- - $server.$host.system.mem.free_cached $free_cached $datestamp
- - where: 
+- Mtrics are sent in “.” formatted string with time stamp to graphite carbon server: $server.$host.system.mem.free_cached $free_cached $datestamp, where:
   - *metrics name:* $server.$host.system.mem.free_cached 
   - *metrics value:* $free_cached 
   - *timestamp:* $datestamp
