@@ -27,6 +27,7 @@ sub collect_IOStats;
 sub collect_VMStats;
 sub collect_CPUStats;
 sub collect_NFSiostats;
+sub collect_ETHTool;
 
 while (1) {
 
@@ -41,6 +42,7 @@ while (1) {
  collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
  collect_NFSiostats;			# NFS stats
+ collect_ETHTool;
 
  #print @data; 				# Testing only 
  #print "\n------\n"; 			# Testing only
@@ -189,12 +191,14 @@ close(MPSTAT);
   $user = $cpuhash{$key}[0] + $cpuhash{$key}[1];
   $sys = $cpuhash{$key}[2];
   $idle = $cpuhash{$key}[3] + $cpuhash{$key}[4];
-  $intr = $cpuhash{$key}[5] + $cpuhash{$key}[6];
+  $intr = $cpuhash{$key}[5];
+  $softirq = $cpuhash{$key}[6];
   
   push @data, "$server.$host.system.CPU.$key.user $user $now\n";
   push @data, "$server.$host.system.CPU.$key.sys $sys $now\n";
   push @data, "$server.$host.system.CPU.$key.idle $idle $now\n";
   push @data, "$server.$host.system.CPU.$key.intr $intr $now\n";
+  push @data, "$server.$host.system.CPU.$key.softirq $softirq $now\n";
  }
 }
 
@@ -209,7 +213,7 @@ sub collect_NFSiostats {
   if (/nfs4/){
     s/:/ /g; 
     s/\//mpt-/g;
-    print;
+    #print;
     @mounts=split;
    }
   if (/(READ:|WRITE:|OPEN:|CLOSE:|SETATTR:|LOCK:|ACCESS:|GETATTR:|LOOKUP:|REMOVE:|RENAME:|LINK:|SYMLINK:|CREATE:|STATFS:|READLINK:|READDIR:)/) {
@@ -227,3 +231,21 @@ sub collect_NFSiostats {
  }
 }
 
+sub collect_ETHTool {
+  my @stats;
+  my @ETH = `ls /sys/class/net/`;
+  foreach my $ETH (@ETH){
+    next if ($ETH =~ /lo/);
+    chomp($ETH);
+    open(ETHTOOL, "ethtool -S $ETH |") || die print "failed to get data: $!\n";
+     while (<ETHTOOL>) {
+      next if (/napi/ || /misses/ || /csum/ || /^NIC/ || /multicast/ || /poll/);
+      if (/rx_/ || /tx_/){
+      s/:/ /g;
+      @stats=split;  
+      push @data, "$server.$host.system.ethtool.$ETH.$stats[0] $stats[1] $now\n";
+   }
+  }
+  close(ETHTOOL);
+ }
+}
