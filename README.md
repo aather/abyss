@@ -20,7 +20,7 @@ Abyss has following components:
 - **Time-Series Database:** All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
 - **Jolokia:** Captures JVM metrics via JMX port on localhost for Java applications: Cassandra, Kafka, Tomcat
 - **Visualization:** Grafana is used for querying metrics and designing dashboards
-- ** Agents:** Run on instance under investigation and generate metrics:  
+- **Agents:** Run on instance under investigation and generate metrics:  
   - *System Agents:* System  metrics: cpu, memory, net, tcp, io, nfs
   - *Application Agents:* Application metrics: Cassandra, kafka, Tomcat. 
   - *Sniffer:* Low level tcp and io metrics collected via open source tcpip driver and Linux “perf” utility.
