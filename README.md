@@ -3,7 +3,7 @@
 - Helps automate benchmarks and interpret results 
 - Use time-series graphite database to store metrics
 - Query metrics for visualization via Grafana graph and dashboard builder. http://grafana.org/
-- Custom Dashboards are available for graphing: cassandra, kafka, tomcat, nfs, system metrics and benchmark results.  go/abyss
+- Custom Dashboards are available for graphing: cassandra, kafka, tomcat, nfs, system metrics and benchmark results.
 - Abyss design fits well into self service model
 - Capture metrics across full software stack: application, JVM, system, network, and kernel. 
 - Higher granularity of metrics helps identify resource usage spikes and constraints
