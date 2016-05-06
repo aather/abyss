@@ -40,7 +40,7 @@ Abyss has following components:
  - Snapshot sharing of interactive graphs
 
 ## Abyss Setup 
-Script, graphite-setup, is provided to quickly setup services: graphite, grafana, apache on a single server for testing Abyss agents. Ayss agents configuration is performed via single file: **env.pl** to set environment variables. 
+Script, graphite-setup, is provided to quickly setup services: graphite, grafana, apache on a single server for testing Abyss agents. Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
 
  - **carbon_server-**    Agents ships metrics to graphite server on this host
  - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
@@ -84,9 +84,10 @@ $./startNetBenchmark
     - Pending Tasks: Type of Tasks pending completion: compaction, hintedhandoff, readstage, etc..
     - compaction: total bytes compacted, memtable size and memtable switch rate
     - sstable stats, sstable cached in memory, sstable sizes and sstable counts
-  -**kafka**
+
+  - **kafka**
     - 
-  -**tomcat**
+  - **tomcat**
     - 
 
 - Benchmark Metrics
