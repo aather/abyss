@@ -1,21 +1,37 @@
 ![Abyss](abyss.jpg)
+- Collects system and application level performance metrics at a higher resolution
+- Helps automate benchmarks and interpret results 
+- Use time-series graphite database to store metrics
+- Query metrics for visualization via Grafana graph and dashboard builder. http://grafana.org/
+- Custom Dashboards are available for graphing: cassandra, kafka, tomcat, nfs, system metrics and benchmark results.  go/abyss
+- Abyss design fits well into self service model
+- Capture metrics across full software stack: application, JVM, system, network, and kernel. 
+- Higher granularity of metrics helps identify resource usage spikes and constraints
+- Low level profiling data to understand application characteristics
+- Data correlation via custom dashboards
 
-Abyss is used to monitor application and server performance. To estimate resource demand of complex workload, it is essential to have access to low level profiling data captured at proper granularity. Abyss is designed to understand application characteristics by measuring relevent metrics across full software stack. Correlation is then performed to identify resource constraints limiting application performance. Abyss toolset provides access to low level profiling data captured at higher resolution. 
-## Abyss Design
+## Abyss Model
 
-Abyss agents run on a server or a cloud instance to capture application and system level metrics and periodically push them to a graphite server (Support for influxdb and Elastic Search are planned).
+Abyss relies on following components to function:
+- Agents: Run on instance under investigation
+- Application: Application and JVM metrics via JMX port. Available agents: Cassandra, Kafka, Tomcat
+- System: System level metrics: cpu, memory, net, tcp, io, nfs
+- Sniffer: Low level tcp and io metrics collected via kernel driver and linux “perf” utility.
+- Benchmark: Automate IO and Network benchmark and interpret results 
+- Time-Series Database:  All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
+- Visualization: Grafana is used for querying metrics and designing dashboards
 
-Ready to use dashboards are created using Grafana to visualize metrics and to perform data correlation.
-
-Abyss is consist of three components:
-
-- **Agents:** Agents run on the instance being monitored and are written using perl, python and C.
-  - **App:** App agents capture java application and jvm metrics via JMX port on localhost. Cassandra, kafka and tomcat agents are available. 
-  - **System:** System agent captures system metrics: cpu, mem, net, io, NFS
-  - **Sniffer:** Sniffer agents captures low level per connection tcp metrics and IO latency metrics using perf and kernel module
-  - **Benchmark:** benchmarking agents are used to automate the process of running  network and IO benchmarks. Agents also collects relevent benchmark and system level metrics  
-- **Graphite Server:** Agents periodically (default: every 5 seconds) ship metrics to graphite server on the network. 
-- **Visualization:** Once sufficient metrics (15-30 minutes) are collected, Grafana dashboards are used to visualize it. Ready to use Dashboards are available. 
+## Abyess Agents
+- Abyss agents are simple to write and language agnostic.
+- There are sample agents written in Perl are available.
+- Agents collects metrics and ships them to graphite server periodically.
+- For graphite database, metrics are sent in “.” formatted string with time stamp:
+ - $server.$host.system.mem.free_cached $free_cached $datestamp
+ - where: metrics name: $server.$host.system.mem.free_cached, metrics value: $free_cached, timestamp: $datestamp
+- For graphing metrics, open source grafana dashboard builder is used to query metrics and to design custom dashboards. Sample Dashboards are available. Grafana is feature rich and support: 
+ - Several time-series data sources: Elasticsearch, Cloudwatch, InfluxDB ..
+ - Templating Variables automatically filled with values from database
+ - Snapshot sharing of interactive graphs
 
 ## Abyss Config 
 All config options for abyss agents are provided in a single file: **env.pl**. There are separate section for server running in AWS cloud and datacenter. Few options are listed below: 
@@ -28,21 +44,18 @@ All config options for abyss agents are provided in a single file: **env.pl**. T
  - **interval-**         Sets metrics collection granularity
  - **iterations-**	 Sets number of benchmark iterations to perform
 
-You can run application and system agents running script below on the system or cloud instance being monitored
+Run the command on the host that you plan to monitor: $./startMonitoring
 
-$./startMonitoring
-
-This will start accumulating metrics in to graphite server. Wait for **15-30** minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
+This will start abyss agents to collect metrics at 5 second interval and push them to graphite server on the network. Wait for **15-30** minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
 
 http://hostname-or-IPAddr-of-graphite-server:7410/
 
-
-To run network Benchmark set environment variables in **env.pl** file to set hostname of peer host running netserver and memcached servers. Istall and start netserver and memcached server with options below:
+To run network Benchmark set environment variables in **env.pl** file to set peer host running netserver, webserver or/and memcached servers. Install and start netserver, webserver (nginx, apache) and memcached server with options below:
+- peer = "peer IP address or hostname" 
 - netserver: sudo netserver -p 7420
 - memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
-- peer =  "hostname-or-IPADDR-of-peer-running-netserver-memcached"
 
-Start benchmark agents:
+To start Network throughput benchmark, run:
 $./startNetBenchmark 
 
 ## Abyss In Action
