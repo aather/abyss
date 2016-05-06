@@ -95,8 +95,8 @@ $./startNetBenchmark
     - **memcache:** measure net latency: Open source memcached client "mcblaster" is used to warm up the memcached server cache with 2 Million 100 bytes records. mcblaster client then performs "gets" request at various RPS rates and measure memcache latencies. At the end of test, transactions completed within 1-10 ms are bucketed in 10ms increments.
     - **webserver:** Open source "wrk" client is used to run RPS test again nginx or any other web server
 
-*NOTE: Every data point in the graph represents a single test result. Considering Tests duration can be more than 5 seconds, Time 
-scale in graph is fabricated to keep data points to look like generated every 5 seoncs. This is to keep time series database happy 
+ *NOTE: Every data point in the graph represents a single test result. Considering Tests duration can be more than 5 seconds, Time 
+scale in graph is fabricated to keep data points to look like generated every 5 seoncs. This is to keep time series database happy* 
 
 ## Future Enhancements
 - Web browser interface instead of config file "env.pl" to setup and start metric collection
