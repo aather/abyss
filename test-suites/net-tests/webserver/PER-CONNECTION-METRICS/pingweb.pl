@@ -9,7 +9,7 @@ use Fcntl qw/:flock/;
 open SELF, "< $0" or die ;
 flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../env.pl";                            # Sets up environment varilables for all agents
+require "../../../../env.pl";                            # Sets up environment varilables for all agents
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 
@@ -19,9 +19,9 @@ require "../../env.pl";                            # Sets up environment varilab
 #$SIG{TERM} = \&signal_handler;
 
 my @data = ();                                  # array to store metrics
-my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
+my ($now, $connections) = @ARGV;
 
-open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 
@@ -31,7 +31,6 @@ my @percentile;
 # Start capturing
 #while ($iterations-- > 0 ) {
 while (1) {
-$now = `date +%s`;
 # graphite metrics are sent with date stamp 
  open (INTERFACE, "sudo ping -A -w 5 $peer |")|| die print "failed to get data: $!\n";
   while (<INTERFACE>) {
@@ -51,12 +50,12 @@ $now = `date +%s`;
 
 @percentile = sort {$a <=> $b} @percentile; 
 
-push @data, "$server-netbench.$host.benchmark.pingtest.min $percentile[0] $now \n";
-push @data, "$server-netbench.$host.benchmark.pingtest.max $percentile[-1] $now \n";
+push @data, "$server-netbench.$host.benchmark.webserver.$connections.pingtest.min $percentile[0] $now \n";
+push @data, "$server-netbench.$host.benchmark.webserver.$connections.pingtest.max $percentile[-1] $now \n";
 my $tmp = $percentile[sprintf("%.0f",(0.95*($#percentile)))];
- push @data, "$server-netbench.$host.benchmark.pingtest.95th $tmp $now \n";
+ push @data, "$server-netbench.$host.benchmark.webserver.$connections.pingtest.95th $tmp $now \n";
 my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
- push @data, "$server-netbench.$host.benchmark.pingtest.99th $tmp $now \n";
+ push @data, "$server-netbench.$host.benchmark.webserver.$connections.pingtest.99th $tmp $now \n";
 
 # Ship Metrics to carbon server --- 
   #print @data; 		# For Testing only 
@@ -64,7 +63,6 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
   print GRAPHITE  @data;  	# Ship metrics to carbon server
   @data=();     		# Initialize for next set of metrics
   @percentile=();
-
-  sleep 1;
+  $now = $now + 5;
 } # while
 

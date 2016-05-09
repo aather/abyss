@@ -7,7 +7,7 @@ use Fcntl qw/:flock/;
 open SELF, "< $0" or die ;
 flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../env.pl";                            # Sets up environment varilables for all agents
+require "../../../env.pl";                            # Sets up environment varilables for all agents
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 
@@ -19,12 +19,13 @@ require "../../env.pl";                            # Sets up environment varilab
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
-open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 my @stats;
 my @percentile;
 
+# Start Capturing
 my @args = ("./sysnet.pl", "$now");
   if (my $pid = fork) {
      # No waiting for child 
@@ -35,7 +36,6 @@ my @args = ("./sysnet.pl", "$now");
      exec(@args);
   }
 
-# Start Capturing
 while ($iterations-- > 0 ) {
 $now = `date +%s`;
 open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $net_dport -- -P $net_cport |")|| die print "failed to get data: $!\n";
@@ -67,5 +67,6 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
 
   sleep 1;
 } # while
-`pkill sysnet.pl`;
-
+`sudo pkill -9 sysnet.pl`;
+`sudo pkill -9 pingnetBW.pl`;
+`sudo pkill -9 tpsnetBW.pl`;

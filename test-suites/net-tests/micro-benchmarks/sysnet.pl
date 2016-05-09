@@ -7,19 +7,17 @@ use Fcntl qw/:flock/;
 #open SELF, "< $0" or die ;
 #flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../env.pl";				# Sets up environment varilables for all agents
+require "../../../env.pl";				# Sets up environment varilables for all agents
 
 #$SIG{INT} = \&signal_handler; 
 #$SIG{TERM} = \&signal_handler; 
 
 my @data = ();					# array to store metrics
-
-# Takes start time, test name, test types, filesystem, block
-
-my ($now, $RPS) = @ARGV;
-
+my ($now) = @ARGV;
+#my $now = `date +%s`;				# metrics are sent with date stamp to graphite server
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+#open(GRAPHITE, "| ../../../common/ncat -i 100000ms $carbon_server $carbon_port ") || die "failed to send: $!\n";
  
 # ------------------------------agent specific sub routines-------------------
 sub build_HashArray;
@@ -33,6 +31,7 @@ sub collect_NFSiostats;
 
 while (1) {
 
+$now = `date +%s`;				# metrics are sent with date stamp to graphite server
 # Comment out stats that you are not interested in collecting 
 
  collect_NetStats;
@@ -41,13 +40,12 @@ while (1) {
  collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
 
- #print @data; 				# Testing only 
- #print "\n------\n"; 			# Testing only
+# print @data; 				# Testing only 
+# print "\n------\n"; 			# Testing only
  print GRAPHITE @data;			# Ship metrics to graphite server
  @data=();  	
 
  sleep $interval ;  
- $now = $now + $interval;
 }
 
 # ----------------------- subroutines -----------------
@@ -74,10 +72,10 @@ sub collect_NetStats {
   next if (/^$/ || /^Inter/ || /face/) ;
   s/:/ /g;
   @stats = split;
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.interface.$stats[0].rxbytes $stats[1] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.interface.$stats[0].rxpackets $stats[2] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.interface.$stats[0].txbytes $stats[9] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.interface.$stats[0].txpackets $stats[10] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.interface.$stats[0].rxbytes $stats[1] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.interface.$stats[0].rxpackets $stats[2] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.interface.$stats[0].txbytes $stats[9] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.interface.$stats[0].txpackets $stats[10] $now\n";
  }
  close(INTERFACE);
 }
@@ -88,11 +86,11 @@ sub collect_TCPRetrans {
   while (<TCP>) {
   next if ( /SyncookiesSent/ || /Ip/);
   @stats = split;
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.ListenDrops $stats[21] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.TCPFastRetrans $stats[45] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.TCPSlowStartRetrans $stats[47] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.TCPTimeOuts $stats[48] $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.TCPBacklogDrop $stats[75] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.ListenDrops $stats[21] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPFastRetrans $stats[45] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPSlowStartRetrans $stats[47] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPTimeOuts $stats[48] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPBacklogDrop $stats[75] $now\n";
  }
 close(TCP);
 }
@@ -106,13 +104,13 @@ sub collect_TCPSegs {
    next if (!/Tcp/);
    next if (/RtoAlgo/);
    @stats = split; 
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.ActiveOpens $stats[5] $now\n";
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.PassiveOpens $stats[6] $now\n";
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.EstabRsts $stats[8] $now\n"; 
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.InSegs $stats[10] $now\n";
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.OutSegs $stats[11] $now\n";
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.RetransSegs $stats[12] $now\n";
-   push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.tcp.OutRst $stats[14] $now\n";  
+   push @data, "$server-netbench.$host.benchmark.system.tcp.ActiveOpens $stats[5] $now\n";
+   push @data, "$server-netbench.$host.benchmark.system.tcp.PassiveOpens $stats[6] $now\n";
+   push @data, "$server-netbench.$host.benchmark.system.tcp.EstabRsts $stats[8] $now\n"; 
+   push @data, "$server-netbench.$host.benchmark.system.tcp.InSegs $stats[10] $now\n";
+   push @data, "$server-netbench.$host.benchmark.system.tcp.OutSegs $stats[11] $now\n";
+   push @data, "$server-netbench.$host.benchmark.system.tcp.RetransSegs $stats[12] $now\n";
+   push @data, "$server-netbench.$host.benchmark.system.tcp.OutRst $stats[14] $now\n";  
  }
 close(TCP);
 }
@@ -136,9 +134,9 @@ close (VMSTAT);
  $free_unused = $Array[1];
  $used = $Array[0] - $free_cached - $free_unused;
 
- push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.mem.free_cached $free_cached $now\n";
- push @data, "$server-netbench..$host.benchmark.memcached.$RPS.system.mem.free_unused $free_unused $now\n";
- push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.mem.used $used $now\n";
+ push @data, "$server-netbench.$host.benchmark.system.mem.free_cached $free_cached $now\n";
+ push @data, "$server-netbench.$host.benchmark.system.mem.free_unused $free_unused $now\n";
+ push @data, "$server-netbench.$host.benchmark.system.mem.used $used $now\n";
 }
 
 sub collect_CPUStats {
@@ -170,13 +168,13 @@ close(MPSTAT);
   $user = $cpuhash{$key}[0] + $cpuhash{$key}[1];
   $sys = $cpuhash{$key}[2];
   $idle = $cpuhash{$key}[3] + $cpuhash{$key}[4];
-  $intr = $cpuhash{$key}[5] + $cpuhash{$key}[6];
+  $intr = $cpuhash{$key}[5];
+  $softirq = $cpuhash{$key}[6];
 
-# benchmark.memcached.30000  
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.CPU.$key.user $user $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.CPU.$key.sys $sys $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.CPU.$key.idle $idle $now\n";
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.CPU.$key.intr $intr $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$key.user $user $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$key.sys $sys $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$key.idle $idle $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$key.intr $intr $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$key.softirq $softirq $now\n";
  }
 }
-

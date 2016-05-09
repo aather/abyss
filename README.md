@@ -66,8 +66,10 @@ $./startNetBenchmark
 
 ## Abyss In Action
 
-![Abyss](bench.png)
-![Abyss](app.png)
+![Abyss](menu.png)
+![Abyss](cassandra.png)
+![Abyss](net-tpt.png)
+![Abyss](sys.png)
 
 ## Abyss Metrics
  List of metrics collected by abyss agents:
