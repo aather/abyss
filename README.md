@@ -40,7 +40,10 @@ Abyss has following components:
  - Snapshot sharing of interactive graphs
 
 ## Abyss Setup 
-**Script, graphite-setup/graphite-setup.sh, is provided to test Abyss quickly. Script sets upthe server side to Abyss. It install and configured services: graphite, grafana, apache that Abyss agents used to store, query and visualized metrics.** 
+
+Clone the repository: $ git clone https://github.com/aather/abyss
+
+**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics** 
 
 Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
 
