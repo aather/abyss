@@ -43,22 +43,25 @@ Abyss has following components:
 
 Clone the repository: $ git clone https://github.com/aather/abyss
 
-**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly on Ubuntu server. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics** 
+**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly on a single Ubuntu server. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics on localhost** 
 
-Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
+Start system monitoring agents: **$./startMonitoring**
 
- - **carbon_server-**    Agents ships metrics to graphite server on this host
+*This will start abyss agents to collect metrics at 5 second interval and push them to graphite server on the network.* 
+*Wait for few minutes to have sufficient metrics collected so they can be displayed on dashboard.*
+
+**Enter URL of grafana server. By default, it is running on localhost**
+ http://localhost:7410/
+
+For full setup, use abyss agents configuration file: **env.pl** . This file sets up environment variables for all abyss agents. 
+
+ - **carbon_server-**    Agents ships metrics to graphite server on this host. Default locahost
  - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
+ - **grafana_port-**	 Port where grafana server is listening. Default: http://localhost:7410/
  - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
  - **server-**           Sets Server name or Application cluster name, used by graphite server for storing metrics. 
  - **interval-**         Sets metrics collection granularity. Default: 5 seconds
  - **iterations-**	 Sets number of benchmark iterations to perform. Default: 5 seconds
-
-Run the command on the host that you plan to monitor: $./startMonitoring
-
-This will start abyss agents to collect metrics at 5 second interval and push them to graphite server on the network. Wait for **15-30** minutes to have sufficient metrics displayed on dashboard and then enter URL of graphite server. 
-
-http://hostname-or-IPAddr-of-graphite-server:7410/
 
 ## Abyss Benchmark Agents
 To run network Benchmark set environment variables in **env.pl** file to set peer host running netserver, webserver or/and memcached servers. Install and start netserver, webserver (nginx, apache) and memcached server with options below:
