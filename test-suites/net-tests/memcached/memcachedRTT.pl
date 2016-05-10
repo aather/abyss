@@ -8,7 +8,7 @@ use Fcntl qw/:flock/;
 open SELF, "< $0" or die ;
 flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../../../env.pl";
+require "../../../env.pl";
 
 #setpriority(0,$$,19);                          # Uncomment if running script at a lower priority
 
@@ -27,7 +27,7 @@ my $exit;
 
 # Warm up the memcache with 2 million entries of size 100 bytes before starting RPS test
 
-$exit = `../../../../common/mcblaster -p $mem_port -z 100 -k 2000000  -d 30 -w 10000 -c 1 -r 1 $peer 2>&1`;
+$exit = `../../../common/mcblaster -p $mem_port -z 100 -k 2000000  -d 30 -w 10000 -c 1 -r 1 $peer 2>&1`;
 if ($exit =~ /Hostname lookup failed/) {
   print "\nHostname lookup failed: $!\n";
   printf "command exited with value %d\n", $? >> 8;
@@ -35,7 +35,7 @@ if ($exit =~ /Hostname lookup failed/) {
 }
 
 # open a connection to graphite server
-open(GRAPHITE, "| ../../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # Plan is to keep all RPS rates within the same time frame
 my $time = `date +%s`;
@@ -54,7 +54,7 @@ foreach my $RPS (@RPS){
      exec(@args);
   }
   while ($loops-- > 0 ) {
-   open (INTERFACE, " ../../../../common/mcblaster -p $mem_port -t 2 -z 100 -d 10 -r $RPS -c 1 $peer |")|| die print "failed to get data: $!\n";
+   open (INTERFACE, " ../../../common/mcblaster -p $mem_port -t 2 -z 100 -d 10 -r $RPS -c 1 $peer |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if (/^$/);
      if ((/^RTT min/ && $skip == 0)){  # need min, average and max latency

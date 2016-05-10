@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=$PWD
+DIR=/usr/share/abyss
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null
@@ -24,7 +24,7 @@ cd $DIR/monitor
 nohup ./loop-systats.sh &
 PIDLIST="$PIDLIST $!"
 
-# Agent to monitor Storage IO latencies
+# Agent to monitor Storage IO size and latencies
 # check if perf is installed
 if [ -f "/usr/bin/perf" ] 
 then
@@ -44,11 +44,11 @@ fi
 #fi
 
 # Agent to monitor Application stats via JMX port. 
-# We can monitor only one app per instance or system
+# We can monitor only one java app per instance or system
 #
 # cassandra Agent
 found=0
-pid=`jps|grep DseDaemon|awk '{print $1}'` >> /dev/null
+pid=`jps|egrep "DseDaemon|DseModule"|awk '{print $1}'` >> /dev/null
 if ps --pid $pid &>/dev/null
 then
  found=1
@@ -84,3 +84,5 @@ fi
 
 
 wait
+
+

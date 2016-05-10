@@ -7,7 +7,7 @@ use Fcntl qw/:flock/;
 #open SELF, "< $0" or die ;
 #flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
-require "../../../../env.pl";				# Sets up environment varilables for all agents
+require "../../../env.pl";				# Sets up environment varilables for all agents
 
 #$SIG{INT} = \&signal_handler; 
 #$SIG{TERM} = \&signal_handler; 
@@ -19,7 +19,7 @@ my @data = ();					# array to store metrics
 my ($now, $RPS) = @ARGV;
 
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| ../../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "|../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
  
 # ------------------------------agent specific sub routines-------------------
 sub build_HashArray;

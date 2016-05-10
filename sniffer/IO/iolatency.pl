@@ -18,8 +18,8 @@ require "../../env.pl";                            # Sets up environment varilab
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
-#open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
-open(GRAPHITE, "| ../../common/ncat -i 1000000ms -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+#open(GRAPHITE, "| ../../common/ncat -i 1000000ms -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 
@@ -36,14 +36,18 @@ while (1) {
   #print "stats:$stats[0]\n";
   push (@rpercentile, $stats[1]) if ($stats[0] =~ /R/);
   push (@wpercentile, $stats[1]) if ($stats[0] =~ /W/);
+  push (@rSize, $stats[1]) if ($stats[0] =~ /Size-*R/);
+  push (@wSize, $stats[1]) if ($stats[0] =~ /Size-*W/);
   }
  close(PERF);
 
 # Sort
 @rpercentile = sort {$a <=> $b} @rpercentile;
 @wpercentile = sort {$a <=> $b} @wpercentile;
+@rSize = sort {$a <=> $b} @rSize;
+@wSize = sort {$a <=> $b} @wSize;
 
-# print min and max
+# ---- Read Write Latency
 push @data, "$server.$host.system.io.Latency.Read.min $rpercentile[0] $now \n";
 push @data, "$server.$host.system.io.Latency.Read.max $rpercentile[-1] $now \n";
 push @data, "$server.$host.system.io.Latency.Write.min $wpercentile[0] $now \n";
@@ -59,6 +63,23 @@ my $tmp = $rpercentile[sprintf("%.0f",(0.99*($#rpercentile)))];
 my $tmp = $wpercentile[sprintf("%.0f",(0.99*($#wpercentile)))];
  push @data, "$server.$host.system.io.Latency.Write.99th $tmp $now \n";
 
+#----Read Write Size
+push @data, "$server.$host.system.io.Size.Read.min $rSize[0] $now \n";
+push @data, "$server.$host.system.io.Size.Read.max $rSize[-1] $now \n";
+push @data, "$server.$host.system.io.Size.Write.min $wSize[0] $now \n";
+push @data, "$server.$host.system.io.Size.Write.max $wSize[-1] $now \n";
+# Print 95% percentile
+my $tmp = $rSize[sprintf("%.0f",(0.95*($#rSize)))];
+ push @data, "$server.$host.system.io.Size.Read.95th $tmp $now \n";
+my $tmp = $wSize[sprintf("%.0f",(0.95*($#wSize)))];
+ push @data, "$server.$host.system.io.Size.Write.95th $tmp $now \n";
+# Print 99% percentile
+my $tmp = $rSize[sprintf("%.0f",(0.99*($#rSize)))];
+ push @data, "$server.$host.system.io.Size.Read.99th $tmp $now \n";
+my $tmp = $wSize[sprintf("%.0f",(0.99*($#wSize)))];
+ push @data, "$server.$host.system.io.Size.Write.99th $tmp $now \n";
+
+
 
   #print @data; 			# For Testing only 
   #print "\n------\n"; 			# For Testing only
@@ -69,3 +90,4 @@ my $tmp = $wpercentile[sprintf("%.0f",(0.99*($#wpercentile)))];
 
   sleep $interval;
 }
+
