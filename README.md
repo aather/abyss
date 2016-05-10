@@ -43,7 +43,7 @@ Abyss has following components:
 
 Clone the repository: $ git clone https://github.com/aather/abyss
 
-**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics** 
+**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly on Ubuntu server. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics** 
 
 Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
 
