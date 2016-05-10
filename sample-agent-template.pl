@@ -23,15 +23,15 @@ open(GRAPHITE, "| ../../common/ncat -i 100000ms $carbon_server $carbon_port") ||
 
 # ------------------------------agent specific sub routines-------------------
 
-# Call your routines, collect_MyStats that stores metrics in @data and for shippment to graphite server
+# Call your routines, collect_MyStats that stores metrics in @data for shippment to graphite server
 
 while (1) {
 
  $now = `date +%s`;     	# date stamp is required with every metrics
  collect_MyStats;
 
- #print @data; 			# For Testing only. 
- #print "\n------\n"; 		# For Testing only
+ print @data; 			 
+ print "\n------\n"; 		
 
  print GRAPHITE  @data;  	# Ship metrics to carbon server
 
@@ -42,7 +42,7 @@ while (1) {
 # ----------------------- All subroutines -----------------
 
 sub collect_MyStats {
- # Your Code here
+ # <Your Code here>
  # push $mystats @data;   # store metrics in @data array for delivery to graphite server
 }
 
