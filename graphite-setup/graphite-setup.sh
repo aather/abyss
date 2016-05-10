@@ -31,11 +31,12 @@ cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-de
 rm -f /etc/apache2/sites-enabled/000-default.conf
 cp ./graphite.conf.custom /etc/apache2/sites-enabled/graphite.conf
 sudo ln -sf /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
-sudo cp ./grafana.tar.gz /usr/share/
-cd /usr/share
-sudo tar -zxvf grafana.tar.gz > /dev/null 2>&1
+#sudo cp ./grafana.tar.gz /usr/share/
+sudo cp -r grafana /usr/share/
+#sudo tar -zxvf grafana.tar.gz > /dev/null 2>&1
 cd /usr/share/grafana/bin
 sudo nohup ./grafana-server start &
 sudo service apache2 restart
 sudo service carbon-cache restart 
 sudo netstat -ltpn 
+
