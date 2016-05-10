@@ -40,7 +40,9 @@ Abyss has following components:
  - Snapshot sharing of interactive graphs
 
 ## Abyss Setup 
-Script, graphite-setup, is provided to quickly setup services: graphite, grafana, apache on a single server for testing Abyss agents. Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
+**Script, graphite-setup/graphite-setup.sh, is provided to test Abyss quickly. Script sets upthe server side to Abyss. It install and configured services: graphite, grafana, apache that Abyss agents used to store, query and visualized metrics.** 
+
+Abyss agents configuration is performed via single file: **env.pl** to set environment variables. 
 
  - **carbon_server-**    Agents ships metrics to graphite server on this host
  - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
