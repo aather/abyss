@@ -55,7 +55,7 @@ Start system monitoring agents: **$./startMonitoring**
 
 For full setup, use abyss agents configuration file: **env.pl** . This file sets up environment variables for all abyss agents. 
 
- - **carbon_server-**    Agents ships metrics to graphite server on this host. Default locahost
+ - **carbon_server-**    Agents ships metrics to graphite server on this host. Default locahost. Y
  - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
  - **grafana_port-**	 Port where grafana server is listening. Default: http://localhost:7410/
  - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
