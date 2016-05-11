@@ -19,8 +19,8 @@ require "../../env.pl";    			# Sets up common environment varilables for all ag
 my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
-#open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
-open(GRAPHITE, "|../../common/ncat -i 1000000ms $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../common/nc -w 200 $carbon_server $carbon_port") || die "failed to send: $!\n";
+#open(GRAPHITE, "|../../common/ncat -i 1000000ms $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 
@@ -40,6 +40,9 @@ my $value7;
 my $value8;
 my $value9;
 my $value10;
+my $value11;
+my $value12;
+my $value13;
 
 #compile and load kernel module tcp_prob_plus 
 
@@ -138,9 +141,7 @@ else {
         print "\n Problem starting fetcher thread\n";
         print "\n exit: $exit\n";
         exit;
-   }
-
-# Start collecting samples
+ }
 
 while (1) {
    open (SNIFFER, "curl -s http://$localIP:$cloudstat_port/app/startCapturing/|json_pp |")|| die print "failed to get data: $!\n";
@@ -167,12 +168,14 @@ while (1) {
     $value8 = $stats[1] if $stats[0] =~ /LOST/;
     $value9 = $stats[1] if $stats[0] =~ /WQUEUE/;
     $value10 = $stats[1] if $stats[0] =~ /RQUEUE/;
+    $value11 = $stats[1] if $stats[0] =~ /INFLIGHT/;
+    $value12 = $stats[1] if $stats[0] =~ /RTO/;
 
-    if ($key2 !~ /127.0.0/ ){  # don't worry about loopback addresses
+    #if ($key2 !~ /127.0.0/ ){  # don't worry about loopback addresses
     $key2=~s/^\s+//; # Remove space in the begining
     $key2=~s/\./_/g; # change . into _ because of graphite
     $keyjoined = join "-", $key1,$key2;
-   } 
+   #} 
 
     push @data, "$server.$host.system.tcp.traffic.RTT.$keyjoined $value1 $now\n"; 
     push @data, "$server.$host.system.tcp.traffic.RETRANS.$keyjoined $value2 $now\n"; 
@@ -186,7 +189,10 @@ while (1) {
     push @data, "$server.$host.system.tcp.traffic.LOST.$keyjoined $value8 $now\n"; 
     push @data, "$server.$host.system.tcp.traffic.WQUEUE.$keyjoined $value9 $now\n"; 
     push @data, "$server.$host.system.tcp.traffic.RQUEUE.$keyjoined $value10 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.INFLIGHT.$keyjoined $value11 $now\n"; 
+    push @data, "$server.$host.system.tcp.traffic.RTO.$keyjoined $value12 $now\n"; 
   }
+
  close(SNIFFER);
 
   #print @data; 			# For Testing only 
@@ -196,3 +202,4 @@ while (1) {
 
   sleep $interval;
 }
+
