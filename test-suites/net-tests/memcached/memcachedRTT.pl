@@ -27,7 +27,7 @@ my $exit;
 
 # Warm up the memcache with 2 million entries of size 100 bytes before starting RPS test
 
-$exit = `../../../common/mcblaster -p $mem_port -z 100 -k 2000000  -d 30 -w 10000 -c 1 -r 1 $peer 2>&1`;
+$exit = `../../../common/mcblaster -p $mem_port -z $payload -k 2000000  -d 30 -w 10000 -c $threads -r 1 $peer 2>&1`;
 if ($exit =~ /Hostname lookup failed/) {
   print "\nHostname lookup failed: $!\n";
   printf "command exited with value %d\n", $? >> 8;
@@ -40,7 +40,7 @@ open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die 
 # Plan is to keep all RPS rates within the same time frame
 my $time = `date +%s`;
 my $now = $time;
-my $loops = $iterations;
+#my $loops = $iterations;
 my $skip = 0;
 
 foreach my $RPS (@RPS){
@@ -53,8 +53,9 @@ foreach my $RPS (@RPS){
      # I am child, now execute external command in context of new process.
      exec(@args);
   }
-  while ($loops-- > 0 ) {
-   open (INTERFACE, " ../../../common/mcblaster -p $mem_port -t 2 -z 100 -d 10 -r $RPS -c 1 $peer |")|| die print "failed to get data: $!\n";
+  #while ($loops-- > 0 ) {
+  while (1) {
+  open (INTERFACE, " ../../../common/mcblaster -p $mem_port -t $threads -z $payload -d 10 -r $RPS -c $connections $peer |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if (/^$/);
      if ((/^RTT min/ && $skip == 0)){  # need min, average and max latency
@@ -108,6 +109,5 @@ foreach my $RPS (@RPS){
    }
   }
   `pkill sysmemRTT.pl`;
-  $loops=$iterations;
-  #$now = $time;  # Reset $now for new RPS rate
+  #$loops=$iterations;
 }

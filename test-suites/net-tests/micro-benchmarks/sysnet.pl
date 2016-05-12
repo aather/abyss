@@ -4,8 +4,8 @@
 #use strict;
 use Fcntl qw/:flock/;
 
-#open SELF, "< $0" or die ;
-#flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
+open SELF, "< $0" or die ;
+flock SELF, LOCK_EX | LOCK_NB  or die "Another instance of the same program is already running: $!";
 
 require "../../../env.pl";				# Sets up environment varilables for all agents
 
@@ -160,7 +160,7 @@ sub collect_CPUStats {
   }
  else {  # also needs to collect running and blocked processes
   @stats = split;
-  push @data, "$server-netbench.$host.benchmark.memcached.$RPS.system.CPU.$stats[0] $stats[1] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.CPU.$stats[0] $stats[1] $now\n";
  } 
  }
 close(MPSTAT);

@@ -90,7 +90,7 @@ $mem_port  = 7425;			# abyss agent will use this memcached port on peer
 $threads = 2;				# controls mcblaster threads for memcache test 
 $connections = 1;			# controls mcblaster connections per thread
 $payload = 50; 				# controls mcblaster payload in bytes for "gets"
-@RPS = (100000,150000,200000)		# controls mcblaster RPS rates
+@RPS = (100000,150000,200000);		# controls mcblaster RPS rates
 #
 # webserver Tests
 # start nginx webserver on $peer 

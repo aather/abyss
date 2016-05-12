@@ -1,0 +1,10 @@
+# Remove files that has not been updated for last 2 minutes.
+*/4 * * * *  find /var/lib/graphite/whisper/cluster/*/*/system/tcp/traffic/* -mmin +2 -exec rm -rf {} \;
+*/4 * * * * find /mnt/whisper/cluster/*/*/system/tcp/traffic/* -mmin +2 -exec rm -rf {} \;
+# Every 30 minutes check files that has not been written for last 10 minutes and remove it
+*/30 * * * * find /var/lib/graphite/whisper/cluster -type f -name *.wsp -mmin +10 -exec rm -rf {} \;;
+*/30 * * * * find /mnt/whisper/cluster -type f -name *.wsp -mmin +10 -exec rm -rf {} \;;
+# Carbon daemon logs can get very large if there are errors in metrics format
+0 */6 * * *  find /mnt/logs/system/carbon/* -exec rm -rf {} \;
+# carbon-cache some time stop responding to request. Restarting it every 6 hours in case
+0 */6 * * *  service carbon-cache restart;

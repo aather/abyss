@@ -36,7 +36,8 @@ my @args = ("./sysnet.pl", "$now");
      exec(@args);
   }
 
-while ($iterations-- > 0 ) {
+#while ($iterations-- > 0 ) {
+while (1) {
 $now = `date +%s`;
 open (INTERFACE, "netperf -H $peer -j -v 2 -l 10 -D 1 -p $net_dport -- -P $net_cport |")|| die print "failed to get data: $!\n";
 
@@ -64,9 +65,5 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
   print GRAPHITE  @data;  		# Ship metrics to carbon server
   @data=();     			# Initialize for next set of metrics
   @percentile=();
-
-  sleep 1;
 } # while
 `sudo pkill -9 sysnet.pl`;
-`sudo pkill -9 pingnetBW.pl`;
-`sudo pkill -9 tpsnetBW.pl`;

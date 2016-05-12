@@ -26,6 +26,16 @@ my @stats;
 my @percentile;
 
 # Start Capturing
+my @args = ("./sysnet.pl", "$now");
+  if (my $pid = fork) {
+     # No waiting for child 
+     #  waitpid($pid);  
+  }
+  else {
+     # I am child, now execute external command in context of new process.
+     exec(@args);
+  }
+
 #while ($iterations-- > 0 ) {
 while (1) {
 $now = `date +%s`;
@@ -55,5 +65,4 @@ my $tmp = $percentile[sprintf("%.0f",(0.99*($#percentile)))];
   @data=();     		# Initialize next set of metrics
   @percentile=();
 
-  sleep 1;
 } # while

@@ -30,11 +30,8 @@ open(GRAPHITE, "| ../../../common/nc -w 600 $carbon_server $carbon_port") || die
 
 # Plan is to keep all RPS rates within the same time frame
 my $time = `date +%s`;
-print "$time\n";
-print "Test started\n";
-#my ($time) = @ARGV;
 my $now = $time;
-my $loops = $iterations;
+#my $loops = $iterations;
 
 my @args = ("./sysweb.pl", "$now", "$connections");
   if (my $pid = fork) {
@@ -57,7 +54,8 @@ foreach my $connections (@CONNECTIONS){
     # I am child, now execute external command in context of new process.
      exec(@args);
   }
-  while ($loops-- > 0 ) {
+  #while ($loops-- > 0 ) {
+  while (1) {
    open (INTERFACE, "../../../common/wrk --latency -t $wthreads -c $connections -d 300s http://$peer:$webserver_port/$filename |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if ((/^$/) || (/Latency/) || (/Req\/Sec/));
@@ -87,9 +85,7 @@ foreach my $connections (@CONNECTIONS){
   @data=();     			# Initialize for next set of metrics
   $now = $now + 5;  # Make it look like sample is shipped every 5 seconds
  }
- # `pkill -9 sysweb.pl`;
- # `pkill -9 pingweb.pl`;
- # `pkill -9 tpsweb.pl`;
-  $loops=$iterations;
-  #$now = $time;  # Reset $now for new RPS rate
+  `pkill -9 sysweb.pl`;
+  #$loops=$iterations;
 }
+
