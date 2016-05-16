@@ -43,20 +43,9 @@ my @args = ("./sysweb.pl", "$now", "$connections");
      exec(@args);
   }
 
-
 foreach my $connections (@CONNECTIONS){
-  my @args = ("./sysweb.pl", "$now", "$connections");
-  if (my $pid = fork) {
-     # No waiting for child 
-     #  waitpid($pid);  
-  }
-  else {
-    # I am child, now execute external command in context of new process.
-     exec(@args);
-  }
-  #while ($loops-- > 0 ) {
-  while (1) {
-   open (INTERFACE, "../../../common/wrk --latency -t $wthreads -c $connections -d 300s http://$peer:$webserver_port/$filename |")|| die print "failed to get data: $!\n";
+  while ($loops-- > 0 ) {
+  open (INTERFACE, "../../../common/wrk --latency -t $wthreads -c $connections -d 60s http://$peer:$webserver_port/$filename |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if ((/^$/) || (/Latency/) || (/Req\/Sec/));
      if ((/50%/) ||( /75%/) ||( /90%/) ||( /99%/)){
@@ -78,14 +67,14 @@ foreach my $connections (@CONNECTIONS){
    }
   }
   close(INTERFACE);
-  print @data; 			# For Testing only 
-  print "\n------\n"; 			# For Testing only
+  #print @data; 			# For Testing only 
+  #print "\n------\n"; 			# For Testing only
   print GRAPHITE  @data;  		# Ship metrics to graphite carbon server
 
   @data=();     			# Initialize for next set of metrics
   $now = $now + 5;  # Make it look like sample is shipped every 5 seconds
  }
-  `pkill -9 sysweb.pl`;
-  #$loops=$iterations;
+  $loops=$iterations;
 }
+  `pkill -9 sysweb.pl`;
 

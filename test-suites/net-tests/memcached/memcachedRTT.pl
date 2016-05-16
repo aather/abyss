@@ -37,10 +37,10 @@ if ($exit =~ /Hostname lookup failed/) {
 # open a connection to graphite server
 open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
 
-# Plan is to keep all RPS rates within the same time frame
+# Plan is to keep all RPS rates within the same time frame for ease of graphing
 my $time = `date +%s`;
 my $now = $time;
-#my $loops = $iterations;
+my $loops = $iterations;
 my $skip = 0;
 
 foreach my $RPS (@RPS){
@@ -53,8 +53,7 @@ foreach my $RPS (@RPS){
      # I am child, now execute external command in context of new process.
      exec(@args);
   }
-  #while ($loops-- > 0 ) {
-  while (1) {
+  while ($loops-- > 0 ) {
   open (INTERFACE, " ../../../common/mcblaster -p $mem_port -t $threads -z $payload -d 10 -r $RPS -c $connections $peer |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
      next if (/^$/);
@@ -108,6 +107,6 @@ foreach my $RPS (@RPS){
     delete $hash{$_};
    }
   }
-  `pkill sysmemRTT.pl`;
-  #$loops=$iterations;
+  $loops=$iterations;
 }
+`pkill sysmemRTT.pl`;

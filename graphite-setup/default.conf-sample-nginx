@@ -1,6 +1,5 @@
-# Sample default.conf file for nginx webserver benchmark
 server {
-    listen       80 reuseport;
+    listen       7430 reuseport;
     server_name  localhost;
 
     access_log  off;
@@ -12,4 +11,3 @@ server {
         #index  index.html index.htm;
     }
   }
-
