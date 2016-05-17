@@ -1,6 +1,4 @@
 #!/bin/bash
-
-DIR=/usr/share/abyss
 killall()
 {
  kill  `pgrep systats.pl`   2>/dev/null
@@ -20,28 +18,31 @@ exit
 trap "killall" HUP INT QUIT KILL TERM USR1 USR2 EXIT
 
 # Agent to monitor system stats: cpu, io, disk, net, mem
-cd $DIR/monitor
+cd monitor
 nohup ./loop-systats.sh &
 PIDLIST="$PIDLIST $!"
+cd ..
 
 # Agent to monitor Storage IO size and latencies
 # check if perf is installed
 if [ -f "/usr/bin/perf" ] 
 then
- cd $DIR/sniffer/IO
+ cd sniffer/IO
  nohup ./loop-iolatency.sh &
  PIDLIST="$PIDLIST $!"
+ cd ../../
 else
   echo "perf is not available. iolatency agent is not started"
 fi
 
 # Agent to monitor low level tcp stats: per connection RTT, Throughput, Retransmit, Congestion, etc..
-#if [ -f "/usr/bin/make" ] 
-#then
-#   cd $DIR/sniffer/NET
-#   nohup ./loop-tcpstats.sh &
-#   PIDLIST="$PIDLIST $!"
-#fi
+if [ -f "/usr/bin/make" ] 
+then
+   cd sniffer/NET
+   nohup ./loop-tcpstats.sh &
+   PIDLIST="$PIDLIST $!"
+   cd ../../ 
+fi
 
 # Agent to monitor Application stats via JMX port. 
 # We can monitor only one java app per instance or system
@@ -52,9 +53,10 @@ pid=`jps|egrep "DseDaemon|DseModule"|awk '{print $1}'` >> /dev/null
 if ps --pid $pid &>/dev/null
 then
  found=1
- cd $DIR/java-apps/cassandra
+ cd java-apps/cassandra
  nohup ./loop-cassandra.sh &
  PIDLIST="$PIDLIST $!"
+ cd ../..
 fi
 
 # Kafka Agent
@@ -64,9 +66,10 @@ then
  if ps --pid $pid &>/dev/null
  then
    found=1
-   cd $DIR/java-apps/kafka
+   cd java-apps/kafka
    nohup ./loop-kafka.sh &
    PIDLIST="$PIDLIST $!"
+   cd ../..
  fi
 fi
 
@@ -76,13 +79,12 @@ then
  pid=`jps|grep Bootstrap|awk '{print $1}'` >> /dev/null
  if ps --pid $pid &>/dev/null
  then
-  cd $DIR/java-apps/tomcat
+  cd java-apps/tomcat
   nohup ./loop-tomcat.sh &
   PIDLIST="$PIDLIST $!"
+  cd ../..
  fi
 fi
 
-
 wait
-
 

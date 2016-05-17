@@ -43,8 +43,7 @@ my $now = $time;
 my $loops = $iterations;
 my $skip = 0;
 
-foreach my $RPS (@RPS){
-  my @args = ("./sysmemRTT.pl", "$now", "$RPS");
+my @args = ("./sysmemRTT.pl", "$now");
   if (my $pid = fork) {
      # No waiting for child 
      #  waitpid($pid);  
@@ -53,6 +52,8 @@ foreach my $RPS (@RPS){
      # I am child, now execute external command in context of new process.
      exec(@args);
   }
+
+foreach my $RPS (@RPS){
   while ($loops-- > 0 ) {
   open (INTERFACE, " ../../../common/mcblaster -p $mem_port -t $threads -z $payload -d 10 -r $RPS -c $connections $peer |")|| die print "failed to get data: $!\n";
    while (<INTERFACE>) {
@@ -77,7 +78,7 @@ foreach my $RPS (@RPS){
         }
         else {
           @stats = split;
-          $hash{$stats[0]} = $stats[2]; 
+          $hash{$stats[0]} = $stats[1]; 
          }
       }
     }
@@ -89,7 +90,7 @@ foreach my $RPS (@RPS){
       push @data, "$server-netbench.$host.benchmark.memcached.$key-100ms $hash{$key} $now \n";
     }
     else{
-      push @data, "$server-netbench.$host.benchmark.memcached.$key-us $hash{$key} $now \n";
+      push @data, "$server-netbench.$host.benchmark.memcached.$key-ns $hash{$key} $now \n";
     }
   }
   push @data, "$server-netbench.$host.benchmark.memcached.total-Packets $total $now \n";
@@ -110,3 +111,4 @@ foreach my $RPS (@RPS){
   $loops=$iterations;
 }
 `pkill sysmemRTT.pl`;
+

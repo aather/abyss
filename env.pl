@@ -37,7 +37,6 @@
 # -- Environment Variables exported to abyss agents --
 #
 #$carbon_server = "graphite ip or hostname"; 	   # graphite server
-$carbon_server = "172.31.7.252";	 	   # graphite server
 $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
@@ -52,12 +51,15 @@ $publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;
 $server = "cluster.Netflix"; 		# Metrics are accumulated under app name
 #					# e.g: cluster.Netfix. Change "Netflix" to your app name.
 #
-# Uncomment if running agents in data center or VirtualBox VM. 
-# $host = "MYHOST";
-# $localIP = "IP ADDRESS OF MYHOST";      # IP address of VM running agents to capture metrics 
-# $publicIP = "IP ADDRESS OF MYHOST";     # Same as above
-# $server = "cluster.Netflix";            # Metrics are accumulated under application name
-#                                         # e.g: Netflix. Change it to match your app name
+# Uncomment below and comment out above for running abyss in data center or VirtualBox VM. 
+#$myIP = `ip addr|uniq |grep global`;
+#@myIPArray = split /\s+/, $myIP;
+#@hostIP = split /\//, $myIPArray[2];
+# $host = `hostname`;
+# $localIP = $hostIP[0];      			# IP address of VM or server where you installed abyss
+# $publicIP = $hostIP[0];      			# Same as above
+# $server = "cluster.Netflix";            	# Metrics are accumulated under application name
+#                                         	# e.g: Netflix. Change it to match your app name
 #
 # Sampling Interval
 $interval = 5;				 # Sets sample interval, default 5 second
@@ -69,7 +71,7 @@ $interval = 5;				 # Sets sample interval, default 5 second
 # and/or web servers on $peer host. Default ports for netserver, 
 # memcache and webserver are: 7420, 7425, 7430 respectively.
 # 
-$peer =  "peer hostname or IP ";	# peer host running netserver and memcached daemons
+#$peer = "peer hostname or IP ";	# peer host running netserver and memcached daemons
 $iterations = 10;                       # Sets number of benchmark test iterations
 #
 # netserver Tests
@@ -105,8 +107,8 @@ $wthreads =  4;    			# control wrt threads for webserver test
 $filename = "";				# default file to fetch
 #
 # -- IO Benchmark  Variables --
-@filesystems=('ext4','xfs','zfs');	# Supported filesystems: ('xfs','ext4','zfs') to run tests.  
-@devices=('xvdb','xvdc','xvdd');	# List of devices. For multiple devices, stripe volume is build
+@filesystems=('xfs');			# Supported filesystems: ('xfs','ext4','zfs') to run tests.  
+@devices=('xvdb','xvdc');		# List of devices. For multiple devices, stripe volume is build
 $mpt='mnt';				# Sets mount point
 #
 # FIO options for IO benchmark
@@ -126,17 +128,17 @@ $iolatencytests=1;                      # default is enabled. Set to 0 to disabl
 $iodirecttests=1;                       # default is enabled. Set to 0 to disable IO read tests via directIO path
 #------
 $randreadtests=1;                       # default is enabled. Set to 0 to disable random read no-cache tests
-$randwritetests=0;                      # Set to 1 to enable random write no-cache tests 
-$randreadmmap=0;                        # Set to 1 to enable random read tests using mmap
-$randwritemmap=0;                       # Set to 1 to enable random write tests using mmap
-$randmixedtests=0;                      # Set to 1 to enable mixed random tests
-$randmixedmmap=0;                       # Set to 1 to enable mixed random tests using mmap
+$randwritetests=1;                      # Set to 1 to enable random write no-cache tests 
+$randreadmmap=1;                        # Set to 1 to enable random read tests using mmap
+$randwritemmap=1;                       # Set to 1 to enable random write tests using mmap
+$randmixedtests=1;                      # Set to 1 to enable mixed random tests
+$randmixedmmap=1;                       # Set to 1 to enable mixed random tests using mmap
 #-----
-$seqreadtests=0;                        # default is enabled. Set to 0 to disable sequential read tests
-$seqwritetests=0;                       # Set to 1 to enable sequential write tests
-$seqreadmmap=0;                         # Set to 1 to enable sequentail read tests using mmap
-$seqwritemmap=0;                        # Set to 1 to enable sequentail write tests using mmap
-$seqmixedtests=0;                       # Set to 1 to enable mixed sequential tests
-$seqmixedmmap=0;                        # Set to 1 to enable mixed sequential tests using mmap
+$seqreadtests=1;                        # default is enabled. Set to 0 to disable sequential read tests
+$seqwritetests=1;                       # Set to 1 to enable sequential write tests
+$seqreadmmap=1;                         # Set to 1 to enable sequentail read tests using mmap
+$seqwritemmap=1;                        # Set to 1 to enable sequentail write tests using mmap
+$seqmixedtests=1;                       # Set to 1 to enable mixed sequential tests
+$seqmixedmmap=1;                        # Set to 1 to enable mixed sequential tests using mmap
 1;
 

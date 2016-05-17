@@ -9,6 +9,9 @@ our @ISA= qw( Exporter );
 our @EXPORT_OK = qw( setup_filesystem );
 our @EXPORT = qw( setup_filesystem );
 
+# make sure user has permission to create file under requested mount point
+$user=`id -nu`; $group=`id -ng`; chomp($user); chomp($group);
+
 
 # subroutines
 sub check_device;
@@ -314,8 +317,8 @@ sub create_filesystem {
         `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool $dev -f`;
         `sudo zfs set mountpoint=/$mpt pool`;
         #`sudo zfs set primarycache=metadata pool`;
-        `sudo chown ubuntu /$mpt`;
-        `sudo chgrp ubuntu /$mpt`;
+        `sudo chown $user /$mpt`;
+        `sudo chgrp $group /$mpt`;
   }
 }
 
@@ -408,8 +411,8 @@ sub try_mount {
       }
  }
  # Set the permission of mounted directory
- `sudo chown ubuntu /$mpt`; 
- `sudo chgrp ubuntu /$mpt`; 
+ `sudo chown $user /$mpt`; 
+ `sudo chgrp $group /$mpt`; 
 }
 
 sub raid_matchdevs{
@@ -488,8 +491,8 @@ sub create_zpool {
  `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool @devices -f`;
  `sudo zfs set mountpoint=/$mpt pool`;
  #`sudo zfs set primarycache=metadata pool`;
- `sudo chown ubuntu/$mpt`;
- `sudo chgrp ubuntu /$mpt`;
+ `sudo chown $user /$mpt`;
+ `sudo chgrp $group /$mpt`;
 
 }
 1;
