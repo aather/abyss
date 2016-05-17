@@ -314,8 +314,8 @@ sub create_filesystem {
         `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool $dev -f`;
         `sudo zfs set mountpoint=/$mpt pool`;
         #`sudo zfs set primarycache=metadata pool`;
-        `sudo chown $ENV{'NETFLIX_APPUSER'} /$mpt`;
-        `sudo chgrp nac /$mpt`;
+        `sudo chown ubuntu /$mpt`;
+        `sudo chgrp ubuntu /$mpt`;
   }
 }
 
@@ -408,8 +408,8 @@ sub try_mount {
       }
  }
  # Set the permission of mounted directory
- `sudo chown $ENV{'NETFLIX_APPUSER'} /$mpt`; 
- `sudo chgrp nac /$mpt`; 
+ `sudo chown ubuntu /$mpt`; 
+ `sudo chgrp ubuntu /$mpt`; 
 }
 
 sub raid_matchdevs{
@@ -488,8 +488,8 @@ sub create_zpool {
  `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool @devices -f`;
  `sudo zfs set mountpoint=/$mpt pool`;
  #`sudo zfs set primarycache=metadata pool`;
- `sudo chown $ENV{'NETFLIX_APPUSER'} /$mpt`;
- `sudo chgrp nac /$mpt`;
+ `sudo chown ubuntu/$mpt`;
+ `sudo chgrp ubuntu /$mpt`;
 
 }
 1;

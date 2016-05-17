@@ -14,14 +14,12 @@ require "../../env.pl";				# Sets up environment varilables for all agents
 
 my @data = ();					# array to store metrics
 
-# Takes start time, test name, test types, filesystem
-
 # sysio will be invoked with argumens below:
-# ./sysio $same stats[2] $filesystem 
-my ($now, $type, $filesystem) = @ARGV;
+# ./sysio $same $filesystem 
+my ($now, $filesystem) = @ARGV;
 
 # carbon server hostname: example: abyss.us-east-1.test.netflix.net
-open(GRAPHITE, "| nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../common/nc -w 25 $carbon_server $carbon_port") || die "failed to send: $!\n";
  
 # ------------------------------agent specific sub routines-------------------
 sub build_HashArray;
@@ -50,7 +48,7 @@ while (1) {
  @data=();  	
 
  sleep $interval ;  
- $now = $now + $interval;
+ $now = `date +%s`;
 }
 
 # ----------------------- subroutines -----------------
@@ -76,14 +74,14 @@ sub collect_IOStats {
   while (<IOSTAT>) {
   next if (/^$/ || /loop/) ;
   @stats = split;
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].ReadIOPS $stats[3] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].WriteIOPS $stats[7] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].ReadSectors  $stats[5]  $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].WriteSectors $stats[9]  $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].ReadTime $stats[6] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].WriteTime $stats[10] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].QueueSize $stats[13] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[2].Utilization $stats[12] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].ReadIOPS $stats[3] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].WriteIOPS $stats[7] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].ReadSectors  $stats[5]  $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].WriteSectors $stats[9]  $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].ReadTime $stats[6] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].WriteTime $stats[10] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].QueueSize $stats[13] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[2].Utilization $stats[12] $now\n";
  } 
 close(IOSTAT);
 }
@@ -112,10 +110,10 @@ sub collect_ZFStats {
   elsif ($stats[6] =~ /M/){ $stats[6] = $stats[6] * 1024 * 1024; } 
   elsif ($stats[6] =~ /G/){ $stats[6] = $stats[6] * 1024 * 1024 * 1024; } 
 
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[0].ReadIOPS $stats[3] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[0].WriteIOPS $stats[4] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[0].ReadBW $stats[5] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.io.$stats[0].WriteBW $stats[6] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[0].ReadIOPS $stats[3] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[0].WriteIOPS $stats[4] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[0].ReadBW $stats[5] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.io.$stats[0].WriteBW $stats[6] $now\n";
   }
  }
 close(ZFSTAT);
@@ -141,9 +139,9 @@ close (VMSTAT);
  $free_unused = $Array[1];
  $used = $Array[0] - $free_cached - $free_unused;
 
- push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.mem.free_cached $free_cached $now\n";
- push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.mem.free_unused $free_unused $now\n";
- push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.mem.used $used $now\n";
+ push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.mem.free_cached $free_cached $now\n";
+ push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.mem.free_unused $free_unused $now\n";
+ push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.mem.used $used $now\n";
 }
 
 sub collect_CPUStats {
@@ -167,7 +165,7 @@ sub collect_CPUStats {
   }
  else {  # also needs to collect running and blocked processes
   @stats = split;
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$stats[0] $stats[1] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$stats[0] $stats[1] $now\n";
  } 
  }
 close(MPSTAT);
@@ -178,11 +176,11 @@ close(MPSTAT);
   $intr = $cpuhash{$key}[5];
   $softirq = $cpuhash{$key}[6];
   
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$key.user $user $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$key.sys $sys $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$key.idle $idle $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$key.intr $intr $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.CPU.$key.softirq $softirq $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$key.user $user $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$key.sys $sys $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$key.idle $idle $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$key.intr $intr $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.CPU.$key.softirq $softirq $now\n";
  }
 }
 
@@ -202,14 +200,14 @@ sub collect_NFSiostats {
   if (/(READ:|WRITE:|OPEN:|CLOSE:|SETATTR:|LOCK:|ACCESS:|GETATTR:|LOOKUP:|REMOVE:|RENAME:|LINK:|SYMLINK:|CREATE:|STATFS:|READLINK:|READDIR:)/) {
   s/:/ /g;
   @stats = split;
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].Ops $stats[1] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].Trans $stats[2] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].Timeouts $stats[3] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].BytesSent $stats[4] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].BytesRecv $stats[5] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].Queueing $stats[6] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].RpcRTT $stats[7] $now\n";
-  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.$type.system.nfs.$mounts[5].$stats[0].RpcExec $stats[8] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].Ops $stats[1] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].Trans $stats[2] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].Timeouts $stats[3] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].BytesSent $stats[4] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].BytesRecv $stats[5] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].Queueing $stats[6] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].RpcRTT $stats[7] $now\n";
+  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.system.nfs.$mounts[5].$stats[0].RpcExec $stats[8] $now\n";
   }
  }
 }

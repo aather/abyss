@@ -151,7 +151,8 @@ if ($seqwritemmap == 1)  { push (@alltests, @seqwritemmap); }
 if ($randmixedmmap == 1)  { push (@alltests, @randmixedmmap); }
 if ($seqmixedmmap == 1)  { push (@alltests, @seqmixedmmap); }
 
-open(GRAPHITE, "| ../../common/ncat -i 100000000ms $carbon_server $carbon_port") || die "failed to send: $!\n";
+open(GRAPHITE, "| ../../common/nc -w 1000 $carbon_server $carbon_port") || die "failed to send: $!\n";
+
 
 # ------------------------------agent specific sub routines-------------------
 my @stats;
@@ -168,25 +169,7 @@ my $testfiles;
 my $loops=$iterations;
 my $same;
 my $start = `date +%s`;
-`date`;
-print "-------------------------------------------------\n";
-print "Tests requested: @alltests";
-print "-------------------------------------------------\n";
-
-#=====Testing all file system creation test
-#foreach $filesystem (@filesystems){
-#  my $output =`df -T`;
-#  print "$output\n";
-##  print "========\n";
-##  print "filesystem: $filesystem mpt: $mpt devices:@devices \n";
-#  setup_filesystem($filesystem,$mpt,\@devices);
-#  my $output =`df -T`;
-#  print "$output\n";
-#  print "========\n";
-#}
-#exit;
-#======
-foreach $filesystem (@filesystems){
+foreach $filesystem (@filesystems){  # Run tests against all filesystem requested
   print "filesystem selected: $filesystem \n";
   print "mount point selected:  $mpt \n";
   print "Devices selected: @devices \n\n";
@@ -194,21 +177,27 @@ foreach $filesystem (@filesystems){
   setup_filesystem($filesystem,$mpt,\@devices);
   my $output =`df -T`;
   print "Please check if output matches your request:\n $output\n";
-  $same = $start;     # This makes sure all test results are reported within a same time window
-  foreach my $test (@alltests){
+  $same = $start;   
+
+  my @args = ("./sysio.pl", "$same", "$filesystem");
+    if (my $pid = fork) {
+      #  waitpid($pid);  
+    }
+    else {
+      exec(@args);
+  }
+  my @args = ("./iolatency.pl", "$same", "$filesystem");
+    if (my $pid = fork) {
+      #  waitpid($pid);  
+    }
+    else {
+      exec(@args);
+  }
+  foreach my $test (@alltests){  # Running tests one by one
       my @list = split / /, $test;
       my @word = split /=/,$list[1];
-      next if ((($word[1] =~ /latency/) || ($word[1] =~ /direct/))  && ($filesystem =~ /zfs/)) ;  # no direct IO test for ZFS
-
-      print "Start capturing system level stats in the context of test run\n";
-      my @args = ("./sysio.pl", "$same", "$word[1]", "$filesystem");
-      if (my $pid = fork) {
-        #  waitpid($pid);  
-      } 
-      else {
-         exec(@args);
-      }
-
+      # zfs does not support direct IO
+      next if ((($word[1] =~ /latency/) || ($word[1] =~ /direct/))  && ($filesystem =~ /zfs/)) ; 
       foreach my $size (@blocks){
         my $temp = $test."--bs=$size |";
         print "Block Size: $size | Test: $temp\n";
@@ -216,15 +205,12 @@ foreach $filesystem (@filesystems){
            `sudo zfs set recordsize=$size pool`;	
 	   print "ZFS: Setting recordsize=$size\n";
         }
-        while ($loops-- > 0 ){
-          print "Total iteration requested: $iteration\n";
-          print "Iteration Number: $loops\n";
+        while ($loops-- > 0 ){ # perform each test with various block sizes for that many $iterations
           open (FIO, $temp) || die print "failed to get data: $!\n";
           while (<FIO>) {
              @stats= split(/;/);
           }
           close(FIO);
-	  # $server, $host, $block, $now, $filesystem, $procs,$name,$rtot, $rbw, $riops, $wtot, $wbw, $wiops, $rlatency, $wlatency, $mydev
           if (($stats[2] =~ /latency/) || ($stats[2] =~ /direct/)){
               @data = populate_data($server,$host,$size,$same,$filesystem,1,$stats[2],$stats[5],$stats[6],$stats[7],$stats[46],$stats[47],$stats[48],$stats[38], $stats[79], $stats[121]);
 	  }
@@ -232,8 +218,8 @@ foreach $filesystem (@filesystems){
              @data = populate_data($server,$host,$size,$same,$filesystem,$procs,$stats[2],$stats[5],$stats[6],$stats[7],$stats[46],$stats[47],$stats[48],$stats[38], $stats[79], $stats[121]);
           }
 
-          #print @data;                            # For Testing only 
-          #print "\n------\n";                     # For Testing only
+          print @data;                            # For Testing only 
+          print "\n------\n";                     # For Testing only
           print GRAPHITE  @data;                  # Ship metrics to carbon server
 
           @data=();                               # Initialize for next set of metrics
@@ -251,20 +237,18 @@ foreach $filesystem (@filesystems){
           }
         }
     $loops=$iterations;
-    $same=$start;    # Reset it to show all tests in one time window
+    $same=$start;    # Reset it to show all tests in the same time window. Makes it convenient to see in graph
    } 
   print "Completed -- Block: @blocks | Tests: $test\n";
   print "Removing test files: /$mpt/$word[1]\n";
   `sudo rm /$mpt/$word[1]*`;
-  print "Killing sysio.pl and syslat.pl process started in test context\n";
-  `pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
-  `pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
-  $same=$start;			# Reset it to show all tests in one time window 
+  #`pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
+  #`pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
+  $same=$start;			# Reset it to show all filesystem tests in one time window 
   sleep 5;
   }
- sleep 5;
-}
+  #`pkill -9 sysio.pl`; `pkill -9 iolatency.pl`;
+  # Run all tests for the next file system requested
+ }
 print "Completed: All Tests\n @alltests\n";
-print `date`;
-`pkill -9 ncat`; `pkill -9 ncat`;
 close (GRAPHITE);
