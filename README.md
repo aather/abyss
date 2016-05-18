@@ -140,8 +140,8 @@ Abyss agent run IO benchmarks using fio tool. Make sure to install fio package.
 
 $ sudo apt-get install -y fio
 
-Agent sets the filesystem and storage and starts the test.  Requested file system, device and fio options are are set in **env.pl** file:
-  - @filesystems=('xfs');                   Supported filesystems: ('xfs','ext4','zfs') to run tests.
+Agent sets the filesystem, storage and starts the test.  Requested file system, device and fio options are are set in **env.pl** file:
+  - @filesystems=('xfs');		    Supported filesystems: ('xfs','ext4','zfs') to run tests.
 
    This sets up type of file system to use for IO benchmark. Multiple file system can be listed
 
