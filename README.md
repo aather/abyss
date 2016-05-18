@@ -114,7 +114,7 @@ collect system metrics on both netserver system ($peer) and the system running b
 
 $./startMonitoring.sh
 
-Now start the benchmark agents on a system that is used to generate load against the peer server:
+Now start benchmark agent to generate load against the service running on $peer server:
 
 To start network throughput benchmark, type:
 $./startNetTputBenchmark.sh 
