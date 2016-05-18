@@ -202,7 +202,7 @@ Click: **IO Benchmark**  Dashboards
 
 **Webserver Benchmark**
 
-Abyss agent run webserver benchmarks using 'wrk' tool. $peer server runs webserver. Script, webserver-nginx-setup.sh, is provided to sets up nginx server. To install and configure nginx webserver type:
+Abyss agent run webserver benchmarks using 'wrk' tool. Webserver runs on $peer server. Script, webserver-nginx-setup.sh, is provided to sets up nginx server fo testing. To install and configure nginx webserver type:
 ```  
  $cd abyss/graphite-setup
  $ sudo -s 
@@ -269,6 +269,21 @@ Benchmark agents runs the benchmark, collects important metrics from test result
 
 Click: **Memcached RPS Benchmarkk**  Dashboards
 ![Abyss](memcache-benchmark.png)
+
+**Automated carbon database cleanup Via Cron**
+Metrics will be collected in carbon database on graphite server. **tcpstat.pl** agent generates metrics per IP address. If server open/close connection at higher rates, it will fill up the disk space quickly. As part of graphite install, we  (after making backup copy) create root crontab to clean up stale metrics from the database. Active records in database should be updated every 5 seconds. If the records are not updated for some time, record can be removed as server that sending these metrics may have gone. 
+```
+# Remove files that has not been updated for last 2 minutes.
+*/4 * * * * find /var/lib/graphite/whisper/cluster/*/*/system/tcp/traffic/* -mmin +2 -exec rm -rf {} \;
+*/4 * * * * find /mnt/whisper/cluster/*/*/system/tcp/traffic/* -mmin +2 -exec rm -rf {} \;
+# Every 30 minutes check files that has not been written for last 10 minutes and remove it
+*/30 * * * * find /var/lib/graphite/whisper/cluster -type f -name *.wsp -mmin +10 -exec rm -rf {} \;;
+*/30 * * * * find /mnt/whisper/cluster -type f -name *.wsp -mmin +10 -exec rm -rf {} \;;
+# Carbon daemon logs can get very large if there are errors in metrics format. Keep pruning it
+0 */6 * * *  find /mnt/logs/system/carbon/* -exec rm -rf {} \;
+# carbon-cache some time stop responding to request. Restarting it every 6 hours in case 
+0 */6 * * *  service carbon-cache restart;
+```
 
 ## Abyss Metrics
  List of metrics collected by abyss agents:
