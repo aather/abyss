@@ -41,7 +41,7 @@ $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
 $iterations = 10;                       	   # Applies to benchmark agent
-$peer = "peer hostname or IP ";	                   # Applies to Net benchmark
+$peer = "peer IP address or hostname";	           # Applies to Net benchmark
 #
 # Uncomment if running abyss agents on Amazon cloud instance
 # aws instance metadata can be used to find: region, instance-id of the monitored server 

@@ -47,13 +47,12 @@ Clone the repository: $ git clone https://github.com/aather/abyss
 It is prefered to clone it on multiple servers of any type: VirtualBox, docker, Cloud Instance, Bare-matel ..
 
 
-**Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
- 
- $cd abyss/graphite-setup; 
- $sudo -s; 
+**Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:``` 
+ $cd abyss/graphite-setup 
+ $sudo -s 
  #./graphite-setup.sh 
-
 [Note: script is tested on Ubuntu Trusty only]
+```
 
 **Agent Setup:**  Abyss agents are used for collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
 
@@ -83,9 +82,12 @@ Click **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connecti
  host            	Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
  server          	Sets Server name or Application cluster name, used by graphite server for storing metrics. 
  interval      		Sets metrics collection granularity. Default: 5 seconds
- iterations		Applies to benchmark agents. Sets number of benchmark iterations to perform. Default: 10
+ iterations             Applies to benchmark agents. Sets iterations to perform. Default: 10
  peer            	Applies to Net benchmark
 ```
+
+There are abyss agents to collect JAVA JMX metrics using java agents that connects to JMX port on demand on the localhost to collect metrics. At this point Cassandra, Kafka and Tomcat Java and JVM metrics are reported 
+![Abyss](cassandra.png)
 
 ## Abyss Benchmark Agents
 
@@ -201,12 +203,82 @@ Benchmark agents runs the benchmark, collects important metrics from test result
 Click: **IO Benchmark**  Dashboards
 ![Abyss](io-benchmark.png)
 
+**Webserver Benchmark**
+
+Abyss agent run webserver benchmarks using 'wrk' tool. $peer server runs webserver. Script, webserver-nginx-setup.sh, is provided to sets up nginx server. To install and configure nginx webserver type:
+```  
+ $cd abyss/graphite-setup
+ $ sudo -s 
+ # ./webserver-nginx-setup.sh
+```
+ This setups the nginx webserver to listen on port 7430 on $peer host 
+
+Start system monitoring agents to collect system level metrics on both systems:
+
+$./startMonitoring.sh
+
+webserver benchmark agent use 'wrk' tool to generate load. Setting are in **env.pl** file:
+```
+ $webserver_port = 7430;                 nginx port
+ $wthreads =  4;                         control wrt threads for webserver test
+ @CONNECTIONS = (8,16,32,64);            Number of web connections to test nginx webserver
+ $filename = "";                         default file to fetch. Empty string is good for min payload
+```
+Now start the agent:
+
+ $./startWebserverBenchmarks.sh
+
+[NOTE: It is recommended to use "screen" program and run it from screen window. This allows one to run benchmark agents in the background]
+
+Benchmark agents runs the benchmark, collects important metrics from test results and push them to graphite server. You can then use grafana dashboard to query and graph benchmark metrics. Enter URL in broswer
+
+**http://hostname:7410/**
+
+Click: **Webserver RPS Benchmark**  Dashboards
+![Abyss](webserver-benchmark.png)
+
+
+**memcached Benchmark**
+
+Abyss agent run memcached benchmarks using open source 'mcblaster' tool. memcached server runs on $peer host. You can install it by running:
+
+$ sudo apt-get install -y memcached
+
+Start the memcached server on $peer to listen on port 7425 using following options:
+ - $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
+
+memcached agent setting in *env.pl** file:
+
+```
+ $mem_port  = 7425;                      abyss agent will use this memcached port on peer
+ $threads = 2;                           controls mcblaster threads for memcache test
+ $connections = 1;                       controls mcblaster connections per thread
+ $payload = 50;                          controls mcblaster payload in bytes for "gets"
+ @RPS = (10000,50000,100000);            controls mcblaster RPS rates
+```
+
+Start system monitoring agents to collect system level metrics:
+
+$./startMonitoring.sh
+
+Now start memcached benchmark agent:
+$./startMemcachedBenchmarks.sh
+
+[NOTE: It is recommended to use "screen" program and run it from screen window. This allows one to run benchmark agents in the background]
+
+Benchmark agents runs the benchmark, collects important metrics from test results and push them to graphite server. You can then use grafana dashboard to query and graph benchmark metrics. Enter URL in broswer
+
+**http://hostname:7410/**
+
+Click: **Memcached RPS Benchmarkk**  Dashboards
+![Abyss](memcache-benchmark.png)
+
 ## Abyss Metrics
  List of metrics collected by abyss agents:
 - System Metrics: 
     - **cpu:**  cpu and percpu utilization: idle, sys, usr, intr, cpu load: runnable and blocked threads, context switches
     - **memory:**  free (unused), free (cached) and used memory
-    - **network:** system-wide Network throughput, pps, tcp segments, tcp timeouts, per connection stats: Network throughput, Latency (RTT), retransmit, packet size, ssthresh, cwnd, rwnd, read/write queue size
+    - **network:** system-wide Network throughput, pps, tcp segments,nfs, tcp timeouts, per connection stats: Network throughput, Latency (RTT), retransmit, packet size, ssthresh, cwnd, rwnd, read/write queue size
     - **io:** system-wide IO throughput, IOPS, IO latency and IO size
 - Application Metrics:
   - **cassandra**
