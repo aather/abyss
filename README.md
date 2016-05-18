@@ -56,10 +56,9 @@ It is prefered to clone it on multiple servers of any type: VirtualBox, docker, 
 ```
 
 **Agent Setup:**  Abyss agents are used for collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
-
-**$carbon_server = "IPAddr of graphite server";           # graphite serverr
-..
-
+```
+ $carbon_server = "IPAddr of graphite server";           # graphite serverr
+```
 Save changes and then start system monitoring agent by running: **$./startMonitoring**
 
 *This is a wrapper script that starts system monitoring agents to collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and pushed to graphite server on the network. 
