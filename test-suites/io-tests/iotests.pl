@@ -169,7 +169,12 @@ my $testfiles;
 my $loops=$iterations;
 my $same;
 my $start = `date +%s`;
+
 foreach $filesystem (@filesystems){  # Run tests against all filesystem requested
+  if(! -e "/sbin/mkfs.$filesystem"){
+   print "$filesystem is not installed. Please install $filesystem packagei\n"; 
+   exit;
+  }
   print "filesystem selected: $filesystem \n";
   print "mount point selected:  $mpt \n";
   print "Devices selected: @devices \n\n";

@@ -122,7 +122,7 @@ sub setup_filesystem {
 # Device is not found in mounted device list.
 # Single Device case
  elsif ($#devices == 0){
-   print "Single Device Case. Checking filesystem or raid or zpool on device.. :\$mpt\n";
+   print "Single Device Case. Checking filesystem or raid or zpool on device.. :$mpt\n";
    if (check_fstype($filesystem, \@devices)){ 
      try_umount($mpt,$mydfs);
      try_mount($filesystem,@devices,$mpt);
@@ -306,8 +306,8 @@ sub create_filesystem {
   my ($filesystem,$mpt,$dev) = @_; 
 
   if ($filesystem =~ /xfs/){
-     `sudo /sbin/mkfs.xfs /dev/$dev -f `;
-      try_mount($filesystem,$dev,$mpt);
+   `sudo /sbin/mkfs.xfs /dev/$dev -f `;
+    try_mount($filesystem,$dev,$mpt);
   }
   elsif($filesystem =~ /ext4/){
      `sudo /sbin/mkfs.ext4 /dev/$dev`;
@@ -326,57 +326,22 @@ sub try_umount {
  my ($mympt, $mydfs) = @_;
  my $umount;
  my @pids;
-RETRY:
-  $umount = `sudo umount /$mympt 2>&1`;
- if (($umount =~ /busy/) && ($mympt =~ /mnt/)){  # failure to umount file system and mount point is mnt
-   # stop services and kill processes. Neflix specific
-   `sudo svc -d /service/*`;
-   `sudo service rsyslog stop`;
-   `sudo service pcp stop`;
-   `sudo service pmwebd stop`;
-   `sudo service netperf stop`;
-   @pids=`sudo lsof /mnt| awk '{print $2}'|uniq`;
-   foreach my $pid (@pids) {
-    `sudo kill -9 $pid`;
-    }
-   goto RETRY;
-  }
-  elsif ($umount =~ /busy/) {     # failure to umount file system other than /mnt
-   @pids=`sudo lsof /mnt| awk '{print $2}'|uniq`;
-    foreach my $pid (@pids) {
-      `sudo kill -9 $pid`;
-      }
-    goto RETRY;
-  }
- if (($mydfs =~ /zfs/) && ($fileysstem !~ /zfs/)){
-   `sudo zpool destroy pool`; 
- }
+ $umount = `sudo umount /$mympt 2>&1`;
+ if ($umount =~ /busy/){ 
+    print "File system is busy. Run lsof $mympt and kill these process\n";
+    exit;
+   }
 }
 
 sub try_umountdev {
  my ($dev) = @_;
  my $umount;
  my @pids;
-
-RETRY:
-  $umount = `sudo umount $dev 2>&1`;
+ $umount = `sudo umount $dev 2>&1`;
  if ($umount =~ /busy/){
-   # stop services and kill processes. Neflix specific
-   `sudo svc -d /service/*`;
-   `sudo service rsyslog stop`;
-   `sudo service pcp stop`;
-   `sudo service pmwebd stop`;
-   `sudo service netperf stop`;
-   # check if /mnt is mounted
-   my $checkmnt = `df -T|grep mnt`;
-  if ($checkmnt){
-   @pids=`sudo lsof /mnt| awk '{print $2}'|uniq`;
-   foreach my $pid (@pids) {
-    `sudo kill -9 $pid`;
-    }
+   print "File system is busy. check mount point of device $dev. Run lsof  and kill process\n";
+   exit;
    }
-   goto RETRY;
-  }
 }
 
 sub try_mount {
