@@ -61,7 +61,7 @@ It is prefered to clone it on multiple servers of any type: VirtualBox, docker, 
 ```
 Save changes and then start system monitoring agent by running: **$./startMonitoring**
 
-*This is a wrapper script that starts system monitoring agents to collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and pushed to graphite server on the network. 
+[NOTE:This is a wrapper script that starts system monitoring agents to collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and pushed to graphite server on the network] 
 
 Wait for few minutes to have sufficient metrics collected and then enter URL to display graphs:
 
