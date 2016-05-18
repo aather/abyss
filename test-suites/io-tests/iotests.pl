@@ -172,7 +172,7 @@ my $start = `date +%s`;
 
 foreach $filesystem (@filesystems){  # Run tests against all filesystem requested
   if(! -e "/sbin/mkfs.$filesystem"){
-   print "$filesystem is not installed. Please install $filesystem packagei\n"; 
+   print "$filesystem is not installed. Please install $filesystem package\n"; 
    exit;
   }
   print "filesystem selected: $filesystem \n";
@@ -182,7 +182,8 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
   setup_filesystem($filesystem,$mpt,\@devices);
   my $output =`df -T`;
   print "Please check if output matches your request:\n $output\n";
-  $same = $start;   
+
+  $same = $start;  # To make it look like all file system tests started at the time. Useful for comparision in graph   
 
   my @args = ("./sysio.pl", "$same", "$filesystem");
     if (my $pid = fork) {
@@ -243,11 +244,11 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
         }  # Test for each block
     $loops=$iterations;
     #$same=$start;    		# Uncomment it to show the test with all blocks in the same time window. 
-   } # Test completed with all blocks
+   } # Single Test completed with all blocks
   print "Completed All iteration of Test $test with blocks: @blocks\n";
   print "Removing test files: /$mpt/$word[1]\n";
   `sudo rm /$mpt/$word[1]*`;
-  #$same=$start;		# Reset it to show all tests for perticular filesystem in one time window 
+  #$same=$start;		# Uncomment it to show all tests for perticular filesystem in one time window 
   } # All Tests completed for a perticular fileystem type
   `pkill -9 sysio.pl`; `pkill -9 iolatency.pl`;
  } # All Tests completed for all filesystem type

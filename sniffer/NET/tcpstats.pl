@@ -20,7 +20,6 @@ my @data = ();                                  # array to store metrics
 my $now = `date +%s`;                           # metrics are sent with date stamp to graphite server
 
 open(GRAPHITE, "| ../../common/nc -w 200 $carbon_server $carbon_port") || die "failed to send: $!\n";
-#open(GRAPHITE, "|../../common/ncat -i 1000000ms $carbon_server $carbon_port") || die "failed to send: $!\n";
 
 # ------------------------------agent specific sub routines-------------------
 

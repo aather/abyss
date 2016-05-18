@@ -51,7 +51,7 @@ push @data, "$server-iobench.$host.benchmark.IO.$filesystem.Latency.Write.min $w
 push @data, "$server-iobench.$host.benchmark.IO.$filesystem.Latency.Write.max $wpercentile[-1] $now \n";
 # Print 95% percentile
 my $tmp = $rpercentile[sprintf("%.0f",(0.95*($#rpercentile)))];
- push @data, "$server-iobench.$host.benchmark.$filesystem.IO.Latency.Read.95th $tmp $now \n";
+ push @data, "$server-iobench.$host.benchmark.IO.$filesystem.Latency.Read.95th $tmp $now \n";
 my $tmp = $wpercentile[sprintf("%.0f",(0.95*($#wpercentile)))];
  push @data, "$server-iobench.$host.benchmark.IO.$filesystem.Latency.Write.95th $tmp $now \n";
 # Print 99% percentile
