@@ -30,7 +30,7 @@ Abyss has following components:
 - Abyss agents are simple to write and language agnostic.
 - Basic requirement is to collect metrics and dump them to graphite server periodically.
 - There are sample agents written in perl and python are available.
-- Mtrics are sent in “.” formatted string with time stamp to graphite carbon server: $server.$host.system.mem.free_cached $free_cached $datestamp, where:
+- Metrics are sent in “.” formatted string with time stamp to graphite carbon server: $server.$host.system.mem.free_cached $free_cached $datestamp, where:
   - *metrics name:* $server.$host.system.mem.free_cached 
   - *metrics value:* $free_cached 
   - *timestamp:* $datestamp
@@ -47,7 +47,9 @@ Clone the repository: $ git clone https://github.com/aather/abyss
 It is prefered to clone it on three servers. You can do the whole install on a singe server running Linux (Ubuntu): VirtualBox, Cloud Instance, Baremetal
 
 
-**Backend Setup** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script **graphite-setup.sh** is provided that can install and configure all three services (graphite, grafana, apache) on a single server. To run it, type: $cd abyss/graphite-setup; sudo -s ; ./graphite-setup.sh. 
+**Backend Setup** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script **graphite-setup.sh** is provided that can install and configure all three services (graphite, grafana, apache) on a single server. To run it, type: 
+ - $cd abyss/graphite-setup; sudo -s ; ./graphite-setup.sh 
+
 [Note: script is tested on Ubuntu Trusty]
 
 **Agent Setup**:  Abyss agents are use for storing and quering metrics. All agents use **env.pl** file for configuration. Update thefile with IP address or hostname of server running graphite service:
