@@ -86,7 +86,7 @@ Click **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connecti
  peer            	Applies to Net benchmark
 ```
 
-There are abyss agents to collect JAVA JMX metrics using java agents that connects to JMX port on demand on the localhost to collect metrics. At this point Cassandra, Kafka and Tomcat Java and JVM metrics are reported 
+There are abyss agents to collect java and jvm  metrics using java agents that connects to JMX port on demand on the localhost to collect metrics. At this point Cassandra, Kafka and Tomcat mmetrics are reported 
 ![Abyss](cassandra.png)
 
 ## Abyss Benchmark Agents
