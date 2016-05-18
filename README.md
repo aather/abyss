@@ -52,7 +52,7 @@ It is prefered to clone it on three servers. You can do the whole install on a s
 
 [Note: script is tested on Ubuntu Trusty]
 
-**Agent Setup**:  Abyss agents are use for storing and quering metrics. All agents use **env.pl** file for configuration. Update thefile with IP address or hostname of server running graphite service:
+**Agent Setup**:  Abyss agents are use for storing and quering metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service:
 
 **$carbon_server = "IPAddr of graphite server";           # graphite serverr
 
