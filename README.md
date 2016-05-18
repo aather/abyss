@@ -270,7 +270,8 @@ Benchmark agents runs the benchmark, collects important metrics from test result
 Click: **Memcached RPS Benchmarkk**  Dashboards
 ![Abyss](memcache-benchmark.png)
 
-**Automated carbon database cleanup Via Cron**
+**Automated carbon database cleanup via cron**
+
 Metrics will be collected in carbon database on graphite server. **tcpstat.pl** agent generates metrics per IP address. If server open/close connection at higher rates, it will fill up the disk space quickly. As part of graphite install, we  (after making backup copy) create root crontab to clean up stale metrics from the database. Active records in database should be updated every 5 seconds. If the records are not updated for some time, record can be removed as server that sending these metrics may have gone. 
 ```
 # Remove files that has not been updated for last 2 minutes.
