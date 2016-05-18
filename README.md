@@ -82,7 +82,7 @@ Click **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connecti
  grafana_port		Port where grafana server is listening. Default: http://hostname:7410/
  host            	Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
  server          	Sets Server name or Application cluster name, used by graphite server for storing metrics. 
- interval        	Sets metrics collection granularity. Default: 5 seconds
+ interval      		Sets metrics collection granularity. Default: 5 seconds
  iterations		Applies to benchmark agents. Sets number of benchmark iterations to perform. Default: 10
  peer            	Applies to Net benchmark
 ```
@@ -106,11 +106,11 @@ Update **env.pl** file where abyss agents are running so that they can generate 
 where $peer is the hostname where netserver is running
 
 NetworkAgent connects to netserver via netperf on following default ports:
-
- - net_dport = 7420;                      Agent  will use this netserver data port on peer
- - net_cport = 7421;                      Agent  will use this netserver control port on peer
- - net_rport = 7422;                      Aagent will use this netserver port for net latency test
-
+```
+  net_dport = 7420;                      Agent  will use this netserver data port on peer
+  net_cport = 7421;                      Agent  will use this netserver control port on peer
+  net_rport = 7422;                      Aagent will use this netserver port for net latency test
+```
 collect system metrics on both netserver system ($peer) and the system running benchmark agents to generate load:
 
 $./startMonitoring.sh
@@ -142,50 +142,49 @@ Abyss agent run IO benchmarks using fio tool. Make sure to install fio package.
 $ sudo apt-get install -y fio
 
 Agent sets the filesystem, storage and starts the test.  Requested file system, device and fio options are are set in **env.pl** file:
-  - @filesystems=('xfs');		    Supported filesystems: ('xfs','ext4','zfs') to run tests.
+```
+  @filesystems=('xfs');		    Supported filesystems: ('xfs','ext4','zfs') to run tests.
+  This sets up type of file system to use for IO benchmark. Multiple file system can be listed
 
-   This sets up type of file system to use for IO benchmark. Multiple file system can be listed
+  @devices=('xvdb');               	    List of devices. For multiple devices, stripe volume is build
+  Storage Device(s) to use for IO testing. Multiple devices can be specified: ('xvdb', 'xvdc'). 
+  For multiple devices "md" stripe volume is created 
 
-  - @devices=('xvdb');               	    List of devices. For multiple devices, stripe volume is build
-
-   Storage Device(s) to use for IO testing. Multiple devices can be specified: ('xvdb', 'xvdc'). For multiple devices
-   "md" stripe volume is created 
-
-  - $mpt='mnt';                             # Sets up the  mount point
-
-    Device with file system is mounted under this mount point. You can specify any string.
-
+  $mpt='mnt';                             # Sets up the  mount point
+  Device with file system is mounted under this mount point. You can specify any string.
+```
 **FIO OPTIONS**
- - @blocks=('4k','16k','32k','1m');        List of IO size to test.
- - $filesize='1g';                         file size.
- - $procs='2';                             Number of concurrent fio processes running.
- - $iodepth='2';                           Controls number of concurrent IO. Applies to direct IO test
- - $fadvise='1';                           Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
- - $cachehit='zipf:1.1';                   Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
- - $percentread=60;                        percent of read IO for mixed IO tests
- - $percentwrite=40;                       percent of write IO for mixed IO tests
- - $end_fsync=1;                           Sync file contents when job exits
- - $fsync_on_close=0;                      Sync file contents on close. end_fsync only does it at job ends
+```
+  @blocks=('4k','16k','32k','1m');        List of IO size to test.
+  $filesize='1g';                         file size.
+  $procs='2';                             Number of concurrent fio processes running.
+  $iodepth='2';                           Controls number of concurrent IO. Applies to direct IO test
+  $fadvise='1';                           Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
+  $cachehit='zipf:1.1';                   Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
+  $percentread=60;                        percent of read IO for mixed IO tests
+  $percentwrite=40;                       percent of write IO for mixed IO tests
+  $end_fsync=1;                           Sync file contents when job exits
+  $fsync_on_close=0;                      Sync file contents on close. end_fsync only does it at job ends
 
 Type of fio Tests interested in running:
 
- - $iolatencytests=1;                      default is enabled. Set to 0 to disable io latency tests via directIO path
- - $iodirecttests=1;                       default is enabled. Set to 0 to disable IO read tests via directIO path
- - $randreadtests=1;                       default is enabled. Set to 0 to disable random read no-cache tests
- - $randwritetests=0;                      Set to 1 to enable random write no-cache tests
- - $randreadmmap=0;                        Set to 1 to enable random read tests using mmap
- - $randwritemmap=0;                       Set to 1 to enable random write tests using mmap
- - $randmixedtests=0;                      Set to 1 to enable mixed random tests
- - $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
- - $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
+  $iolatencytests=1;                      default is enabled. Set to 0 to disable io latency tests via directIO path
+  $iodirecttests=1;                       default is enabled. Set to 0 to disable IO read tests via directIO path
+  $randreadtests=1;                       default is enabled. Set to 0 to disable random read no-cache tests
+  $randwritetests=0;                      Set to 1 to enable random write no-cache tests
+  $randreadmmap=0;                        Set to 1 to enable random read tests using mmap
+  $randwritemmap=0;                       Set to 1 to enable random write tests using mmap
+  $randmixedtests=0;                      Set to 1 to enable mixed random tests
+  $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
+  $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
 
- - $seqreadtests=0;                        default is enabled. Set to 0 to disable sequential read tests
- - $seqwritetests=0;                       Set to 1 to enable sequential write tests
- - $seqreadmmap=0;                         Set to 1 to enable sequentail read tests using mmap
- - $seqwritemmap=0;                        Set to 1 to enable sequentail write tests using mmap
- - $seqmixedtests=0;                       Set to 1 to enable mixed sequential tests
- - $seqmixedmmap=0;                        Set to 1 to enable mixed sequential tests using mmap
-
+  $seqreadtests=0;                        default is enabled. Set to 0 to disable sequential read tests
+  $seqwritetests=0;                       Set to 1 to enable sequential write tests
+  $seqreadmmap=0;                         Set to 1 to enable sequentail read tests using mmap
+  $seqwritemmap=0;                        Set to 1 to enable sequentail write tests using mmap
+  $seqmixedtests=0;                       Set to 1 to enable mixed sequential tests
+  $seqmixedmmap=0;                        Set to 1 to enable mixed sequential tests using mmap
+```
 Start system monitoring agents to collect system level metrics:
 
 $./startMonitoring.sh
