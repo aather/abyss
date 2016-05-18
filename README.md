@@ -44,7 +44,7 @@ Abyss has following components:
 
 Clone the repository: $ git clone https://github.com/aather/abyss
 
-It is prefered to clone it on three servers. You can, however,do the whole install on a  singe Linux (Ubuntu) server: VirtualBox, Cloud Instance, bare-metal
+It is prefered to clone it on multiple servers of any type: VirtualBox, docker, Cloud Instance, Bare-matel ..
 
 
 **Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
@@ -70,43 +70,47 @@ Wait for few minutes to have sufficient metrics collected and then enter URL to 
 
 Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed and running on the same server. You will find several ready to use dashboards. 
 ![Abyss](menu.png)
-Click **"System Performance"** Dashboard to see graphs of system metrics and **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connection stats metrics
+Click **"System Performance"** Dashboard to see graphs of system metrics.
 ![Abyss](sys.png)
+Click **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connection stats metrics.
 ![Abyss](pertcpconnection.png)
 
 **env.pl** file sets up environment variables for all abyss agents. 
 
- - **carbon_server-**    Agents ships metrics to graphite server on this host. Default locahost. Y
- - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
- - **grafana_port-**	 Port where grafana server is listening. Default: http://hostname:7410/
- - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
- - **server-**           Sets Server name or Application cluster name, used by graphite server for storing metrics. 
- - **interval-**         Sets metrics collection granularity. Default: 5 seconds
- - **iterations-**	 Applies to benchmark agents. Sets number of benchmark iterations to perform. Default: 10
+ - **carbon_server:**   Agents ships metrics to graphite server on this host. Default locahost. Y
+ - **carbon_port:**     Agent sends request to this Port number where carbon server is listening. Default: 7405
+ - **grafana_port:**	Port where grafana server is listening. Default: http://hostname:7410/
+ - **host:**            Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
+ - **server:**          Sets Server name or Application cluster name, used by graphite server for storing metrics. 
+ - **interval:**        Sets metrics collection granularity. Default: 5 seconds
+ - **iterations:**	Applies to benchmark agents. Sets number of benchmark iterations to perform. Default: 10
+ - **peer:**            Applies to Net benchmark
 
 ## Abyss Benchmark Agents
 
 There are agents provided to automate benchmarks:
 
-**Network Throughput and TPS Benchmark**:
+**Network Throughput and TPS Benchmark**
+
 Abyss agents run Network throughput and TPS benchmarks using netperf tool. You need to install netserver on the peer host by running:
 
 $ sudo apt-get install -y netserver
 
-Make sure to run netserver on port 7420 on peer host. Otherwise, consider changing default ports in env.pl file
+Make sure netserver listens on port 7420 on peer host. Otherwise, you may have to change default ports in env.pl file
 
 $ sudo netserver -p 7420
 
 Update **env.pl** file where abyss agents are running so that they can generate traffic against the server:
-- peer = "peer IP address or hostname"   - Hostname where netserver is running on port 7420 
+- peer = "peer IP address or hostname"   
+where $peer is the hostname where netserver is running
 
 NetworkAgent connects to netserver via netperf on following default ports:
 
-net_dport = 7420;                      - abyss agent will use this netserver data port on peer
-$net_cport = 7421;                     - abyss agent will use this netserver control port on peer
-$net_rport = 7422;                     - abyss agent will use this netserver port for net latency test
+ - net_dport = 7420;                      Agent  will use this netserver data port on peer
+ - net_cport = 7421;                      Agent  will use this netserver control port on peer
+ - net_rport = 7422;                      Aagent will use this netserver port for net latency test
 
-collect system metrics on both netserver system ($peer) and the system running benchmark agents:
+collect system metrics on both netserver system ($peer) and the system running benchmark agents to generate load:
 
 $./startMonitoring.sh
 
@@ -125,54 +129,61 @@ Benchmark agents  runs the benchmark, collects important metrics from the test r
 
 **http://hostname:7410/**
 
-Click: **Net Benchmark** and/or **Net Latency and TPS** Dashboards
+Click: **Net Benchmark** Dashboard
 ![Abyss](net-tpt.png)
+Click **Net Latency and TPS** Dashboard
 ![Abyss](TPS-benchmark.png)
 
-**IO Throughput and Latency Benchmark:**
+**IO Throughput and Latency Benchmark**
+
 Abyss agent run IO benchmarks using fio tool. Make sure to install fio package.
 
 $ sudo apt-get install -y fio
 
 Agent sets the filesystem and storage and starts the test.  Requested file system, device and fio options are are set in **env.pl** file:
-  - @filesystems=('xfs');                   # Supported filesystems: ('xfs','ext4','zfs') to run tests.
+  - @filesystems=('xfs');                   Supported filesystems: ('xfs','ext4','zfs') to run tests.
+
    This sets up type of file system to use for IO benchmark. Multiple file system can be listed
-  - @devices=('xvdb');               	    # List of devices. For multiple devices, stripe volume is build
+
+  - @devices=('xvdb');               	    List of devices. For multiple devices, stripe volume is build
+
    Storage Device(s) to use for IO testing. Multiple devices can be specified: ('xvdb', 'xvdc'). For multiple devices
    "md" stripe volume is created 
-  - $mpt='mnt';                             # Sets mount point
+
+  - $mpt='mnt';                             # Sets up the  mount point
+
     Device with file system is mounted under this mount point. You can specify any string.
 
 **FIO OPTIONS**
- - @blocks=('4k','16k','32k','1m');        # List of IO size to test.
- - $filesize='1g';                         # file size.
- - $procs='2';                             # Number of concurrent fio processes running.
- - $iodepth='2';                           # Controls number of concurrent IO. Applies to direct IO test
- - $fadvise='1';                           # Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
- - $cachehit='zipf:1.1';                   # Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
- - $percentread=60;                        # percent of read IO for mixed IO tests
- - $percentwrite=40;                       # percent of write IO for mixed IO tests
- - $end_fsync=1;                           # Sync file contents when job exits
- - $fsync_on_close=0;                      # sync file contents on close. end_fsync only does it at job ends
+ - @blocks=('4k','16k','32k','1m');        List of IO size to test.
+ - $filesize='1g';                         file size.
+ - $procs='2';                             Number of concurrent fio processes running.
+ - $iodepth='2';                           Controls number of concurrent IO. Applies to direct IO test
+ - $fadvise='1';                           Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
+ - $cachehit='zipf:1.1';                   Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
+ - $percentread=60;                        percent of read IO for mixed IO tests
+ - $percentwrite=40;                       percent of write IO for mixed IO tests
+ - $end_fsync=1;                           Sync file contents when job exits
+ - $fsync_on_close=0;                      Sync file contents on close. end_fsync only does it at job ends
 
 Type of fio Tests interested in running:
 
- - $iolatencytests=1;                      # default is enabled. Set to 0 to disable io latency tests via directIO path
- - $iodirecttests=1;                       # default is enabled. Set to 0 to disable IO read tests via directIO path
- - $randreadtests=1;                       # default is enabled. Set to 0 to disable random read no-cache tests
- - $randwritetests=0;                      # Set to 1 to enable random write no-cache tests
- - $randreadmmap=0;                        # Set to 1 to enable random read tests using mmap
- - $randwritemmap=0;                       # Set to 1 to enable random write tests using mmap
- - $randmixedtests=0;                      # Set to 1 to enable mixed random tests
- - $randmixedmmap=0;                       # Set to 1 to enable mixed random tests using mmap
- - $randmixedmmap=0;                       # Set to 1 to enable mixed random tests using mmap
+ - $iolatencytests=1;                      default is enabled. Set to 0 to disable io latency tests via directIO path
+ - $iodirecttests=1;                       default is enabled. Set to 0 to disable IO read tests via directIO path
+ - $randreadtests=1;                       default is enabled. Set to 0 to disable random read no-cache tests
+ - $randwritetests=0;                      Set to 1 to enable random write no-cache tests
+ - $randreadmmap=0;                        Set to 1 to enable random read tests using mmap
+ - $randwritemmap=0;                       Set to 1 to enable random write tests using mmap
+ - $randmixedtests=0;                      Set to 1 to enable mixed random tests
+ - $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
+ - $randmixedmmap=0;                       Set to 1 to enable mixed random tests using mmap
 
- - $seqreadtests=0;                        # default is enabled. Set to 0 to disable sequential read tests
- - $seqwritetests=0;                       # Set to 1 to enable sequential write tests
- - $seqreadmmap=0;                         # Set to 1 to enable sequentail read tests using mmap
- - $seqwritemmap=0;                        # Set to 1 to enable sequentail write tests using mmap
- - $seqmixedtests=0;                       # Set to 1 to enable mixed sequential tests
- - $seqmixedmmap=0;                        # Set to 1 to enable mixed sequential tests using mmap
+ - $seqreadtests=0;                        default is enabled. Set to 0 to disable sequential read tests
+ - $seqwritetests=0;                       Set to 1 to enable sequential write tests
+ - $seqreadmmap=0;                         Set to 1 to enable sequentail read tests using mmap
+ - $seqwritemmap=0;                        Set to 1 to enable sequentail write tests using mmap
+ - $seqmixedtests=0;                       Set to 1 to enable mixed sequential tests
+ - $seqmixedmmap=0;                        Set to 1 to enable mixed sequential tests using mmap
 
 Start system monitoring agents to collect system level metrics:
 
