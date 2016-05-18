@@ -6,29 +6,30 @@
 - Helps automate benchmarks and interpret results 
 - Use time-series graphite database to store metrics
 - Query metrics for visualization via Grafana graph and dashboard builder. http://grafana.org/
-- Custom ready to use Dashboards are available for: system, cassandra, kafka, tomcat, nfs and benchmark results.
+- Ready to use Dashboards to display: 
+  - System metrics: io, net, cpu, tcp, nfs  
+  - Low level metrics (captured via Linux perf):per tcp connection, io size and io latency
+  - Application metrics: cassandra, kafka, and tomcat. 
+  - Benchmark metrics: Captures critical benchmark metrics: webserver, memcache, Network and IO throughput, TPS and Latency 
 - Abyss design fits well into self service model
 - Capture metrics across full software stack: application, JVM, system, network, and kernel. 
 - Higher granularity of metrics helps identify resource usage spikes and constraints
-- Low level profiling data to understand application characteristics better
-- Data correlation via custom dashboards
+- Low level profiling data to better understand application characteristics.
+- Data correlation via custom dashboards.
+- Fits well into self service model.  
 
 ## Abyss Model
 
 Abyss has following components:
 - **Time-Series Database:** All agents ship metrics to graphite server. Support is planned for ES, Cloudwatch, influxDB
 - **Jolokia:** Captures JVM metrics via JMX port on localhost for Java applications: Cassandra, Kafka, Tomcat
-- **Visualization:** Grafana is used for querying metrics and designing dashboards
-- **Agents:** Run on instance under investigation and generate metrics:  
-  - *System Agents:* Collect system  metrics: cpu, memory, net, tcp, io, nfs
-  - *Application Agents:* Collect application metrics: Cassandra, kafka, Tomcat. 
-  - *Sniffer Agents:* Collect low level tcp and io metrics via open source tcpip driver and Linux “perf” utility.
-  - *Benchmark Agents:* Automate IO and Network benchmarking and graphing results:  Net, IO, memcache, web  
+- **Agents:** Run on instance. Capture metrics and ship them to graphite server  
+- **Visualization:** Grafana is used to query metrics from graphite datasource and to build custom dashboards
 
 ## Abyess Agents Design
 - Abyss agents are simple to write and language agnostic.
 - Basic requirement is to collect metrics and dump them to graphite server periodically.
-- There are sample agents written in Perl are available.
+- There are sample agents written in perl and python are available.
 - Mtrics are sent in “.” formatted string with time stamp to graphite carbon server: $server.$host.system.mem.free_cached $free_cached $datestamp, where:
   - *metrics name:* $server.$host.system.mem.free_cached 
   - *metrics value:* $free_cached 
@@ -43,35 +44,70 @@ Abyss has following components:
 
 Clone the repository: $ git clone https://github.com/aather/abyss
 
-**There is a script, graphite-setup/graphite-setup.sh, provided to test Abyss quickly on a single Ubuntu server. Script sets up server side of Abyss. It installs and configures services: graphite, grafana, apache that Abyss agents use for storing and quering metrics on localhost** 
+It is prefered to clone it on three servers. You can do the whole install on a singe server running Linux (Ubuntu): VirtualBox, Cloud Instance, Baremetal
+
+
+**Backend Setup** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script **graphite-setup.sh** is provided that can install and configure all three services (graphite, grafana, apache) on a single server. To run it, type: $cd abyss/graphite-setup; sudo -s ; ./graphite-setup.sh. 
+[Note: script is tested on Ubuntu Trusty]
+
+**Agent Setup**:  Abyss agents are use for storing and quering metrics. All agents use **env.pl** file for configuration. Update thefile with IP address or hostname of server running graphite service:
+
+**$carbon_server = "IPAddr of graphite server";           # graphite serverr
+
+<save changes>
 
 Start system monitoring agents: **$./startMonitoring**
 
-*This will start abyss agents to collect metrics at 5 second interval and push them to graphite server on the network.* 
-*Wait for few minutes to have sufficient metrics collected so they can be displayed on dashboard.*
+*This is a wrapper script that starts: system monitoring agents that collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and push to graphite server on the network.* 
+Wait for few minutes to have sufficient metrics collected and then enter URL:
 
-**Enter URL of grafana server. By default, it is running on localhost**
- http://localhost:7410/
+**http://hostname:7410/**      
 
-For full setup, use abyss agents configuration file: **env.pl** . This file sets up environment variables for all abyss agents. 
+Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed on the same server. You will find several ready to use dashboards. Click "System Performance" Dashboard to see graphs of system metrics and "Per Connection TCP Stats" Dashboard to see graphs of per TCP connection stats metrics
+
+**env.pl** file sets up environment variables for all abyss agents. 
 
  - **carbon_server-**    Agents ships metrics to graphite server on this host. Default locahost. Y
  - **carbon_port-**      Agent sends request to this Port number where carbon server is listening. Default: 7405
- - **grafana_port-**	 Port where grafana server is listening. Default: http://localhost:7410/
+ - **grafana_port-**	 Port where grafana server is listening. Default: http://hostname:7410/
  - **host-**             Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
  - **server-**           Sets Server name or Application cluster name, used by graphite server for storing metrics. 
  - **interval-**         Sets metrics collection granularity. Default: 5 seconds
- - **iterations-**	 Sets number of benchmark iterations to perform. Default: 5 seconds
+ - **iterations-**	 Applies to benchmark agents. Sets number of benchmark iterations to perform. Default: 10
 
 ## Abyss Benchmark Agents
-To run network Benchmark set environment variables in **env.pl** file to set peer host running netserver, webserver or/and memcached servers. Install and start netserver, webserver (nginx, apache) and memcached server with options below:
-- peer = "peer IP address or hostname" 
-- netserver: sudo netserver -p 7420
-- memcached: $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0
 
-To start Network throughput benchmark, run:
-$./startNetBenchmark 
+There are agents provided to automate benchmarks:
 
+Network Throughput and TPS Benchmark
+Abyss agents run Network throughput and TPS benchmarks using netperf tool. You need to install netserver on the peer host:
+
+$ sudo apt-get install -y netserver
+
+Make sure to run netserver on port 7420. Otherwise, change default ports in env.pl file
+
+$ sudo netserver -p 7420
+
+Update **env.pl** file where abyss agents are running so that they can generate traffic against the serverr:
+- peer = "peer IP address or hostname"   - Hostname where netserver is running on port 7420 
+
+Agent connects to netserver via netperf on following default ports:
+net_dport = 7420;                      - abyss agent will use this netserver data port on peer
+$net_cport = 7421;                     - abyss agent will use this netserver control port on peer
+$net_rport = 7422;                     - abyss agent will use this netserver port for net latency test
+
+Now start the benchmark agents:
+
+To start network throughput test, type:
+$./startNetTputBenchmark.sh 
+
+To start network TPS test, type:
+
+$./startNetTPSBenchmark.sh
+
+[NOTE: It is recommended to use "screen" program and run it from screen window] 
+
+IO Throughput and Latency Benchmark:
 ## Abyss In Action
 
 ![Abyss](menu.png)
