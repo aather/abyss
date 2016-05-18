@@ -205,7 +205,7 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
            `sudo zfs set recordsize=$size pool`;	
 	   print "ZFS: Setting recordsize=$size\n";
         }
-        while ($loops-- > 0 ){ # perform each test with various block sizes for that many $iterations
+        while ($loops-- > 0 ){ # perform each test with various block sizes. Repeat for $iteration 
           open (FIO, $temp) || die print "failed to get data: $!\n";
           while (<FIO>) {
              @stats= split(/;/);
@@ -235,20 +235,16 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
            my $output =`cat /proc/spl/kstat/zfs/arcstats|grep ^size`;
            print "ZFS ARC Size After: $output\n";
           }
-        }
+        }  # Test for each block
     $loops=$iterations;
-    $same=$start;    # Reset it to show all tests in the same time window. Makes it convenient to see in graph
-   } 
-  print "Completed -- Block: @blocks | Tests: $test\n";
+    #$same=$start;    		# Uncomment it to show the test with all blocks in the same time window. 
+   } # Test completed with all blocks
+  print "Completed All iteration of Test $test with blocks: @blocks\n";
   print "Removing test files: /$mpt/$word[1]\n";
   `sudo rm /$mpt/$word[1]*`;
-  #`pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
-  #`pkill -9 sysio.pl`; `pkill -9 syslat.pl`;
-  $same=$start;			# Reset it to show all filesystem tests in one time window 
-  sleep 5;
-  }
-  #`pkill -9 sysio.pl`; `pkill -9 iolatency.pl`;
-  # Run all tests for the next file system requested
- }
+  #$same=$start;		# Reset it to show all tests for perticular filesystem in one time window 
+  } # All Tests completed for a perticular fileystem type
+  `pkill -9 sysio.pl`; `pkill -9 iolatency.pl`;
+ } # All Tests completed for all filesystem type
 print "Completed: All Tests\n @alltests\n";
 close (GRAPHITE);

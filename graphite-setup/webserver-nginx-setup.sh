@@ -10,10 +10,16 @@ curl http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo -e "deb http://nginx.org/packages/mainline/ubuntu/ `lsb_release -cs` nginx\ndeb-src http://nginx.org/packages/mainline/ubuntu/ `lsb_release -cs` nginx" > /etc/apt/sources.list.d/nginx.list
 apt-get update
 apt-get install -q -y nginx
+if [ -e "/etc/nginx/nginx.conf" ]
+then
 cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf-ORIG
+fi
 cp nginx.conf-sample-nginx /etc/nginx/nginx.conf
+if [ -e "/etc/nginx/conf.d/default.conf" ]
+then
 cp /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf-ORIG
-cp default.conf-sample-nginx /etc/nginx/conf.d/
-service nginx start
+fi
+cp default.conf-sample-nginx /etc/nginx/conf.d/default.conf
+service nginx restart
 sudo netstat -ltpn 
 nginx -v
