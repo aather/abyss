@@ -103,12 +103,9 @@ Make sure netserver listens on port 7420 on peer host. Otherwise, you may have t
 
 $ sudo netserver -p 7420
 
-Update **env.pl** file where abyss agents are running so that they can generate traffic against the server:
-- peer = "peer IP address or hostname"   
-where $peer is the hostname where netserver is running
-
-NetworkAgent connects to netserver via netperf on following default ports:
+Update **env.pl** file. Network Agent connects to netserver via netperf on following default ports:
 ```
+  peer = "peer IP address or hostname"   Network benchmark tests will run againt this server 
   net_dport = 7420;                      Agent  will use this netserver data port on peer
   net_cport = 7421;                      Agent  will use this netserver control port on peer
   net_rport = 7422;                      Aagent will use this netserver port for net latency test
