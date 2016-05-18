@@ -36,7 +36,7 @@
 #
 # -- Environment Variables exported to abyss agents --
 #
-#$carbon_server = "graphite ip or hostname"; 	   # graphite server
+$carbon_server = "graphite ip or hostname"; 	   # graphite server
 $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
@@ -71,7 +71,7 @@ $interval = 5;				 # Sets sample interval, default 5 second
 # and/or web servers on $peer host. Default ports for netserver, 
 # memcache and webserver are: 7420, 7425, 7430 respectively.
 # 
-#$peer = "peer hostname or IP ";	# peer host running netserver and memcached daemons
+$peer = "peer hostname or IP ";	# peer host running netserver and memcached daemons
 $iterations = 10;                       # Sets number of benchmark test iterations
 #
 # netserver Tests
