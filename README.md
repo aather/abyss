@@ -47,25 +47,29 @@ Clone the repository: $ git clone https://github.com/aather/abyss
 It is prefered to clone it on three servers. You can do the whole install on a singe server running Linux (Ubuntu): VirtualBox, Cloud Instance, Baremetal
 
 
-**Backend Setup** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script **graphite-setup.sh** is provided that can install and configure all three services (graphite, grafana, apache) on a single server. To run it, type: 
- - $cd abyss/graphite-setup; sudo -s ; ./graphite-setup.sh 
+**Backend Setup:** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
+ 
+ $cd abyss/graphite-setup; 
+ $sudo -s; 
+ #./graphite-setup.sh 
 
-[Note: script is tested on Ubuntu Trusty]
+[Note: script is tested on Ubuntu Trusty only]
 
-**Agent Setup**:  Abyss agents are use for storing and quering metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service:
+**Agent Setup:**  Abyss agents are use collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
 
 **$carbon_server = "IPAddr of graphite server";           # graphite serverr
+..
+ <save changes>
 
-<save changes>
+Start system monitoring by running: **$./startMonitoring**
 
-Start system monitoring agents: **$./startMonitoring**
+*This is a wrapper script that starts: system monitoring agents that collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and push to graphite server on the network. 
 
-*This is a wrapper script that starts: system monitoring agents that collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and push to graphite server on the network.* 
-Wait for few minutes to have sufficient metrics collected and then enter URL:
+Wait for few minutes to have sufficient metrics collected and then enter URL to display graphs:
 
 **http://hostname:7410/**      
 
-Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed on the same server. You will find several ready to use dashboards. Click "System Performance" Dashboard to see graphs of system metrics and "Per Connection TCP Stats" Dashboard to see graphs of per TCP connection stats metrics
+Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed and running on the same server. You will find several ready to use dashboards. Click **"System Performance"** Dashboard to see graphs of system metrics and **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connection stats metrics
 
 **env.pl** file sets up environment variables for all abyss agents. 
 
@@ -81,35 +85,107 @@ Hostname or IP addres of grafana server. As discussed above, all three services 
 
 There are agents provided to automate benchmarks:
 
-Network Throughput and TPS Benchmark
-Abyss agents run Network throughput and TPS benchmarks using netperf tool. You need to install netserver on the peer host:
+**Network Throughput and TPS Benchmark**:
+Abyss agents run Network throughput and TPS benchmarks using netperf tool. You need to install netserver on the peer host by running:
 
 $ sudo apt-get install -y netserver
 
-Make sure to run netserver on port 7420. Otherwise, change default ports in env.pl file
+Make sure to run netserver on port 7420 on peer host. Otherwise, consider changing default ports in env.pl file
 
 $ sudo netserver -p 7420
 
-Update **env.pl** file where abyss agents are running so that they can generate traffic against the serverr:
+Update **env.pl** file where abyss agents are running so that they can generate traffic against the server:
 - peer = "peer IP address or hostname"   - Hostname where netserver is running on port 7420 
 
-Agent connects to netserver via netperf on following default ports:
+NetworkAgent connects to netserver via netperf on following default ports:
+
 net_dport = 7420;                      - abyss agent will use this netserver data port on peer
 $net_cport = 7421;                     - abyss agent will use this netserver control port on peer
 $net_rport = 7422;                     - abyss agent will use this netserver port for net latency test
 
-Now start the benchmark agents:
+collect system metrics on both netserver system ($peer) and the system running benchmark agents:
 
-To start network throughput test, type:
+$./startMonitoring.sh
+
+Now start the benchmark agents on a system that is used to generate load against the peer server:
+
+To start network throughput benchmark, type:
 $./startNetTputBenchmark.sh 
 
-To start network TPS test, type:
+To start network TPS benchmark, type:
 
 $./startNetTPSBenchmark.sh
 
-[NOTE: It is recommended to use "screen" program and run it from screen window] 
+[NOTE: It is recommended to use "screen" program and run it from screen window. This allows one to run benchmark agents in the background] 
 
-IO Throughput and Latency Benchmark:
+Benchmark agents  runs the benchmark, collects important metrics from the test results and push them to graphite server. You can then use grafana dashboard to query and graph benchmark metrics. Enter URL in broswer 
+
+**http://hostname:7410/**
+
+Click: **Net Benchmark** and/or **Net Latency and TPS** Dashboards
+![Abyss](net-tpt.png)
+![Abyss](TPS-benchmark.png)
+
+**IO Throughput and Latency Benchmark:**
+Abyss agent run IO benchmarks using fio tool. Make sure to install fio package.
+
+$ sudo apt-get install -y fio
+
+Agent sets the filesystem and storage and starts the test.  Requested file system, device and fio options are are set in **env.pl** file:
+  - @filesystems=('xfs');                   # Supported filesystems: ('xfs','ext4','zfs') to run tests.
+   This sets up type of file system to use for IO benchmark. Multiple file system can be listed
+  - @devices=('xvdb');               	    # List of devices. For multiple devices, stripe volume is build
+   Storage Device(s) to use for IO testing. Multiple devices can be specified: ('xvdb', 'xvdc'). For multiple devices
+   "md" stripe volume is created 
+  - $mpt='mnt';                             # Sets mount point
+    Device with file system is mounted under this mount point. You can specify any string.
+
+**FIO OPTIONS**
+ - @blocks=('4k','16k','32k','1m');        # List of IO size to test.
+ - $filesize='1g';                         # file size.
+ - $procs='2';                             # Number of concurrent fio processes running.
+ - $iodepth='2';                           # Controls number of concurrent IO. Applies to direct IO test
+ - $fadvise='1';                           # Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
+ - $cachehit='zipf:1.1';                   # Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
+ - $percentread=60;                        # percent of read IO for mixed IO tests
+ - $percentwrite=40;                       # percent of write IO for mixed IO tests
+ - $end_fsync=1;                           # Sync file contents when job exits
+ - $fsync_on_close=0;                      # sync file contents on close. end_fsync only does it at job ends
+
+Type of fio Tests interested in running:
+
+ - $iolatencytests=1;                      # default is enabled. Set to 0 to disable io latency tests via directIO path
+ - $iodirecttests=1;                       # default is enabled. Set to 0 to disable IO read tests via directIO path
+ - $randreadtests=1;                       # default is enabled. Set to 0 to disable random read no-cache tests
+ - $randwritetests=0;                      # Set to 1 to enable random write no-cache tests
+ - $randreadmmap=0;                        # Set to 1 to enable random read tests using mmap
+ - $randwritemmap=0;                       # Set to 1 to enable random write tests using mmap
+ - $randmixedtests=0;                      # Set to 1 to enable mixed random tests
+ - $randmixedmmap=0;                       # Set to 1 to enable mixed random tests using mmap
+ - $randmixedmmap=0;                       # Set to 1 to enable mixed random tests using mmap
+
+ - $seqreadtests=0;                        # default is enabled. Set to 0 to disable sequential read tests
+ - $seqwritetests=0;                       # Set to 1 to enable sequential write tests
+ - $seqreadmmap=0;                         # Set to 1 to enable sequentail read tests using mmap
+ - $seqwritemmap=0;                        # Set to 1 to enable sequentail write tests using mmap
+ - $seqmixedtests=0;                       # Set to 1 to enable mixed sequential tests
+ - $seqmixedmmap=0;                        # Set to 1 to enable mixed sequential tests using mmap
+
+Start system monitoring agents to collect system level metrics:
+
+$./startMonitoring.sh
+
+Now start IO benchmark agent:
+$./startIOBenchmark.sh
+
+[NOTE: It is recommended to use "screen" program and run it from screen window. This allows one to run benchmark agents in the background]
+
+Benchmark agents runs the benchmark, collects important metrics from test results and push them to graphite server. You can then use grafana dashboard to query and graph benchmark metrics. Enter URL in broswer
+
+**http://hostname:7410/**
+
+Click: **IO Benchmark**  Dashboards
+![Abyss](io-benchmark.png)
 ## Abyss In Action
 
 ![Abyss](menu.png)

@@ -40,6 +40,8 @@ $carbon_server = "graphite ip or hostname"; 	   # graphite server
 $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
+$iterations = 10;                       	   # Applies to benchmark agent
+$peer = "peer hostname or IP ";	                   # Applies to Net benchmark
 #
 # Uncomment if running abyss agents on Amazon cloud instance
 # aws instance metadata can be used to find: region, instance-id of the monitored server 
@@ -61,8 +63,6 @@ $server = "cluster.Netflix"; 		# Metrics are accumulated under app name
 # $server = "cluster.Netflix";            	# Metrics are accumulated under application name
 #                                         	# e.g: Netflix. Change it to match your app name
 #
-# Sampling Interval
-$interval = 5;				 # Sets sample interval, default 5 second
 #
 # -- Additional Environment variables for Benchmark Agents --
 #
@@ -70,12 +70,10 @@ $interval = 5;				 # Sets sample interval, default 5 second
 # To run net benchmark, you may need to run netserver, memcached 
 # and/or web servers on $peer host. Default ports for netserver, 
 # memcache and webserver are: 7420, 7425, 7430 respectively.
-# 
-$peer = "peer hostname or IP ";	# peer host running netserver and memcached daemons
-$iterations = 10;                       # Sets number of benchmark test iterations
+# Agent are written to test only these services.
 #
 # netserver Tests
-# start netserver on $peer 
+# start netserver on $peer host
 # $sudo apt-get install -y netserver
 # $sudo netserver -p 7420
 #
@@ -84,23 +82,20 @@ $net_cport = 7421;			# abyss agent will use this netserver control port on peer
 $net_rport = 7422;			# abyss agent will use this netserver port for net latency test
 #
 # memcache Tests
-# start memcached on $peer 
+# start memcached on $peer host
 # $sudo apt-get install -y memcached
 # $sudo memcached -p 7425 -u nobody -c 32768 -o slab_reassign slab_automove -I 2m -m 59187 -d -l 0.0.0.0
-#
+# Benchmark agent use open source 'mcblaster' tool to benchmark memached server
 $mem_port  = 7425;			# abyss agent will use this memcached port on peer
 $threads = 2;				# controls mcblaster threads for memcache test 
 $connections = 1;			# controls mcblaster connections per thread
 $payload = 50; 				# controls mcblaster payload in bytes for "gets"
-@RPS = (100000,150000,200000);		# controls mcblaster RPS rates
+@RPS = (10000,50000,100000);		# controls mcblaster RPS rates
 #
 # webserver Tests
 # start nginx webserver on $peer 
-# $sudo apt-get install -y nginx 
-# Setup /etc/nginx/nginx.conf, /etc/nginx/conf.d/default.conf file to set nginx port and other options.  
-# Sample nginx.conf and default.conf is provided. Just copy them to directories listed above. 
-# start nginx: $sudo service nginx start
-#
+# There is a script provided that sets up nginx server for benchmark on $peer
+# Benchmark agent use opensource 'wrk' tool to benchmark webserver
 $webserver_port = 7430;			# nginx port
 $wthreads =  4;    			# control wrt threads for webserver test 
 @CONNECTIONS = (8,16,32,64);   		# Number of web connections to test nginx webserver 
