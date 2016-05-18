@@ -36,7 +36,7 @@
 #
 # -- Environment Variables exported to abyss agents --
 #
-$carbon_server = "graphite ip or hostname"; 	   # graphite server
+$carbon_server = "IPAddr of graphite server"; 	   # graphite server
 $carbon_port = 7405;                               # graphite carbon server port
 $cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval

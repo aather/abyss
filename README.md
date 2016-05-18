@@ -44,10 +44,10 @@ Abyss has following components:
 
 Clone the repository: $ git clone https://github.com/aather/abyss
 
-It is prefered to clone it on three servers. You can do the whole install on a singe server running Linux (Ubuntu): VirtualBox, Cloud Instance, Baremetal
+It is prefered to clone it on three servers. You can, however,do the whole install on a  singe Linux (Ubuntu) server: VirtualBox, Cloud Instance, bare-metal
 
 
-**Backend Setup:** Abyss depends on  graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
+**Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it simple to configure and test, script,graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
  
  $cd abyss/graphite-setup; 
  $sudo -s; 
@@ -55,21 +55,24 @@ It is prefered to clone it on three servers. You can do the whole install on a s
 
 [Note: script is tested on Ubuntu Trusty only]
 
-**Agent Setup:**  Abyss agents are use collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
+**Agent Setup:**  Abyss agents are used for collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
 
 **$carbon_server = "IPAddr of graphite server";           # graphite serverr
 ..
- <save changes>
 
-Start system monitoring by running: **$./startMonitoring**
+Save changes and then start system monitoring agent by running: **$./startMonitoring**
 
-*This is a wrapper script that starts: system monitoring agents that collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and push to graphite server on the network. 
+*This is a wrapper script that starts system monitoring agents to collect system and low level IO latency and per connection tcp metrics. Metrics are collected at 5 second (default) interval and pushed to graphite server on the network. 
 
 Wait for few minutes to have sufficient metrics collected and then enter URL to display graphs:
 
 **http://hostname:7410/**      
 
-Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed and running on the same server. You will find several ready to use dashboards. Click **"System Performance"** Dashboard to see graphs of system metrics and **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connection stats metrics
+Hostname or IP addres of grafana server. As discussed above, all three services (graphite, grafana and apache) are installed and running on the same server. You will find several ready to use dashboards. 
+![Abyss](menu.png)
+Click **"System Performance"** Dashboard to see graphs of system metrics and **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connection stats metrics
+![Abyss](sys.png)
+![Abyss](pertcpconnection.png)
 
 **env.pl** file sets up environment variables for all abyss agents. 
 
@@ -186,12 +189,6 @@ Benchmark agents runs the benchmark, collects important metrics from test result
 
 Click: **IO Benchmark**  Dashboards
 ![Abyss](io-benchmark.png)
-## Abyss In Action
-
-![Abyss](menu.png)
-![Abyss](cassandra.png)
-![Abyss](net-tpt.png)
-![Abyss](sys.png)
 
 ## Abyss Metrics
  List of metrics collected by abyss agents:
