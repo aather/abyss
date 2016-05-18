@@ -47,7 +47,8 @@ Clone the repository: $ git clone https://github.com/aather/abyss
 It is prefered to clone it on multiple servers of any type: VirtualBox, docker, Cloud Instance, Bare-matel ..
 
 
-**Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it easy to configure and test, script, graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:``` 
+**Backend Setup:** Abyss depends on graphite, apache and grafana server. To make it easy to configure and test, script, graphite-setup.sh, is provided that installs and configures all three services (graphite, grafana, apache) on a single server. To run it, type:
+``` 
  $cd abyss/graphite-setup 
  $sudo -s 
  #./graphite-setup.sh 
