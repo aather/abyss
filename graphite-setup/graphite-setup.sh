@@ -1,4 +1,5 @@
 #!/bin/bash
+DIR=`pwd`
 # Run as root or sudo 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
@@ -54,6 +55,7 @@ if [ -e "/var/spool/cron/crontabs/root" ]
 then 
 sudo cp /var/spool/cron/crontabs/root /var/spool/cron/crontabs/root-ORIG
 fi
+cd $DIR
 sudo cp ./crontab-root.custom /var/spool/cron/crontabs/root
 sudo service cron restart
 sudo netstat -ltpn 
