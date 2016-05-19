@@ -272,7 +272,7 @@ Click: **Memcached RPS Benchmarkk**  Dashboards
 
 **Automated carbon database cleanup via cron**
 
-Metrics will be collected in carbon database on graphite server. **tcpstat.pl** agent generates metrics per IP address. If server open/close connection at higher rates, it will fill up the disk space quickly. As part of graphite install, we  (after making backup copy) create root crontab to clean up stale metrics from the database. Active records in database should be updated every 5 seconds. If the records are not updated for some time, record can be removed as server that sending these metrics may have gone. 
+Metrics will be collected in carbon database on graphite server. **tcpstat.pl** agent generates metrics per IP address. If server open/close connection at higher rates, it will fill up the disk space quickly. As part of graphite install, we  (after making backup copy) create root crontab to clean up stale metrics from the database. Active records in database are be normally updated every 5 seconds. If the records are not updated for some time, then record can be removed as server that sending these metrics may have gone. 
 ```
 # Remove files that has not been updated for last 2 minutes.
 */4 * * * * find /var/lib/graphite/whisper/cluster/*/*/system/tcp/traffic/* -mmin +2 -exec rm -rf {} \;
