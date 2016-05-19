@@ -27,7 +27,7 @@ Abyss has following components:
 - **Visualization:** Grafana is used to query metrics from graphite datasource and to build custom dashboards
 
 ## Abyess Agents Design
-- Abyss agents are simple to write and language agnostic.
+- Abyss agents are simple to write.
 - Basic requirement is to collect metrics and dump them to graphite server periodically.
 - There are sample agents written in perl and python are available.
 - Metrics are sent in “.” formatted string with time stamp to graphite carbon server: $server.$host.system.mem.free_cached $free_cached $datestamp, where:
