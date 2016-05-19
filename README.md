@@ -76,14 +76,14 @@ Click **"Per Connection TCP Stats"** Dashboard to see graphs of per TCP connecti
 
 **env.pl** file sets up environment variables for all abyss agents. 
 ```
- carbon_server   	Agents ships metrics to graphite server on this host. Default locahost. Y
- carbon_port     	Agent sends request to this Port number where carbon server is listening. Default: 7405
+ carbon_server   	Agents ships metrics to carbon or graphite server
+ carbon_port     	Agent sends request to this Port number where carbon or graphite server is listening. Default: 7405
  grafana_port		Port where grafana server is listening. Default: http://hostname:7410/
  host            	Sets hostname or Amazon cloud instance id: i-c3a4e33d. Metrics are stored under this hostname
  server          	Sets Server name or Application cluster name, used by graphite server for storing metrics. 
  interval      		Sets metrics collection granularity. Default: 5 seconds
  iterations             Applies to benchmark agents. Sets iterations to perform. Default: 10
- peer            	Applies to Net benchmark
+ peer            	Applies to Net benchmark. Agents generates load agains services running on this server
 ```
 
 There are abyss agents to collect java and jvm  metrics using java agents that connects to JMX port on demand on the localhost to collect metrics. At this point Cassandra, Kafka and Tomcat mmetrics are reported 
