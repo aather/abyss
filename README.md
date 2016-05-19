@@ -10,7 +10,7 @@
   - System metrics: io, net, cpu, tcp, nfs  
   - Low level metrics (captured via Linux perf):per tcp connection, io size and io latency
   - Application metrics: cassandra, kafka, and tomcat. 
-  - Benchmark metrics: Captures critical benchmark metrics: webserver, memcache, Network and IO throughput, TPS and Latency 
+  - Benchmark metrics: Captures important benchmark metrics: webserver, memcache, Network and IO throughput, TPS and Latency 
 - Abyss design fits well into self service model
 - Capture metrics across full software stack: application, JVM, system, network, and kernel. 
 - Higher granularity of metrics helps identify resource usage spikes and constraints
