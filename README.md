@@ -291,7 +291,7 @@ Metrics will be collected in carbon database on graphite server. **tcpstat.pl** 
 - System Metrics: 
     - **cpu:**  cpu and percpu utilization: idle, sys, usr, intr, cpu load: runnable and blocked threads, context switches
     - **memory:**  free (unused), free (cached) and used memory
-    - **network:** system-wide Network throughput, pps, tcp segments,nfs, tcp timeouts, per connection stats: Network throughput, Latency (RTT), retransmit, packet size, ssthresh, cwnd, rwnd, read/write queue size
+    - **network:** system-wide Network throughput, packet/sec, TCP stats, per connection tcp stats, nfs stats
     - **io:** system-wide IO throughput, IOPS, IO latency and IO size
 - Application Metrics:
   - **cassandra**
@@ -305,7 +305,7 @@ Metrics will be collected in carbon database on graphite server. **tcpstat.pl** 
   - **tomcat**
     - 
 - Net Benchmark Metrics:
-  Benchmark agents can automate running IO and Network benchmark and graphing results. Thousands of iterations can be performed:
+  Benchmark agents can automate running IO and Network benchmark and graphing results. Thousands of iterations are performed to get a good estimate of network performance:
     - **ping -A:** measure net latency. Adoptive ping that adopts to RTT. There can only be one unanswered probe pending at any time. Lower value (RTT) is better representing lower network latency
     - **netperf:** measure net latency: TCP request response test with request/response payload of 1 byte. There can be only one transaction pending at any time. Higher number of transactions (TPS) is better representing lower network latency
     - **netperf:** measure net throughput. TCP throughput test with message size equals to the default socket buffer size, Amazon AWS cloud instances are throttled for outbound traffic. This test validates if the instance is achieving amazon advertise instance network bandwidth limit. Higher number is better.
