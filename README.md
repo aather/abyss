@@ -55,7 +55,7 @@ It is prefered to clone it on multiple servers of any type: VirtualBox, Cloud In
 [Note: script is tested on Ubuntu Trusty only]
 ```
 
-**Agent Setup:**  Abyss agents are used for collecting metrics. All agents use **env.pl** file for configuration. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
+**Agent Setup:**  Abyss agents are used for collecting metrics. All agents use **env.pl** file for setup. Update the file with IP address or hostname of server running graphite service so that agents can send metrics to it. Search for string:
 ```
  $carbon_server = "IPAddr of graphite server";           # graphite serverr
 ```
