@@ -204,15 +204,13 @@ Click: **IO Benchmark**  Dashboards
 
 Abyss agent run webserver benchmarks using 'wrk' tool. Webserver runs on $peer server. Script, webserver-nginx-setup.sh, is provided to sets up nginx server fo testing. To install and configure nginx webserver type:
 ```  
- $cd abyss/graphite-setup
+ $cd abyss/test-suites/net-tests/webserver/nginx-setup/
  $ sudo -s 
- # ./webserver-nginx-setup.sh
+ # ./nginx-setup.sh
 ```
  This setups the nginx webserver to listen on port 7430 on $peer host 
 
 Start system monitoring agents to collect system level metrics on both systems:
-
-$./startMonitoring.sh
 
 webserver benchmark agent use 'wrk' tool to generate load. Setting are in **env.pl** file:
 ```
@@ -253,10 +251,6 @@ memcached agent setting in *env.pl** file:
  $payload = 50;                          controls mcblaster payload in bytes for "gets"
  @RPS = (10000,50000,100000);            controls mcblaster RPS rates
 ```
-
-Start system monitoring agents to collect system level metrics:
-
-$./startMonitoring.sh
 
 Now start memcached benchmark agent:
 $./startMemcachedBenchmarks.sh
