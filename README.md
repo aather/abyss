@@ -217,8 +217,8 @@ $./startMonitoring.sh
 webserver benchmark agent use 'wrk' tool to generate load. Setting are in **env.pl** file:
 ```
  $webserver_port = 7430;                 nginx port
- $wthreads =  4;                         control wrt threads for webserver test
- @CONNECTIONS = (8,16,32,64);            Number of web connections to test nginx webserver
+ $wthreads =  8;                         control wrt threads for webserver test
+ @CONNECTIONS = (128,256,512,1024);      Number of web connections to test nginx webserver
  $filename = "";                         default file to fetch. Empty string is good for min payload
 ```
 Now start the agent:
