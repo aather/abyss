@@ -23,118 +23,126 @@ my @data = ();                                  # array to store metrics
 
 # ---- Random read Tests
 my @randreadtests = (
-"fio --name=randread-nocache --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=randread-nocache1 --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
 
-"fio --name=randread-partialcache --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
+"fio --name=randread-partialcache1 --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
 
-"fio --name=randread-fullcache --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
+"fio --name=randread-fullcache1 --ioengine=libaio --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
 );
 
 my @randreadmmap = (
-"fio --name=randreadmmap-nocache --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=randreadmmap-nocache1 --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
 
-"fio --name=randreadmmap-fullcache --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
+"fio --name=randreadmmap-fullcache1 --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
 
-"fio --name=randreadmmap-partialcache --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit "
+"fio --name=randreadmmap-partialcache1 --ioengine=mmap --rw=randread --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit "
 );
 
  # ---- Sequential Read Tests
 my @seqreadtests = (
-"fio --name=seqread-nocache --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=seqread-nocache1 --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
 
-"fio --name=seqread-partialcache --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
+"fio --name=seqread-partialcache1 --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
 
-"fio --name=seqread-fullcache --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
+"fio --name=seqread-fullcache1 --ioengine=libaio --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
 );
 
 my @seqreadmmap = (
-"fio --name=seqreadmmap-nocache --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=seqreadmmap-nocache1 --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
 
-"fio --name=seqreadmmap-fullcache --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
+"fio --name=seqreadmmap-fullcache1 --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
 
-"fio --name=seqreadmmap-partialcache --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit "
+"fio --name=seqreadmmap-partialcache1 --ioengine=mmap --rw=read --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit "
 ); 
 
  # ---- Random Write Tests
 my @randwritetests = (
-"fio --name=randwrite-nocache --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
+"fio --name=randwrite-nocache1 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
 
-"fio --name=randwrite-fullcache --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
+"fio --name=randwrite-fullcache1 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
 
-"fio --name=randwrite-fsync --fsync=32 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=randwrite-partialcache1 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
 
-"fio --name=randwrite-Synchronous --sync=1 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
+"fio --name=randwrite-fsync1 --fsync=32 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+
+"fio --name=randwrite-Synchronous1 --sync=1 --ioengine=libaio --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
 );
 
 my @randwritemmap = (
 
-"fio --name=randwritemmap-nocache --ioengine=mmap --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
+"fio --name=randwritemmap-nocache1 --ioengine=mmap --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
 
-"fio --name=randwritemmap-fullcache --ioengine=mmap --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
+"fio --name=randwritemmap-partialcache1 --ioengine=mmap --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
+
+"fio --name=randwritemmap-fullcache1 --ioengine=mmap --rw=randwrite --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
 );
 
  # ---- Sequential Write Tests
 my @seqwritetests = (
-"fio --name=seqwrite-nocache --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
+"fio --name=seqwrite-nocache1 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
 
-"fio --name=seqwrite-fullcache --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
+"fio --name=seqwrite-fullcache1 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 ",
 
-"fio --name=seqwrite-fsync --fsync=32 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=seqwrite-partialcache1 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
 
-"fio --name=seqwrite-Synchronous --sync=1 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
+"fio --name=seqwrite-fsync1 --fsync=32 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+
+"fio --name=seqwrite-Synchronous1 --sync=1 --ioengine=libaio --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
 );
 
 my @seqwritemmap = (
-"fio --name=seqwritemmap-nocache --ioengine=mmap --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
+"fio --name=seqwritemmap-nocache1 --ioengine=mmap --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime ",
 
-"fio --name=seqwritemmap-fullcache --ioengine=mmap --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
+"fio --name=seqwritemmap-partialcache1 --ioengine=mmap --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --random_distribution=$cachehit ",
+
+"fio --name=seqwritemmap-fullcache1 --ioengine=mmap --rw=write --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --pre_read=1 "
 );
 
  # ---- Random  Mixed Tests
 my @randmixedtests = (
-"fio --name=randmixed-nocache --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
+"fio --name=randmixed-nocache1 --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
 
-"fio --name=randmixed-partialcache --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit ",
+"fio --name=randmixed-partialcache1 --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit ",
 
-"fio --name=randmixed-fullcache --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 "
+"fio --name=randmixed-fullcache1 --ioengine=libaio --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 "
 );
 
 my @randmixedmmap = (
-"fio --name=randmixedmmap-nocache --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
+"fio --name=randmixedmmap-nocache1 --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
 
-"fio --name=randmixedmmap-fullcache --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 ",
+"fio --name=randmixedmmap-fullcache1 --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 ",
 
-"fio --name=randmixedmmap-partialcache --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit "
+"fio --name=randmixedmmap-partialcache1 --ioengine=mmap --rw=randrw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit "
 );
 
  # ---- Sequential Mixed Tests
 my @seqmixedtests = (
-"fio --name=seqmixed-nocache --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
+"fio --name=seqmixed-nocache1 --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
 
-"fio --name=seqmixed-partialcache --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit ",
+"fio --name=seqmixed-partialcache1 --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit ",
 
-"fio --name=seqmixed-fullcache --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 "
+"fio --name=seqmixed-fullcache1 --ioengine=libaio --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 "
 );
 
 my @seqmixedmmap = (
 
-"fio --name=seqmixedmmap-nocache --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
+"fio --name=seqmixedmmap-nocache1 --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --end_fsync=$end_fsync --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite ",
 
-"fio --name=seqmixedmmap-fullcache --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 ",
+"fio --name=seqmixedmmap-fullcache1 --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --pre_read=1 ",
 
-"fio --name=seqmixedmmap-partialcache --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit "
+"fio --name=seqmixedmmap-partialcache1 --ioengine=mmap --rw=rw --direct=0 --size=$filesize --numjobs=$procs --directory=/$mpt  --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime --rwmixread=$percentread --rwmixwrite=$percentwrite --random_distribution=$cachehit "
 );
 
  # ---- IO Latency Tests
 my @iolatencytests = (
-"fio --name=read-latency --ioengine=libaio --rw=randread --direct=1 --size=$filesize --directory=/$mpt --iodepth=1 --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
-"fio --name=write-latency --ioengine=libaio --rw=randwrite --direct=1 --size=$filesize --directory=/$mpt --iodepth=1 --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
+"fio --name=read-latency1 --ioengine=libaio --rw=randread --direct=1 --size=$filesize --directory=/$mpt --iodepth=1 --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=write-latency1 --ioengine=libaio --rw=randwrite --direct=1 --size=$filesize --directory=/$mpt --iodepth=1 --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
 );
 
  # ---- direct IO  Tests
 my @iodirecttests = (
-"fio --name=read-direct --ioengine=libaio --rw=randread --direct=1 --size=$filesize --directory=/$mpt --iodepth=$iodepth --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
-"fio --name=write-direct --ioengine=libaio --rw=randwrite --direct=1 --size=$filesize --directory=/$mpt --iodepth=$iodepth --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
+"fio --name=read-direct1 --ioengine=libaio --rw=randread --direct=1 --size=$filesize --directory=/$mpt --iodepth=$iodepth --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime ",
+"fio --name=write-direct1 --ioengine=libaio --rw=randwrite --direct=1 --size=$filesize --directory=/$mpt --iodepth=$iodepth --minimal --fadvise_hint=$fadvise --clocksource=clock_gettime "
 );
 if ($iolatencytests ==1) { push (@alltests, @iolatencytests);}
 if ($iodirecttests ==1) { push (@alltests, @iodirecttests);}
@@ -171,7 +179,7 @@ my $same;
 my $start = `date +%s`;
 
 foreach $filesystem (@filesystems){  # Run tests against all filesystem requested
-  if(! -e "/sbin/mkfs.$filesystem"){
+  if((! -e "/sbin/mkfs.$filesystem") && ($filesystem !~ /nfs/)){
    print "$filesystem is not installed. Please install $filesystem package\n"; 
    exit;
   }
@@ -192,13 +200,13 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
     else {
       exec(@args);
   }
-  my @args = ("./iolatency.pl", "$same", "$filesystem");
-    if (my $pid = fork) {
-      #  waitpid($pid);  
-    }
-    else {
-      exec(@args);
-  }
+  #my @args = ("./iolatency.pl", "$same", "$filesystem");
+  #  if (my $pid = fork) {
+  #    #  waitpid($pid);  
+  #  }
+  #  else {
+  #    exec(@args);
+  #}
   foreach my $test (@alltests){  # Running tests one by one
       my @list = split / /, $test;
       my @word = split /=/,$list[1];
@@ -212,16 +220,53 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
 	   print "ZFS: Setting recordsize=$size\n";
         }
         while ($loops-- > 0 ){ # perform each test with various block sizes. Repeat for $iteration 
+          
           open (FIO, $temp) || die print "failed to get data: $!\n";
           while (<FIO>) {
-             @stats= split(/;/);
+           @stats= split(/;/);
+           push @rtot,$stats[5];
+           push @rbw,$stats[6];
+           push @riops,$stats[7];
+           push @wtot,$stats[46];
+           push @wbw,$stats[47];
+           push @wiops,$stats[48];
+           push @rlatency,$stats[39];
+           push @wlatency,$stats[80];
           }
           close(FIO);
+	   # Sum it
+	  my $rtot;
+          grep { $rtot += $_ } @rtot;
+
+	  my $rbw;
+          grep { $rbw += $_ } @rbw;
+
+ 	  my $riops;
+          grep { $riops += $_ } @riops;
+
+          my $wtot;
+          grep { $wtot += $_ } @wtot;
+
+          my $wbw;
+          grep { $wbw += $_ } @wbw;
+
+          my $wiops;
+          grep { $wiops += $_ } @wiops;
+
+	  # calculate 99th percetile latency
+          @rlatency = sort {$a <=> $b} @rlatency;
+          $rlatency = $rlatency[sprintf("%.0f",(0.99*($#rlatency)))]; 
+
+          @wlatency = sort {$a <=> $b} @wlatency;
+          $wlatency = $wlatency[sprintf("%.0f",(0.99*($#wlatency)))]; 
+
+
+	
           if (($stats[2] =~ /latency/) || ($stats[2] =~ /direct/)){
-              @data = populate_data($server,$host,$size,$same,$filesystem,1,$stats[2],$stats[5],$stats[6],$stats[7],$stats[46],$stats[47],$stats[48],$stats[38], $stats[79], $stats[121]);
+              @data = populate_data($server,$host,$size,$same,$mpt,$filesystem,$stats[2],$rotot,$rbw,$riops,$wtot,$wbw,$wiops,$rlatency, $wlatency, $stats[121]);
 	  }
           else {
-             @data = populate_data($server,$host,$size,$same,$filesystem,$procs,$stats[2],$stats[5],$stats[6],$stats[7],$stats[46],$stats[47],$stats[48],$stats[38], $stats[79], $stats[121]);
+             @data = populate_data($server,$host,$size,$same,$mpt,$filesystem,$stats[2],$rotot,$rbw,$riops,$wtot,$wbw,$wiops,$rlatency, $wlatency, $stats[121]);
           }
 
           print @data;                            # For Testing only 
@@ -230,6 +275,15 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
 
           @data=();                               # Initialize for next set of metrics
  	  @stats=();
+          @rtot=();
+          @rbw=();
+          @riops=();
+          @wtot=();
+          @wbw=();
+          @wiops=();
+	  @rlatency=();
+	  @wlatency=();
+
           $same = $same + 5;
 
 	  # Need to release memory from ZFS ARC after every test run. 
@@ -254,3 +308,4 @@ foreach $filesystem (@filesystems){  # Run tests against all filesystem requeste
  } # All Tests completed for all filesystem type
 print "Completed: All Tests\n @alltests\n";
 close (GRAPHITE);
+
