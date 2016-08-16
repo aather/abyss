@@ -90,11 +90,11 @@ sub collect_TCPRetrans {
   while (<TCP>) {
   next if ( /SyncookiesSent/ || /Ip/);
   @stats = split;
-  push @data, "$server.$host.system.tcp.ListenDrops $stats[21] $now\n";
-  push @data, "$server.$host.system.tcp.TCPFastRetrans $stats[45] $now\n";
-  push @data, "$server.$host.system.tcp.TCPSlowStartRetrans $stats[47] $now\n";
-  push @data, "$server.$host.system.tcp.TCPTimeOuts $stats[48] $now\n";
-  push @data, "$server.$host.system.tcp.TCPBacklogDrop $stats[75] $now\n";
+  push @data, "$server.$host.system.tcp.ListenDrops $stats[22] $now\n";
+  push @data, "$server.$host.system.tcp.TCPFastRetrans $stats[46] $now\n";
+  push @data, "$server.$host.system.tcp.TCPSlowStartRetrans $stats[48] $now\n";
+  push @data, "$server.$host.system.tcp.TCPTimeOuts $stats[49] $now\n";
+  push @data, "$server.$host.system.tcp.TCPBacklogDrop $stats[76] $now\n";
  }
 close(TCP);
 }
