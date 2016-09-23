@@ -12,7 +12,7 @@ sudo apt-get update
 # install graphite and apache packages
 sudo apt-get install -q -y graphite-carbon
 sudo apt-get install -q -y graphite-web
-sudo apt-get -y install apache2 apache2-mpm-worker libapache2-mod-wsgi
+sudo apt-get -y install apache2 libapache2-mod-wsgi
 service carbon-cache stop
 echo "CARBON_CACHE_ENABLED=true" > /etc/default/graphite-carbon
 if [ -e "/etc/carbon/carbon.conf" ]
@@ -47,7 +47,7 @@ cp ./graphite.conf.custom /etc/apache2/sites-enabled/graphite.conf
 sudo ln -sf /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
 sudo cp -r ./grafana /usr/share/
 cd /usr/share/grafana/bin
-sudo nohup ./grafana-server start &
+sudo nohup ./grafana-server &
 sudo service apache2 restart
 sudo service carbon-cache restart 
 # Install crontab file to remove metrics that are not being updated
