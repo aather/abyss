@@ -1,6 +1,3 @@
-login: aather
-passwd: c39dbe650296ae8821fd05b998c6c6e4bd7ea0bd
-
 passwd requires using a token that is generated via https://github.com/settings/tokens
-and then use it instead of passwd
+and then use it instead of passwd when using github api like git push, clone etc..
 
