@@ -36,30 +36,32 @@
 #
 # -- Environment Variables exported to abyss agents --
 #
-$carbon_server = "IPAddr of graphite server"; 	   # graphite server
+$carbon_server = "localhost"; 	   		   # graphite server hostname or IP
 $carbon_port = 7405;                               # graphite carbon server port
+$cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
-$iterations = 5;	                       	   # Applies to benchmark agent
+$iterations = 5;                       	   # Applies to benchmark agent
 $peer = "peer IP address or hostname";	           # Applies to Net benchmark
 #
 # Uncomment if running abyss agents on Amazon cloud instance
 # aws instance metadata can be used to find: region, instance-id of the monitored server 
 # Default: server running in amazon cloud
-$region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
-$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
-$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
-$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
-$server = "cluster.Netflix"; 		# Metrics are accumulated under app name
+#$region = `curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`;
+#$host = `curl -s http://169.254.169.254/latest/meta-data/instance-id`;
+#$localIP = `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;          
+#$publicIP = `curl -s http://169.254.169.254/latest/meta-data/public-ipv4`;          
+#$server = "cluster.Netflix"; 		# Metrics are accumulated under app name
 #					# e.g: cluster.Netfix. Change "Netflix" to your app name.
 #
 # Uncomment below and comment out above for running abyss in data center or VirtualBox VM. 
-#$myIP = `ip addr|uniq |grep global`;
-#@myIPArray = split /\s+/, $myIP;
-#@hostIP = split /\//, $myIPArray[2];
-# $host = `hostname`;
-# $localIP = $hostIP[0];      			# IP address of VM or server where you installed abyss
-# $publicIP = $hostIP[0];      			# Same as above
-# $server = "cluster.Netflix";            	# Metrics are accumulated under application name
+$myIP = `ip addr|uniq |grep global`;
+@myIPArray = split /\s+/, $myIP;
+@hostIP = split /\//, $myIPArray[2];
+$host = `hostname`;
+$host =~ s/^\s+|\s+$//g;
+$localIP = $hostIP[0];      			# IP address of VM or server where you installed abyss
+$publicIP = $hostIP[0];      			# Same as above
+$server = "cluster.Netflix";            	# Metrics are accumulated under application name
 #                                         	# e.g: Netflix. Change it to match your app name
 #
 #
@@ -168,3 +170,4 @@ $seqwritesycnhronoustest=1;            # Set to 0 to disable seq write sychronou
 $seqmixednocachetest=1;                # Set to 0 to disable mixed seq test
 #---------
 1;
+
