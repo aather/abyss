@@ -38,9 +38,8 @@
 #
 $carbon_server = "IPAddr of graphite server"; 	   # graphite server
 $carbon_port = 7405;                               # graphite carbon server port
-$cloudstat_port = "7415";                          # sniffer agent port
 $interval = 5;                                     # Sets agents sample interval
-$iterations = 10;                       	   # Applies to benchmark agent
+$iterations = 5;	                       	   # Applies to benchmark agent
 $peer = "peer IP address or hostname";	           # Applies to Net benchmark
 #
 # Uncomment if running abyss agents on Amazon cloud instance
@@ -102,38 +101,70 @@ $wthreads =  4;    			# control wrt threads for webserver test
 $filename = "";				# default file to fetch
 #
 # -- IO Benchmark  Variables --
-@filesystems=('xfs');			# Supported filesystems: ('xfs','ext4','zfs') to run tests.  
-@devices=('xvdb','xvdc');		# List of devices. For multiple devices, stripe volume is build
-$mpt='mnt';				# Sets mount point
+@filesystems=('xfs');                   # Supported filesystems: ('xfs','ext4','zfs','nfs') to run tests.
+@devices=('xvdg','xvdf');               # Devices. Stripe volume for multiple devices.
+$mpt='testing';                         # Sets mount point
 #
 # FIO options for IO benchmark
-@blocks=('4k','16k','32k','1m'); 	# List of IO size to test. 
-$filesize='1g';				# file size.
-$procs='2';				# Number of concurrent fio processes running.
-$iodepth='2';				# Controls number of concurrent IO. Applies to direct IO test
-$fadvise='1';				# Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
-$cachehit='zipf:1.1';			# Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
-$percentread=60;			# percent of read IO for mixed IO tests
-$percentwrite=40;			# percent of write IO for mixed IO tests
-$end_fsync=1;				# Sync file contents when job exits
-$fsync_on_close=0;			# sync file contents on close. end_fsync only does it at job ends
+#@blocks=('4k','16k','32k','64k','128k','1m');   # List of IO size for random IO test.
+@blocks=('16k','128k');                        # List of IO size for random IO test.
+$filesize='100m';                              # file size. e.g: 500m, 10g
+$procs='2';                                    # Number of concurrent fio processes running.
+$iodepth='2';                                  # Controls number of concurrent IO. Applies to direct IO test
+$fadvise='1';                                  # Setting 0 will disable fadvise_hints: POSIX_FADV_(SEQUENTIAL|RANDOM)
+$cachehit='zipf:1.1';                          # Cacheit distribution to use for partial fs cache hit. other option: pareto:0.9
+$percentread=60;                               # percent of read IO for mixed IO tests
+$percentwrite=40;                              # percent of write IO for mixed IO tests
+$end_fsync=1;                                  # Sync file contents when job exits
+$fsync_on_close=0;                             # sync file contents on close. end_fsync only does it at job ends
 #
 # Type of fio Tests interested in running
-$iolatencytests=1;                      # default is enabled. Set to 0 to disable io latency tests via directIO path
-$iodirecttests=1;                       # default is enabled. Set to 0 to disable IO read tests via directIO path
-#------
-$randreadtests=1;                       # default is enabled. Set to 0 to disable random read no-cache tests
-$randwritetests=1;                      # Set to 1 to enable random write no-cache tests 
-$randreadmmap=1;                        # Set to 1 to enable random read tests using mmap
-$randwritemmap=1;                       # Set to 1 to enable random write tests using mmap
-$randmixedtests=1;                      # Set to 1 to enable mixed random tests
-$randmixedmmap=1;                       # Set to 1 to enable mixed random tests using mmap
-#-----
-$seqreadtests=1;                        # default is enabled. Set to 0 to disable sequential read tests
-$seqwritetests=1;                       # Set to 1 to enable sequential write tests
-$seqreadmmap=1;                         # Set to 1 to enable sequentail read tests using mmap
-$seqwritemmap=1;                        # Set to 1 to enable sequentail write tests using mmap
-$seqmixedtests=1;                       # Set to 1 to enable mixed sequential tests
-$seqmixedmmap=1;                        # Set to 1 to enable mixed sequential tests using mmap
+#--------
+# IO latency test
+#--------
+$iolatencyreadtest=1;                      # Set to 0 to disable io latency tests via directIO path
+$iolatencywritetest=1;                     # Set to 0 to disable io latency tests via directIO path
+#--------
+# directIO tests
+#----------
+$iodirectreadtest=1;                       # Set to 0 to disable IO read tests via directIO path
+$iodirectwritetest=1;                      # Set to 0 to disable IO read tests via directIO path
+#--------------
+# random read IO tests
+#--------------
+$randreadnocachetest=1;                 # Set to 0 to disable random read no-cache test
+$randreadpartialcachetest=1;            # Set to 0 to disable random read partial-cache test
+$randreadfullcachetest=1;               # Set to 0 to disable random read full-cache test
+#---------------
+# random write IO tests
+#-----------------
+$randwritenocachetest=1;                # Set to 0 to disable random write no-cache test
+$randwritepartialcachetest=1;           # Set to 0 to disable random write partial-cache test
+$randwritefullcachetest=1;              # Set to 0 to disable random write full-cache test
+$randwritefsynctestt=1;                 # Set to 0 to disable random write fsynce test
+$randwritesycnhronoustest=1;            # Set to 0 to disable random write sychronous IO test
+#------------
+# random mixed IO tests
+#--------------
+$randmixednocachetest=1;                # Set to 0 to disable mixed IO random test
+#--------------
+# sequential read IO tests
+#--------------
+$seqreadnocachetest=1;                 # Set to 0 to disable seq read no-cache test
+$seqreadpartialcachetest=1;            # Set to 0 to disable seq read partial-cache test
+$seqreadfullcachetest=1;               # Set to 0 to disable seq read full-cache test
+$seqrandreadtest=1;                    # Set to 0 to disable seq read no-cache test
+#---------------
+# random write IO tests
+#-----------------
+$seqwritenocachetest=1;                # Set to 0 to disable seq write no-cache test
+$seqwritepartialcachetest=1;           # Set to 0 to disable seq write partial-cache test
+$seqwritefullcachetest=1;              # Set to 0 to disable seq write full-cache test
+$seqwritefsynctestt=1;                 # Set to 0 to disable seq write fsynce test
+$seqwritesycnhronoustest=1;            # Set to 0 to disable seq write sychronous IO test
+#------------
+# random mixed IO tests
+#--------------
+$seqmixednocachetest=1;                # Set to 0 to disable mixed seq test
+#---------
 1;
-

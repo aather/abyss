@@ -1,0 +1,6 @@
+zpool statistics:
+To release memory in ARC
+zpool export pool
+zpool import pool
+cat /proc/spl/kstat/zfs/arcstats|grep size
+

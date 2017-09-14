@@ -12,7 +12,6 @@ our @EXPORT = qw( setup_filesystem );
 # make sure user has permission to create file under requested mount point
 $user=`id -nu`; $group=`id -ng`; chomp($user); chomp($group);
 
-
 # subroutines
 sub check_device;
 sub create_filesystem;
@@ -36,7 +35,7 @@ sub setup_filesystem {
  my $devicesref = shift;
  my @devices = @{$devicesref};
 
- my $supportedfs = "xfs,ext4,zfs";
+ my $supportedfs = "xfs,ext4,zfs,nfs";
 
  my $checkdisk; 
  my $mydfs;
@@ -55,7 +54,7 @@ sub setup_filesystem {
      exit;
    }
    elsif ($dev !~ /pool/){
-    if(! -e "/dev/$dev"){
+    if((! -e "/dev/$dev") && ($filesystem !~ /nfs/)){
         print "Invalid device:/dev/$dev\n";
         print "Exiting..";
         exit;
@@ -90,8 +89,13 @@ sub setup_filesystem {
  }
 
 # Mount requested device(s)
+ if (($checkmpt) && ($myfs =~ /$filesystem/)){
+    `sudo chown $user /$mpt`;
+    `sudo chgrp $group /$mpt`;
+   print "NFS Case: All Matched. Ready to run Tests\n";
+ }
 
- if (($checkmpt) && ($#devices == 0) && (($mydev[2] =~ /@devices/) || ($tri[0] =~ /pool/)) && ($myfs =~ /$filesystem/)){
+ elsif (($checkmpt) && ($#devices == 0) && (($mydev[2] =~ /@devices/) || ($tri[0] =~ /pool/)) && ($myfs =~ /$filesystem/)){
    print "Mounted Case: All Matched. Ready to run Tests\n";
  } 
 
@@ -306,17 +310,23 @@ sub create_filesystem {
   my ($filesystem,$mpt,$dev) = @_; 
 
   if ($filesystem =~ /xfs/){
-   `sudo /sbin/mkfs.xfs /dev/$dev -f `;
+    if (check_zpool($dev)){
+      `sudo zpool destroy pool`;
+    }
+   `sudo /sbin/mkfs.xfs -K /dev/$dev -f `;
     try_mount($filesystem,$dev,$mpt);
   }
   elsif($filesystem =~ /ext4/){
-     `sudo /sbin/mkfs.ext4 /dev/$dev`;
+    if (check_zpool($dev)){
+      `sudo zpool destroy pool`;
+    }
+     `sudo /sbin/mkfs.ext4 -E nodiscard /dev/$dev`;
      try_mount($filesystem,$dev,$mpt);
   }
   elsif($filesystem =~ /zfs/){
         `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool $dev -f`;
         `sudo zfs set mountpoint=/$mpt pool`;
-        #`sudo zfs set primarycache=metadata pool`;
+        `sudo zfs set primarycache=metadata pool`;
         `sudo chown $user /$mpt`;
         `sudo chgrp $group /$mpt`;
   }
@@ -350,29 +360,29 @@ sub try_mount {
  if (-d "/$mpt"){  # if directory is created already
      `sudo rm /$mpt/*`;  # make sure directory is empty
      if ($filesystem =~ /xfs/){
-       `sudo mount -o defaults,noatime,discard,nobarrier /dev/$dev /$mpt`;
+       `sudo mount -o defaults,noatime,nobarrier /dev/$dev /$mpt`;
      }
      elsif ($filesystem =~ /ext4/){
-       `sudo mount -o defaults,noatime,discard,nobarrier,data=ordered /dev/$dev /$mpt`;
+       `sudo mount -o defaults,noatime,nobarrier,data=ordered /dev/$dev /$mpt`;
      }
      elsif ($filesystem =~ /zfs/){
        `sudo zfs mount pool`;
        `sudo zfs set mountpoint=/$mpt pool`;
-	#`sudo zfs set primarycache=metadata pool`;
+       `sudo zfs set primarycache=metadata pool`;
      }
  }
  else{
       `sudo mkdir /$mpt`;
       if ($filesystem =~ /xfs/){
-         `sudo mount -o defaults,noatime,discard,nobarrier /dev/$dev /$mpt`;
+         `sudo mount -o defaults,noatime,nobarrier /dev/$dev /$mpt`;
       }
       elsif ($filesystem =~ /ext4/){
-         `sudo mount -o defaults,noatime,discard,nobarrier,data=ordered /dev/$dev /$mpt`;
+         `sudo mount -o defaults,noatime,nobarrier,data=ordered /dev/$dev /$mpt`;
       }
       elsif ($filesystem =~ /zfs/){
          `sudo zfs mount pool`;
          `sudo zfs set mountpoint=/$mpt pool`;
-	 #`sudo zfs set primarycache=metadata pool`;
+	 `sudo zfs set primarycache=metadata pool`;
       }
  }
  # Set the permission of mounted directory
@@ -455,9 +465,10 @@ sub create_zpool {
  print "Creating zpool ...\n"; 
  `sudo sudo zpool create -o ashift=12 -O compression=lz4 pool @devices -f`;
  `sudo zfs set mountpoint=/$mpt pool`;
- #`sudo zfs set primarycache=metadata pool`;
+ `sudo zfs set primarycache=metadata pool`;
  `sudo chown $user /$mpt`;
  `sudo chgrp $group /$mpt`;
 
 }
 1;
+

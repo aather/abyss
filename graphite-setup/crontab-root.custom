@@ -6,5 +6,5 @@
 */30 * * * * find /mnt/whisper/cluster -type f -name *.wsp -mmin +10 -exec rm -rf {} \;;
 # Carbon daemon logs can get very large if there are errors in metrics format
 0 */6 * * *  find /mnt/logs/system/carbon/* -exec rm -rf {} \;
-# carbon-cache some time stop responding to request. Restarting it every 6 hours in case
-0 */6 * * *  service carbon-cache restart;
+# carbon-cache some time stop responding to request. Restarting it every 2 hours in case
+0 */2 * * *  service carbon-cache restart;

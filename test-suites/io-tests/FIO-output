@@ -1,0 +1,126 @@
+For FIO latency discussion, see URL: https://tobert.github.io/post/2014-04-17-fio-output-explained.html
+
+Make sure you use one number below as split start from 0 instead of 1
+
+Feild num	Generic info	READ	WRITE	Sample
+1	output version			3
+2	fio version			2.0.8
+3	job name			mywitejob
+4	group id			0
+5	error			0
+6		total io		0
+7		bandwidth		0
+8		IOPS		0
+9		runtime		0
+10		submission latency (min)		0
+11		submission latency (max)		0
+12		submission latency (mean)		0.000000
+13		submission latency (deviation)		0.000000
+14		Completion latency (min)		0
+15		Completion latency (max)		0
+16		Completion latency (mean)		0.000000
+17		Completion latency (deviation)		0.000000
+18		Completion latency percentiles		1.00%=0
+19		Completion latency percentiles		5.00%=0
+20		Completion latency percentiles		10.00%=0
+21		Completion latency percentiles		20.00%=0
+22		Completion latency percentiles		30.00%=0
+23		Completion latency percentiles		40.00%=0
+24		Completion latency percentiles		50.00%=0
+25		Completion latency percentiles		60.00%=0
+26		Completion latency percentiles		70.00%=0
+27		Completion latency percentiles		80.00%=0
+28		Completion latency percentiles		90.00%=0
+29		Completion latency percentiles		95.00%=0
+30		Completion latency percentiles		99.00%=0
+31		Completion latency percentiles		99.50%=0
+32		Completion latency percentiles		99.90%=0
+33		Completion latency percentiles		99.95%=0
+34		Completion latency percentiles		99.99%=0
+35		Completion latency percentiles		0%=0
+36		Completion latency percentiles		0%=0
+37		Completion latency percentiles		0%=0
+38		Total latency (min)		0
+39		Total latency (max)		0
+40		Total latency (avg)		0.000000
+41		Total latency (deviation)		0.000000
+42		Bandwidth (min)		0
+43		Bandwidth (max)		0
+44		Bandwidth (aggregate percentage of total)		0.000000%
+45		Bandwidth (mean)		0.000000
+46		Bandwidth (deviation)		0.000000
+47			total io	232148
+48			bandwidth	132052
+49			IOPS	33013
+50			runtime	1758
+51			submission latency (min)	3
+52			submission latency (max)	5886
+53			submission latency (mean)	8.561280
+54			submission latency (deviation)	114.339487
+55			Completion latency (min)	2418
+56			Completion latency (max)	39881
+57			Completion latency (mean)	7732.748729
+58			Completion latency (deviation)	2692.821195
+59			Completion latency percentiles	1.00%=4576
+60			Completion latency percentiles	5.00%=5280
+61			Completion latency percentiles	10.00%=5664
+62			Completion latency percentiles	20.00%=6176
+63			Completion latency percentiles	30.00%=6624
+64			Completion latency percentiles	40.00%=7008
+65			Completion latency percentiles	50.00%=7328
+66			Completion latency percentiles	60.00%=7648
+67			Completion latency percentiles	70.00%=8032
+68			Completion latency percentiles	80.00%=8640
+69			Completion latency percentiles	90.00%=9920
+70			Completion latency percentiles	95.00%=11456
+71			Completion latency percentiles	99.00%=15936
+72			Completion latency percentiles	99.50%=22656
+73			Completion latency percentiles	99.90%=38144
+74			Completion latency percentiles	99.95%=38656
+75			Completion latency percentiles	99.99%=39680
+76			Completion latency percentiles	0%=0
+77			Completion latency percentiles	0%=0
+78			Completion latency percentiles	0%=0
+79			Total latency (min)	2427
+80			Total latency (max)	39886
+81			Total latency (avg)	7741.463790
+82			Total latency (deviation)	2695.265498
+83			Bandwidth (min)	130856
+84			Bandwidth (max)	137789
+85			Bandwidth (aggregate percentage of total)	100.000000%
+86			Bandwidth (mean)	134426.333333
+87			Bandwidth (deviation)	3471.162101
+88	CPU usage: user			7.057484%
+89	CPU usage: system			14.342629%
+90	CPU usage: context switches			16005
+91	CPU usage: major page faults			0
+92	CPU usage: minor page faults			21
+93	IO depth distribution <= 1			0.1%
+94	IO depth distribution 2			0.1%
+95	IO depth distribution 4			0.1%
+96	IO depth distribution 8			0.1%
+97	IO depth distribution 16			0.1%
+98	IO depth distribution 32			0.1%
+99	IO depth distribution >= 64			99.9%
+100	IO latency distribution <= 2 usec			0.00%
+101	IO latency distribution 4 usec			0.00%
+102	IO latency distribution 10 usec			0.00%
+103	IO latency distribution 20 usec			0.00%
+104	IO latency distribution 50 usec			0.00%
+105	IO latency distribution 100 usec			0.00%
+106	IO latency distribution 250 usec			0.00%
+107	IO latency distribution 500 usec			0.00%
+108	IO latency distribution 750 usec			0.00%
+109	IO latency distribution 1000 usec			0.00%
+110	IO latency distribution <=2 msec			0.00%
+111	IO latency distribution 4 msec			0.26%
+112	IO latency distribution 10 msec			90.20%
+113	IO latency distribution 20 msec			8.60%
+114	IO latency distribution 50 msec			0.95%
+115	IO latency distribution 100 msec			0.00%
+116	IO latency distribution 250 msec			0.00%
+117	IO latency distribution 500 msec			0.00%
+118	IO latency distribution 750 msec			0.00%
+119	IO latency distribution 1000 msec			0.00%
+120	IO latency distribution 2000 msec			0.00%
+121	IO latency distribution >=2000 msec			0.00%

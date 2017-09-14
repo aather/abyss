@@ -23,6 +23,7 @@ open(GRAPHITE, "| ../../../common/nc -w 25 $carbon_server $carbon_port") || die 
 sub build_HashArray;
 sub collect_NetStats;
 sub collect_TCPRetrans;
+sub collect_TCPInfo;
 sub collect_TCPSegs;
 sub collect_IOStats;
 sub collect_VMStats;
@@ -36,6 +37,7 @@ $now = `date +%s`;				# metrics are sent with date stamp to graphite server
 
  collect_NetStats;
  collect_TCPRetrans;
+ collect_TCPInfo;
  collect_TCPSegs;
  collect_CPUStats;			# cpu stats
  collect_VMStats;			# vm stats
@@ -90,8 +92,59 @@ sub collect_TCPRetrans {
   push @data, "$server-netbench.$host.benchmark.system.tcp.TCPFastRetrans $stats[45] $now\n";
   push @data, "$server-netbench.$host.benchmark.system.tcp.TCPSlowStartRetrans $stats[47] $now\n";
   push @data, "$server-netbench.$host.benchmark.system.tcp.TCPTimeOuts $stats[48] $now\n";
-  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPBacklogDrop $stats[75] $now\n";
+  push @data, "$server-netbench.$host.benchmark.system.tcp.TCPBacklogDrop $stats[76] $now\n";
  }
+close(TCP);
+}
+
+sub collect_TCPInfo {
+#Netid  State      Recv-Q Send-Q Local Address:Port                 Peer Address:Port
+#tcp    ESTAB      0      9369024 100.66.47.109:7421                 100.66.2.184:7421
+# cubic wscale:9,9 rto:204 rtt:0.593/0.029 mss:1344 cwnd:401 ssthresh:267 bytes_acked:165908342209 segs_out:123447072 segs_in:9298694 send 7270.7Mbps 
+# lastrcv:282920 pacing_rate 8721.2Mbps unacked:251 retrans:0/3112 rcv_space:2688
+
+my @stats;
+open (TCP, "ss -i '( dport = :7421 )' |")|| die print "failed to get data: $!\n";
+while (<TCP>) {
+  next if (/Netid/);
+  @stats = split;
+   if ( /^tcp/ ) {
+    push @data, "$server.$host.system.tcp.tcpinfo.Recv-Q $stats[2] $now\n";
+    push @data, "$server.$host.system.tcp.tcpinfo.Send-Q $stats[3] $now\n";
+   }
+  else {
+        @rto = split /:/, $stats[2];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$rto[0] $rto[1] $now\n";
+
+        @rtt = split /:/, $stats[3];
+        @rttext = split /\//, $rtt[1];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$rtt[0].RTT $rttext[0] $now\n";
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$rtt[0].RTTVAR $rttext[1] $now\n";
+
+        @mss = split /:/, $stats[4];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$mss[0] $mss[1] $now\n";
+
+        @cwnd = split /:/, $stats[5];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$cwnd[0] $cwnd[1] $now\n";
+
+        @ssth = split /:/, $stats[6];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$ssth[0] $ssth[1] $now\n";
+        $stats[11] =~ s/Mbps//;
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$stats[10] $stats[11] $now\n";
+
+        # FOR BBR
+        #$stats[10] =~ s/Mbps//;
+        #push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$stats[9] $stats[10] $now\n";
+
+        #@retrans = split /:/, $stats[15];
+        #@retransext = split /\//, $retrans[1];
+        #push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$retrans[0].RETRANS $retransext[0] $now\n";
+        #push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$retrans[0].RETRANSDIVIDER $retransext[1] $now\n";
+
+        @rcv = split /:/, $stats[16];
+        push @data, "$server-netbench.$host.system.tcp.tcpinfo.$stats[0].$rcv[0] $rcv[1] $now\n";
+      }
+   }
 close(TCP);
 }
 
