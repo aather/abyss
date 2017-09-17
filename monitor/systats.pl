@@ -36,15 +36,15 @@ while (1) {
 
 # Comment out stats that you are not interested in collecting 
 
- collect_NetStats;       		# Net stats 
- collect_TCPRetrans;     		# TCP stats 
+ #collect_NetStats;       		# Net stats 
+ #collect_TCPRetrans;     		# TCP stats 
  collect_TCPInfo;
- collect_TCPSegs;			# TCP segments
- collect_IOStats;			# io stats
- collect_CPUStats;			# cpu stats
- collect_VMStats;			# vm stats
- collect_NFSiostats;			# NFS stats
- collect_ETHTool;
+ #collect_TCPSegs;			# TCP segments
+ #collect_IOStats;			# io stats
+ #collect_CPUStats;			# cpu stats
+ #collect_VMStats;			# vm stats
+ #collect_NFSiostats;			# NFS stats
+ #collect_ETHTool;
  #print @data; 				# Testing only 
  #print "\n------\n"; 			# Testing only
  print GRAPHITE @data;			# Ship metrics to graphite server
@@ -100,7 +100,6 @@ sub collect_TCPRetrans {
 close(TCP);
 }
 
-# Useful for network throughput test performed using netperf with port 7421. Otherwise change it
 sub collect_TCPInfo {
 #Netid  State      Recv-Q Send-Q Local Address:Port                 Peer Address:Port
 #tcp    ESTAB      0      9369024 100.66.47.109:7421                 100.66.2.184:7421
@@ -111,43 +110,53 @@ sub collect_TCPInfo {
 #	 bbr wscale:9,9 rto:204 rtt:0.626/0.027 mss:1344 cwnd:432 bytes_acked:969231544513 segs_out:721170953 segs_in:60474955 send 7419.9Mbps lastrcv:1649180 pacing_rate 6508.8Mbps unacked:246 retrans:0/16246 rcv_space:27120
 
 my @stats;
-open (TCP, "ss -i '( dport = :7421 )' |")|| die print "failed to get data: $!\n";
+open (TCP, "ss -i '( dport = :$port )' |")|| die print "failed to get data: $!\n";
 while (<TCP>) {
   next if (/Netid/);
   next if /^\s*$/;
   @stats = split;
    if ( /^tcp/ ) {
-    push @data, "$server.$host.system.tcp.tcpinfo.Recv-Q $stats[2] $now\n";
-    push @data, "$server.$host.system.tcp.tcpinfo.Send-Q $stats[3] $now\n";
+    #tcp    ESTAB      0    11104128    100.66.47.109:7421     100.66.2.184:7421
+    push @data, "$server.$host.system.tcp.tcpinfo.$port.Recv-Q $stats[2] $now\n";
+    push @data, "$server.$host.system.tcp.tcpinfo.$port.Send-Q $stats[3] $now\n";
    }
   else {
+        # cubic wscale:9,9 rto:204, stat[0]=cubic, stat[2]= rto:204
 	@rto = split /:/, $stats[2];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$rto[0] $rto[1] $now\n";
-
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$rto[0] $rto[1] $now\n";
+	# stat[3] = rtt:2.701/0.103
         @rtt = split /:/, $stats[3];
    	@rttext = split /\//, $rtt[1];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$rtt[0].RTT $rttext[0] $now\n";
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$rtt[0].RTTVAR $rttext[1] $now\n";
-
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$rtt[0].RTT $rttext[0] $now\n";
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$rtt[0].RTTVAR $rttext[1] $now\n";
+        # stat[4] = mss:1344
 	@mss = split /:/, $stats[4];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$mss[0] $mss[1] $now\n";
-
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$mss[0] $mss[1] $now\n";
+	# stat[5] cwnd:261
   	@cwnd = split /:/, $stats[5];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$cwnd[0] $cwnd[1] $now\n";
-
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$cwnd[0] $cwnd[1] $now\n";
+	# stat[6] = ssthresh:168
   	@ssth = split /:/, $stats[6];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$ssth[0] $ssth[1] $now\n";
-
-	$stats[10] =~ s/Mbps//;
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$stats[9] $stats[10] $now\n";
-
-	@retrans = split /:/, $stats[15];
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$ssth[0] $ssth[1] $now\n";
+	# stat[8] = segs_out:109108, stat[9]=segs_in:28997
+        @segs_out = split /:/, $stats[8];
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$segs_out[0] $segs_out[1] $now\n";
+        @segs_in = split /:/, $stats[9];
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$segs_in[0] $segs_in[1] $now\n";
+        # stat[10] = send 1039.0Mbps . As you can see no colon (:) between the sample name/value
+	$stats[11] =~ s/Mbps//;
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$stats[10] $stats[11] $now\n";
+        # stat[16] = retrans: 0/678
+	@retrans = split /:/, $stats[16];
   	@retransext = split /\//, $retrans[1];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$retrans[0].RETRANS $retransext[0] $now\n";
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$retrans[0].RETRANSDIVIDER $retransext[1] $now\n";
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$retrans[0].RETRANS $retransext[0] $now\n";
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$retrans[0].RETRANSDIVIDER $retransext[1] $now\n";
+        # stat[17] = reordering: 4
+        @reorder = split /:/, $stats[17];
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$reorder[0] $reorder[1] $now\n";
 
-	@rcv = split /:/, $stats[16];
-        push @data, "$server.$host.system.tcp.tcpinfo.$stats[0].$rcv[0] $rcv[1] $now\n";
+	@rcvspace = split /:/, $stats[18];
+        push @data, "$server.$host.system.tcp.tcpinfo.$port.$stats[0].$rcvspace[0] $rcvspace[1] $now\n";
 
       }
    }
@@ -376,4 +385,3 @@ sub collect_ETHTool {
   close(ETHTOOL);
  }
 }
-

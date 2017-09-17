@@ -119,7 +119,6 @@ sub collect_ZFStats {
 close(ZFSTAT);
 }
 
-
 sub collect_VMStats {
  my @Array;
  my @stats;
@@ -127,7 +126,7 @@ sub collect_VMStats {
  my $free_cached;
  my $free_unused;
 
- open(VMSTAT, "head -4 /proc/meminfo |")|| die print "failed to get data: $!\n";
+ open(VMSTAT, "head -5 /proc/meminfo |")|| die print "failed to get data: $!\n";
  while (<VMSTAT>) {
  next if (/^$/);
  s/://g;   # trim ":"
@@ -135,7 +134,7 @@ sub collect_VMStats {
  push @Array,$stats[1];
  }
 close (VMSTAT);
- $free_cached = $Array[2] + $Array[3];
+ $free_cached = $Array[3] + $Array[4];
  $free_unused = $Array[1];
  $used = $Array[0] - $free_cached - $free_unused;
 

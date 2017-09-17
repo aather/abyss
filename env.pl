@@ -38,7 +38,7 @@
 #
 $carbon_server = "localhost"; 	   		   # graphite server hostname or IP
 $carbon_port = 7405;                               # graphite carbon server port
-$cloudstat_port = "7415";                          # sniffer agent port
+$port=7421;					   # port to capture tcp_info stats. Use for network benchmark
 $interval = 5;                                     # Sets agents sample interval
 $iterations = 5;                       	   # Applies to benchmark agent
 $peer = "peer IP address or hostname";	           # Applies to Net benchmark
