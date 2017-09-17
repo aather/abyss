@@ -36,15 +36,16 @@ while (1) {
 
 # Comment out stats that you are not interested in collecting 
 
- #collect_NetStats;       		# Net stats 
- #collect_TCPRetrans;     		# TCP stats 
+ collect_NetStats;       		# Net stats 
+ collect_TCPRetrans;     		# TCP stats 
  collect_TCPInfo;
- #collect_TCPSegs;			# TCP segments
- #collect_IOStats;			# io stats
- #collect_CPUStats;			# cpu stats
- #collect_VMStats;			# vm stats
- #collect_NFSiostats;			# NFS stats
- #collect_ETHTool;
+ collect_TCPSegs;			# TCP segments
+ collect_IOStats;			# io stats
+ collect_CPUStats;			# cpu stats
+ collect_VMStats;			# vm stats
+ collect_NFSiostats;			# NFS stats
+ collect_ETHTool;
+
  #print @data; 				# Testing only 
  #print "\n------\n"; 			# Testing only
  print GRAPHITE @data;			# Ship metrics to graphite server
